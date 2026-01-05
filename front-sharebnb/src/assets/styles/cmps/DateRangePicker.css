@@ -1,0 +1,92 @@
+/* container */
+.date-range-panel {
+    width: 100%;
+}
+
+/* DayPicker polish to resemble Airbnb */
+.stay-picker {
+    --ring: 2px solid #111;
+}
+
+/* Month header */
+.stay-picker .rdp-caption_label {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* nav buttons round */
+.stay-picker .rdp-nav_button {
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    width: var(--rdp-nav_button-width);
+    height: var(--rdp-nav_button-height);
+}
+
+/* weekdays row */
+.stay-picker .rdp-weekdays {
+    opacity: var(--rdp-weekday-opacity);
+}
+
+/* middle of range — light track */
+.stay-picker .rdp-range_middle {
+    background: var(--rdp-range_middle-background-color);
+    color: var(--rdp-range_middle-color);
+}
+
+/* start/end — dark filled circles */
+.stay-picker .rdp-range_start .rdp-day_button,
+.stay-picker .rdp-range_end .rdp-day_button {
+    background: #111827;
+    color: #fff;
+}
+
+/* focus ring */
+.stay-picker .rdp-day_button:focus-visible {
+    outline: var(--ring);
+    outline-offset: 2px;
+}
+
+/* hover preview (desktop) */
+.stay-picker .is-range-hover .rdp-day_button {
+    background: rgba(17, 24, 39, 0.06);
+    color: #111;
+    border-radius: 10px;
+}
+
+/* disabled + outside days consistency */
+.stay-picker .rdp-day_disabled,
+.stay-picker .rdp-day_outside {
+    opacity: var(--rdp-disabled-opacity);
+}
+
+/* Flexibility chips (footer row) */
+.tolerances {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 6px 4px;
+}
+
+.tolerances .chip {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.tolerances .chip.active {
+    background: #111827;
+    color: #fff;
+    border-color: #111827;
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+    .stay-picker {
+        --rdp-day_button-width: 42px;
+        --rdp-day_button-height: 42px;
+        --rdp-day-width: 44px;
+        --rdp-day-height: 44px;
+    }
+}

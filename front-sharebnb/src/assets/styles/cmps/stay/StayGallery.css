@@ -1,0 +1,198 @@
+/* .stay-gallery {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+} */
+
+.stay-gallery-container {
+    display: flex;
+    flex-direction: column;
+
+    .stay-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        padding-bottom: 24px;
+
+        h1 {
+            font-size: 27px;
+            font-family: 'Roboto-Medium';
+            font-weight: normal;
+            color: var(--text-primary);
+            /* letter-spacing: 0.6px; */
+        }
+    }
+
+    .stay-actions {
+        display: flex;
+        gap: 10px;
+    }
+}
+
+.share-btn,
+.save-btn {
+    background: none;
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 14px;
+    font-family: 'Roboto-Medium';
+    cursor: pointer;
+    text-decoration: underline;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: var(--gray5);
+    }
+}
+
+.share-btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+}
+
+.save-btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 8px;
+    aspect-ratio: 2.2 / 1;
+    place-items: stretch;
+    border-radius: 10px;
+    overflow: hidden;
+
+    img {
+        transition: filter 0.1s ease;
+
+        &:hover {
+            cursor: pointer;
+            filter: brightness(80%);
+        }
+    }
+
+    .main-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background-color: var(--neutrals-o3);
+        grid-row: span 2;
+    }
+
+    .side-img-0,
+    .side-img-1,
+    .side-img-2,
+    .side-img-3 {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background-color: var(--neutrals-o3);
+    }
+}
+
+/* Mobile actions overlay */
+.mobile-actions {
+    display: none;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .stay-gallery {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .stay-gallery-container {
+        position: relative;
+        
+        .stay-header {
+            display: none;
+        }
+        
+        .gallery-grid {
+            display: block;
+            aspect-ratio: unset;
+            border-radius: 0;
+            margin: 0;
+            padding: 0;
+
+            .main-img {
+                width: 100%;
+                height: 50vh;
+                min-height: 300px;
+                object-fit: cover;
+                grid-row: unset;
+                border-radius: 0;
+            }
+            
+            .side-img-0,
+            .side-img-1,
+            .side-img-2,
+            .side-img-3 {
+                display: none;
+            }
+        }
+        
+        .mobile-actions {
+            display: flex;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+
+            .back-arrow {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                background: rgba(255, 255, 255, 0.9);
+                border-radius: 50%;
+                color: #000;
+                text-decoration: none;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                transition: background-color 0.2s;
+
+                &:hover {
+                    background: rgba(255, 255, 255, 1);
+                }
+            }
+            
+            .mobile-share-btn,
+            .mobile-save-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                background: rgba(255, 255, 255, 0.9);
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                border-radius: 50%;
+                cursor: pointer;
+                backdrop-filter: blur(10px);
+                transition: background-color 0.2s;
+
+                &:hover {
+                    background: rgba(255, 255, 255, 1);
+                }
+            }
+            
+            .mobile-share-btn {
+                margin-left: auto;
+                margin-right: 10px;
+            }
+        }
+    }
+}

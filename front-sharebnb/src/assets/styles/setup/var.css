@@ -1,0 +1,73 @@
+:root {
+    --shades-01: #FFFFFF;
+    --shades-02: #222222;
+    --shades-03: rgb(244, 244, 244);
+    --shades-04: rgb(175, 175, 175);
+    --shades-05: #FFFFFF;
+    --shades-06: #FFFFFF;
+
+    --neutrals-o1: rgb(245, 245, 245);
+    --neutrals-o2: rgb(230, 230, 230);
+    --neutrals-o3: rgb(213, 213, 213);
+    --neutrals-o4: rgb(201, 201, 201);
+    --neutrals-o5: rgb(181, 181, 181);
+    --neutrals-o6: rgb(160, 160, 160);
+
+    --neutrals-o7: rgb(150, 150, 150);
+    --neutrals-o8: rgb(70, 70, 70);
+
+    --neutrals-o9: rgb(76, 76, 76);
+    --neutrals-10: rgb(34, 34, 34);
+
+    --primary-01: #ff395c;
+    --text-primary: #222222;
+    --text-secondary: #6a6a6a;
+
+    /* Header */
+    --header-bg: #fefefe;
+    --filter-bg: #FFFFFF;
+    --button-bg-hover: #ebebeb;
+    --icons-bg: #f2f2f2;
+    --icons-bg-hover: #ebebeb;
+
+
+    --header-backdrop-blur: 10px;
+    --header-height-expanded: 120px;
+    --header-height-mini: 72px;
+    --pill-radius: 40px;
+    --divider: rgba(0, 0, 0, 0.12);
+
+    /* === CTA btn === */
+    --gradient-start-color: #E61D4D;
+    --gradient-end-color: #d80566;
+    --gradient-direction: to right;
+
+    --clr1: #ce2e6c;
+    --clr2: #4f3a65;
+    --clr3: #574f7d;
+    --clr4: #95adbe;
+    --clr5: #dff0ea;
+
+    --clr1-light: color-mix(in lab, var(--clr1), white 15%);
+
+    --gray1: #ddd;
+    --gray2: #aaa;
+    --gray3: #777;
+    --gray4: #333;
+    /* title color */
+    --gray5: #f7f7f7;
+    /* hover buttons color */
+
+    --success: rgb(41, 189, 73);
+    --error: rgb(216, 59, 59);
+
+    --black: #000;
+    --white: #fff;
+
+    --light-blue: #2baaf3;
+    --form-nav-border: #a0cfffc9;
+    --form-nav-background: #f0f8ff;
+    --form-nav-color: #409eff;
+    --form-nav-color-lighter: #40a0ffc0;
+
+}

@@ -1,0 +1,125 @@
+.trips-page {
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    /* flex-direction: column; */
+}
+
+.trips-container {
+    max-width: 1200px;
+}
+
+.trips-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 8px 0 20px;
+}
+
+.trips-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .08);
+    border-radius: 16px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
+    overflow: hidden;
+}
+
+.trips-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.trips-table thead th {
+    text-align: left;
+    font-weight: 600;
+    color: #6b6b6b;
+    font-size: 14px;
+    padding: 14px 18px;
+    background: #fafafa;
+    text-align: center;
+}
+
+.trips-table tbody td {
+    padding: 14px 18px;
+    vertical-align: middle;
+    font-size: 15px;
+    text-align: center;
+}
+
+.trips-table tbody tr {
+    cursor: pointer;
+}
+
+.trips-table tbody tr:hover {
+    background: #f7f7f7;
+}
+
+.trips-table tbody tr.zebra {
+    background: #fcfcfc;
+}
+
+.col-total {
+    text-align: right;
+}
+
+.dest-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dest-thumb {
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex: 0 0 72px;
+    background: #eee;
+}
+
+.dest-name {
+    font-weight: 600;
+    color: #111;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.status-pill {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-pill.pending {
+    color: #c97700;
+    background: #fff5e6;
+}
+
+.status-pill.approved {
+    color: #1b8354;
+    background: #e7f6ef;
+}
+
+.status-pill.rejected {
+    color: #b42318;
+    background: #fdecec;
+}
+
+.empty {
+    text-align: center;
+    padding: 24px;
+    color: #6b6b6b;
+}
+
+.trips-card td,
+.trips-card th {
+    padding: 14px 5px !important;
+}
+
+.trips-table tr> :first-child {
+    width: 30vw;
+    max-width: 250px;
+}

@@ -1,0 +1,112 @@
+.confirm-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 16px 64px;
+}
+
+.confirm-hero {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.confirm-hero h1 {
+    font-size: 28px;
+    margin: 8px 0 6px;
+}
+
+.confirm-hero p {
+    color: var(--text-secondary, #666);
+}
+
+.badge-check {
+    display: inline-grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 8px;
+    border-radius: 50%;
+    background: #10b981;
+    /* emerald */
+    color: white;
+    font-size: 34px;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, .35);
+}
+
+.confirm-card {
+    background: var(--shades-01, #fff);
+    border: 1px solid var(--divider, #eee);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+}
+
+.confirm-row {
+    display: grid;
+    grid-template-columns: 2.2fr 1.2fr 1.1fr 1.1fr .9fr;
+    gap: 16px;
+    align-items: start;
+}
+
+.confirm-col h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--text-muted, #777);
+    margin-bottom: 6px;
+}
+
+.muted {
+    color: var(--text-muted, #777);
+    font-size: .9em;
+}
+
+.money {
+    font-weight: 600;
+}
+
+.pill {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+.pill.pending {
+    background: #fff7ed;
+    color: #c2410c;
+    border: 1px solid #fed7aa;
+}
+
+.confirm-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+}
+
+.btn.primary {
+    background: linear-gradient(135deg, var(--gradient-start-color, #ff385c), var(--gradient-end-color, #ff4e35));
+    border: none;
+    color: #fff;
+}
+
+.btn.ghost {
+    background: #fff;
+}
+
+.btn.subtle {
+    background: #f7f7f7;
+}
+
+@media (max-width: 860px) {
+    .confirm-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}

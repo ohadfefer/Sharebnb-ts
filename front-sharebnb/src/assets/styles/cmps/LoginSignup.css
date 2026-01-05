@@ -1,0 +1,131 @@
+/* Minimal auth styles (main.css already imports this file) */
+.login-page {
+	display: grid;
+	place-items: center;
+	padding: 24px 12px;
+}
+
+.login-form, .signup-form {
+	display: grid;
+	gap: 25px;
+	width: 100%;
+	max-width: 550px;
+	padding: 25px;
+	border: 1px solid var(--gray2);
+	border-radius: 16px;
+	background: var(--white);
+}
+
+.login-form input, .signup-form input {
+	border: 1px solid var(--gray1);
+	border-radius: 10px;
+	padding: 10px 12px;
+}
+
+.form-header-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 0 20px;
+	font-size: 11px;
+	font-family: 'Roboto-Medium';
+	font-weight: normal;
+	position: relative;
+	padding-bottom: 15px;
+}
+
+.form-header-container::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: -25px;
+	right: -25px;
+	height: 1px;
+	background-color: var(--gray1);
+}
+
+.login-form button, .signup-form button {
+	background: var(--primary-01);
+	color: var(--white);
+	border: none;
+	padding: 14px;
+	border-radius: 10px;
+	cursor: pointer;
+	font-family: 'Roboto-Medium';
+	font-size: 15px;
+}
+
+.form-nav-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid var(--gray1);
+	border-radius: 10px;
+	padding: 7px;
+	font-family: 'Roboto-Medium';
+	font-size: 15px;
+	/* transition: all 0.2s ease; */
+	cursor: pointer;
+	margin-bottom: 8px;
+}
+
+.form-nav-container:hover {
+	border-color: var(--form-nav-border);
+	background-color: var(--form-nav-background);
+	color: var(--form-nav-color);
+}
+
+.or-divider {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.or-divider hr {
+	flex: 1;
+	border: none;
+	border-top: 1px solid var(--gray1);
+	margin: 0;
+}
+
+.or-divider span {
+	color: var(--gray3);
+	font-size: 14px;
+	font-family: 'Roboto-Medium';
+	padding: 0 10px;
+}
+
+.upload-preview {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.upload-preview label {
+	background-color: var(--form-nav-color);
+	color: var(--white);
+	border: none;
+	border-radius: 8px;
+	padding: 8px;
+	cursor: pointer;
+	font-family: 'Roboto-Medium';
+	font-size: 14px;
+	transition: background-color 0.2s ease;
+	text-align: center;
+	display: inline-block;
+	width: 33%;
+}
+
+.upload-preview label:hover {
+	background-color: var(--form-nav-color-lighter);
+}
+
+.upload-preview input[type="file"] {
+	display: none;
+}
+
+.demo-signup-links {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}

@@ -1,0 +1,70 @@
+/* .wishlist-index {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+} */
+
+.wishlist-header {
+    margin-bottom: 30px;
+}
+
+.wishlist-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #222;
+}
+
+.wishlist-header p {
+    color: #717171;
+    font-size: 1rem;
+}
+
+.empty-wishlist {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-wishlist h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #222;
+}
+
+.empty-wishlist p {
+    color: #717171;
+    font-size: 1rem;
+}
+
+/* Heart icon styling for StayPreview */
+.heart-icon {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.heart-icon:hover {
+    transform: scale(1.01);
+}
+
+.heart-icon img {
+    width: 24px;
+    height: 24px;
+    transition: all 0.2s ease;
+    opacity: 0.8;
+}
+
+.heart-icon:hover img {
+    transform: scale(1.1);
+}

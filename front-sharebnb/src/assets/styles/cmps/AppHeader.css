@@ -1,0 +1,273 @@
+.app-header {
+  --h-mini: 100px;
+  --h-expanded: 200px;
+  --h-current: var(--h-expanded);
+  --filter-scale: 1;
+  --nav-opacity: 1;
+  --nav-translate: 0px;
+
+  height: var(--h-current);
+
+  transition:
+    height 0.8s cubic-bezier(.2, .8, .2, 1),
+    padding 1s cubic-bezier(.2, .8, .2, 1),
+    box-shadow .25s ease,
+    transform 1s ease;
+
+  top: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-rows: auto;
+  background: linear-gradient(#fff, #f8f8f8);
+  backdrop-filter: blur(var(--header-backdrop-blur));
+  border-bottom: solid 0.75px var(--divider);
+  padding: 24px 0px;
+  margin-bottom: 28px;
+}
+
+.app-header.is-unset .nav-bar {
+  margin: 0 auto;
+  grid-template-columns: max-content minmax(auto, 820px) max-content;
+}
+
+
+.app-header.is-expanded .header-main {
+  grid-area: header-main;
+  grid-column: 1 / -1;
+  grid-template-rows: auto auto;
+  justify-self: center;
+  justify-content: space-between;
+  width: 100%;
+  row-gap: 8px;
+  align-items: start;
+}
+
+.filter {
+  width: 100%;
+}
+
+.app-header.is-expanded {
+  --h-current: var(--h-expanded);
+  box-shadow: none;
+}
+
+.app-header.is-mini {
+  --h-current: var(--h-mini);
+  --filter-scale: .92;
+  --nav-opacity: 0;
+  --nav-translate: -6px;
+  /* box-shadow: 0 6px 20px rgba(0, 0, 0, .08); */
+  padding: 0px;
+
+  .logo,
+  .side-links {
+    align-self: center;
+    margin: 0px;
+  }
+}
+
+.app-header.is-sticky {
+  position: sticky;
+  top: 0;
+}
+
+.nav-bar {
+  display: grid;
+  grid-template-columns: max-content auto max-content;
+  grid-template-areas: "logo header-main side-links";
+  align-items: center;
+  height: 100%;
+  transition: height 0.4s ease, padding 1s ease;
+}
+
+.logo {
+  grid-area: logo;
+  display: flex;
+  align-self: flex-start;
+  justify-self: start;
+  gap: 4px;
+  text-decoration: none;
+  padding-top: 0.5em;
+  margin-top: 8px;
+  z-index: 10;
+}
+
+.logo .brand {
+  font-size: 24px;
+  color: var(--primary-01);
+  font-family: Roboto-Medium;
+}
+
+.nav-links {
+  grid-area: nav-links;
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  justify-content: center;
+  align-items: start;
+  align-self: start;
+  gap: 24px;
+
+  opacity: var(--nav-opacity);
+  transform: translateY(var(--nav-translate));
+  transition: opacity 0.6s ease, transform 1s cubic-bezier(.2, .8, .2, 1);
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  font-family: Roboto;
+  font-size: 32px;
+  text-decoration: none;
+  padding: 0px 12px 24px 12px;
+  border-radius: 360px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &.active {
+    font-family: Roboto-Medium;
+  }
+}
+
+.nav-links a .nav-text {
+  font-size: 14px;
+  align-self: center;
+}
+
+.nav-links a:hover .nav-text {
+  font-family: Roboto-Medium;
+}
+
+.become-host {
+  font-size: 0.875rem;
+  font-family: Roboto-Medium;
+}
+
+/* NAV-ICON - PLAY VIDEO ANIMATION ON HOVER */
+.nav-links a .nav-icon {
+  width: 40px;
+  height: 40px;
+  display: inline-grid;
+  place-items: center;
+  overflow: hidden;
+  transform: scale(1);
+  transition: transform .4s ease;
+}
+
+/* .nav-links a .nav-icon video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+} */
+
+.nav-links a:hover .nav-icon {
+  transform: scale(1.20);
+}
+
+/* SIDE LINKS (hamburger, language, new-list) */
+.side-links {
+  grid-area: side-links;
+  display: flex;
+  justify-self: flex-end;
+  align-self: flex-start;
+  gap: 16px;
+  z-index: 10;
+  width: max-content;
+  margin-top: 10px;
+
+  img {
+    padding: 4px;
+    background-color: var(--icons-bg);
+    border-radius: 360px;
+  }
+
+  img:hover {
+    background-color: var(--icons-bg-hover);
+    cursor: pointer;
+  }
+
+  a {
+    justify-self: center;
+    align-self: center;
+    padding: 12px;
+  }
+
+  a:hover {
+    background-color: var(--icons-bg);
+    border-radius: 360px;
+  }
+}
+
+/* <= 1130px: hide "Become a host" */
+@media (max-width: 1130px) {
+  .side-links .become-host {
+    display: none;
+  }
+}
+
+/* <= 950px: hide "Sharebnb" text next to the logo */
+@media (max-width: 950px) {
+  .logo .brand {
+    display: none;
+  }
+
+  /* tighten the grid so it doesn't leave a gap where the brand was */
+  .nav-bar {
+    grid-template-columns: max-content 1fr max-content;
+  }
+
+  /* optional: tighten header padding a bit */
+  /* .app-header { padding: 16px 24px; } */
+}
+
+
+@media (min-width: 769px) {
+
+  /* keep your current padding so there's room for the bar */
+  .nav-links a {
+    position: relative;
+    padding: 0 12px 24px;
+    /* bottom space for the underline */
+  }
+
+  .nav-links a .nav-text {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 4px;
+  }
+
+  .nav-links a .nav-text::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -14px;
+    height: 3px;
+    background: var(--text-primary);
+    border-radius: 3px;
+    opacity: 0;
+    transform: scaleX(0.3);
+    transform-origin: center;
+    transition: opacity .2s ease,
+      transform .25s cubic-bezier(.2, .8, .2, 1);
+  }
+
+  .nav-links a.active .nav-text::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .nav-links a.active::after {
+    content: none;
+  }
+}
+
+@media (max-width: 1440px) {
+  .app-header.is-mini {
+    height: 80px;
+  }
+}

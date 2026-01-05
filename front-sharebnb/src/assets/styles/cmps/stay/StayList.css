@@ -1,0 +1,15 @@
+
+.stay-list {
+  --min: 170px; 
+  --max: 1fr; 
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--min), var(--max)));
+  gap: 11px;
+}
+
+.stay-list > li {
+  list-style: none;
+  width: 100%;
+  border-radius: 8px;
+}

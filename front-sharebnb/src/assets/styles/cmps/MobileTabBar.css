@@ -1,0 +1,93 @@
+:root {
+    --tabbar-h: 68px;
+}
+
+@media (max-width: 768px) {
+
+    /* Hide the desktop footer on mobile if you use one */
+    .app-footer {
+        display: none;
+    }
+
+    .m-tabbar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: var(--tabbar-h);
+        padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+        background: #fff;
+        border-top: 1px solid var(--divider, #eee);
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        align-items: end;
+        z-index: 120;
+    }
+
+    /* Auto-fit when you have 3 or 4 items (e.g., logged-out) */
+    .m-tabbar:has(.tab:nth-child(5)) {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .m-tabbar:has(.tab:nth-child(3)):not(:has(.tab:nth-child(4))) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .m-tabbar .tab {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        color: var(--text-secondary, #6b6b6b);
+        text-decoration: none;
+        padding: 4px 6px;
+    }
+
+    .m-tabbar .tab.active {
+
+        .text,
+        .icon {
+            color: #da1249;
+            font-weight: 600;
+            filter: invert(22%) sepia(81%) saturate(3811%) hue-rotate(328deg) brightness(94%) contrast(95%);
+        }
+    }
+
+    .m-tabbar .icon {
+        font-size: 22px;
+        line-height: 1;
+    }
+
+    .m-tabbar .text {
+        font-size: 11px;
+    }
+
+    .m-tabbar .badge {
+        position: absolute;
+        top: 2px;
+        right: 14px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        border-radius: 999px;
+        background: #ff385c;
+        color: #fff;
+        font-size: 10px;
+        line-height: 16px;
+        text-align: center;
+    }
+
+    /* Spacer so content sits above the fixed nav */
+    .m-tabbar-spacer {
+        height: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+    }
+}
+
+@media (min-width: 769px) {
+
+    .m-tabbar,
+    .m-tabbar-spacer {
+        display: none;
+    }
+}

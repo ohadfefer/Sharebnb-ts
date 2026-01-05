@@ -1,0 +1,143 @@
+.nav-bar {
+    position: relative;
+    isolation: isolate;
+}
+
+.app-header .header-main {
+    position: relative;
+    z-index: 20;
+}
+
+.app-header .side-links, .app-header .logo {
+    position: relative;
+    z-index: 50;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* align img with hamburger */
+
+.icon-btn {
+    border: 0;
+    padding: 8px;
+    border-radius: 999px;
+    display: flex;
+    place-items: center;
+    background: var(--icons-bg);
+    cursor: pointer;
+}
+
+.icon-btn:hover {
+    background: var(--icons-bg-hover);
+}
+
+.become-host {
+    background: transparent;
+    border: 0;
+    padding: 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font: inherit;
+}
+
+.become-host:hover {
+    background: var(--icons-bg);
+}
+
+/* --- the dropdown menu --- */
+.header-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 60;
+    /* above everything inside header */
+    width: 265px;
+    max-width: min(90vw, 380px);
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .08);
+    border-radius: 16px;
+    box-shadow:
+        0 16px 40px rgba(0, 0, 0, .12),
+        0 2px 8px rgba(0, 0, 0, .06);
+    padding: 12px;
+}
+
+/* separators */
+.header-menu hr {
+    margin: 12px 0;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, .08);
+}
+
+/* header row */
+.menu-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px 10px;
+    color: #111;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.menu-icon {
+    width: 22px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    border: 1.5px solid #999;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* menu items */
+.menu-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 12px;
+    background: transparent;
+    border: 0;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.menu-row:hover {
+    background: #f7f7f7;
+}
+
+.menu-row-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    /* allow text ellipsis if needed */
+}
+
+.menu-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: #111;
+    line-height: 1.2;
+}
+
+.menu-sub {
+    font-size: 14px;
+    color: #6b6b6b;
+    line-height: 1.25;
+}
+
+.menu-illus {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    pointer-events: none;
+    flex: 0 0 auto;
+}
+

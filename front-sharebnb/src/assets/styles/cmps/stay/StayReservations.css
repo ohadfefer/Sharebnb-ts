@@ -1,0 +1,627 @@
+:root {
+    --res-col-count: 7;
+}
+
+.reservations-page {
+    padding: 0;
+}
+
+.res-title {
+    font-size: 24px;
+    font-weight: 700;
+    padding: 24px 0;
+}
+
+.res-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .06);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+    overflow: hidden;
+}
+
+.res-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.res-table thead,
+.res-table tbody {
+    display: block;
+}
+
+.res-table tr {
+    display: grid;
+    grid-template-columns: repeat(var(--res-col-count), minmax(max-content, 1fr));
+    align-items: center;
+}
+
+/* cells */
+.res-table th,
+.res-table td {
+    padding: 14px 18px;
+    text-align: start;
+    vertical-align: middle;
+    white-space: normal;
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* header */
+.res-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.res-table thead th {
+    font: 600 13px/1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    color: #6b6b6b;
+    background: #fafafa;
+    user-select: none;
+    cursor: pointer;
+}
+
+.res-table thead th.no-sort {
+    cursor: default;
+}
+
+/* sort arrow */
+th .sort {
+    margin-left: 6px;
+    border: 4px solid transparent;
+    border-top-color: #bbb;
+    display: inline-block;
+    transform: translateY(2px);
+}
+
+th .sort.asc {
+    border-top-color: #111;
+}
+
+th .sort.desc {
+    transform: translateY(-2px) rotate(180deg);
+    border-top-color: #111;
+}
+
+/* rows */
+.res-table tbody tr+tr td {
+    border-top: 1px solid rgba(0, 0, 0, .06);
+}
+
+.reservation-row:hover {
+    background: var(--icons-bg);
+}
+
+/* ---- guest cell ---- */
+.guest-cell {
+    display: inline-grid;
+    grid-auto-flow: column;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    object-fit: cover;
+}
+
+.avatar-fallback {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: #efefef;
+    color: #555;
+    font-weight: 700;
+}
+
+.guest-name,
+.listing-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ---- status pill ---- */
+.status-pill {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 999px;
+    display: inline-block;
+}
+
+.status-pill.pending {
+    background: #fff3cd;
+    color: #7a5c00;
+}
+
+.status-pill.ok {
+    background: #e8f7ee;
+    color: #0a8a43;
+}
+
+.status-pill.bad {
+    background: #fde8e8;
+    color: #b42318;
+}
+
+/* ---- actions ---- */
+.todo-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-approve,
+.btn-reject {
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+}
+
+.btn-approve {
+    color: #138a36;
+    background: #e8f7ee;
+    border-color: #cbeeda;
+}
+
+.btn-reject {
+    color: #b42318;
+    background: #fde8e8;
+    border-color: #f7c2c0;
+}
+
+.btn-approve:disabled,
+.btn-reject:disabled {
+    opacity: .5;
+    cursor: default;
+}
+
+/* ---- empty state ---- */
+.empty {
+    text-align: center;
+    color: #6b6b6b;
+    padding: 40px 0 !important;
+}
+
+/* optional: center sort label+arrow as a unit */
+.res-table thead th>span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+/* KPI cards (you already have these; keep or tweak) */
+.dash-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 8px 0 8px;
+}
+
+@media (max-width: 1000px) {
+    .dash-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 560px) {
+    .dash-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+.dash-card {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    align-items: center;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .06);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+}
+
+.dash-card__title {
+    font-size: 12px;
+    color: #6b6b6b;
+}
+
+.dash-card__value {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.dash-card__sub {
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-top: 2px;
+}
+
+.dash-card__chart {
+    height: 48px;
+}
+
+/* Toolbar (keep your previous styles if you like) */
+.res-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 0 14px;
+}
+
+.res-toolbar .res-search {
+    width: min(420px, 60%);
+    max-width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 10px 12px;
+    outline: none;
+}
+
+.res-toolbar .res-status-filter {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.res-toolbar .spacer {
+    flex: 1;
+}
+
+.res-toolbar .res-csv {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    cursor: pointer;
+}
+
+/* Table alignment helpers (same as before) */
+.res-table th.is-center,
+.res-table td.is-center {
+    text-align: center;
+}
+
+.res-table th.is-right,
+.res-table td.is-right {
+    text-align: right;
+}
+
+.res-table .mono {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- Pretty pagination ---- */
+.pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-top: 1px solid rgba(0, 0, 0, .06);
+    background: #fafafa;
+}
+
+.pager__left,
+.pager__right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pager__center {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pager__btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, transform .05s ease;
+}
+
+.pager__btn:active {
+    transform: translateY(1px);
+}
+
+.pager__btn:disabled {
+    opacity: .45;
+    cursor: default;
+}
+
+.pager__input {
+    width: 56px;
+    height: 36px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.pager__label {
+    color: #6b6b6b;
+    font-size: 13px;
+}
+
+.pager__select {
+    height: 36px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    padding: 0 10px;
+}
+
+/* ========== Insights Row ========== */
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 8px 0 18px;
+}
+
+@media (max-width: 1000px) {
+    .insights-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 560px) {
+    .insights-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.insight-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .06);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+    padding: 14px 16px;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 180px;
+}
+
+.insight-head h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.insight-head p {
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-top: 2px;
+}
+
+.insight-empty {
+    display: grid;
+    place-items: center;
+    color: #6b6b6b;
+    font-size: 14px;
+}
+
+/* Occupancy strip */
+.occ-strip {
+    display: grid;
+    grid-template-columns: repeat(30, 1fr);
+    gap: 4px;
+    align-items: center;
+}
+
+.occ-strip .box {
+    height: 10px;
+    border-radius: 3px;
+    background: #eee;
+}
+
+.occ-strip .box.on {
+    background: #10b981;
+    /* green */
+}
+
+/* Chart wrap ensures consistent spacing */
+.chart-wrap {
+    height: 100%;
+    display: grid;
+    align-items: center;
+}
+
+/* Mobile cards */
+.res-cards {
+    display: grid;
+    gap: 12px;
+    padding: 8px;
+}
+
+.res-card {
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
+    background: #fff;
+}
+
+.res-card.empty {
+    text-align: center;
+    color: #999;
+}
+
+.res-card__top {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items: center;
+    gap: 12px;
+}
+
+.res-card__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.res-card__avatar--fallback {
+    display: grid;
+    place-items: center;
+    background: #f2f2f2;
+    font-weight: 600;
+}
+
+.res-card__guest {
+    font-weight: 600;
+}
+
+.res-card__meta {
+    margin-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.chip {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #f6f6f6;
+}
+
+.res-card__amount {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.res-card__bottom {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-pill {
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.status-pill.ok {
+    background: #e8f7ee;
+}
+
+.status-pill.pending {
+    background: #fff6e5;
+}
+
+.status-pill.bad {
+    background: #fde8e8;
+}
+
+.btn-approve,
+.btn-reject {
+    border: none;
+    border-radius: 12px;
+    padding: 8px 10px;
+    font-weight: 500;
+}
+
+.btn-approve {
+    background: #e8f7ee;
+}
+
+.btn-reject {
+    background: #fde8e8;
+}
+
+/* INSIGHTS ROW */
+/* Mini calendar */
+.occ-cal {
+    padding-top: 6px;
+}
+
+.occ-cal__weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    user-select: none;
+}
+
+.occ-cal__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.occ-cal__cell {
+    height: 30px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    background: #fff;
+}
+
+.occ-cal__cell.is-booked {
+    background: #10b981;
+    color: #fff;
+    border-color: #0ea371;
+}
+
+.occ-cal__cell.is-today {
+    outline: 2px solid #0080ff;
+    outline-offset: 2px;
+}
+
+.occ-cal__cell.is-empty {
+    background: transparent;
+    border-color: transparent;
+}
+
+.occ-cal__num {
+    font-weight: 600;
+}
+
+
+/* Hide desktop table + pager on small screens, keep cards only */
+@media (max-width: 1060px) {
+
+    .res-table,
+    .pager {
+        display: none;
+    }
+
+    .main-container {
+        grid-template-columns: 1rem minmax(0, 2fr) 1rem
+    }
+
+    .res-card.data-table {
+        padding: 4px;
+    }
+}

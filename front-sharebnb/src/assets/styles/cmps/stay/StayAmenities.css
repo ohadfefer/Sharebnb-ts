@@ -1,0 +1,137 @@
+.stay-amenities {
+    padding-top: 20px;
+    padding-bottom: 30px;
+    max-width: 600px;
+}
+
+
+.amenities-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    align-items: center;
+    justify-content: center;
+}
+
+.amenity-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: center;
+}
+
+
+.amenity-name {
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+
+/* Show All Amenities Button */
+.show-all-amenities {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.show-all-amenities button {
+    background: transparent;
+    border: 1px solid var(--gray1);
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-family: 'Roboto-Medium';
+    font-size: 16px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.show-all-amenities button:hover {
+    background: var(--shades-01);
+    border-color: var(--text-primary);
+}
+
+/* Amenities Modal */
+.amenities-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.amenities-modal {
+    background: var(--white);
+    border-radius: 16px;
+    max-width: 720px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* reuse .modal-header/.modal-title/.modal-close/.modal-content from reviews css */
+.amenities-modal .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid var(--gray1);
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    z-index: 1;
+}
+
+.amenities-modal .modal-title {
+    font-size: 24px;
+    font-family: 'Roboto-Medium';
+    font-weight: normal;
+}
+
+.amenities-modal .modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--gray2);
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.amenities-modal .modal-close:hover {
+    background: var(--shades-01);
+}
+
+.amenities-modal .modal-content {
+    padding: 16px 24px 24px;
+}
+
+
+@media (max-width: 768px) {
+    .amenities-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .amenity-row {
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+    }
+
+    .amenities-modal-overlay {
+        width: 100vw;
+    }
+}

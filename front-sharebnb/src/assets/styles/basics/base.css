@@ -1,0 +1,37 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0 auto;
+    font-family: Roboto;
+    color: var(--text-primary);
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-primary);
+    font-family: Roboto;
+    font-size: 0.950rem;
+    cursor: pointer;
+}
+
+.vertical-divider {
+    border-left: 1px solid var(--divider);
+    height: 50%;
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+ul {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}

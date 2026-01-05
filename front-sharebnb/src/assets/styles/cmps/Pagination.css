@@ -1,0 +1,43 @@
+.pagination {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0 8px;
+}
+
+.pagination .arrow,
+.pagination .item {
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #111;
+    display: grid;
+    place-items: center;
+    font: 600 14px/1 system-ui, sans-serif;
+    cursor: pointer;
+    transition: background .15s ease;
+}
+
+.pagination .item.current {
+    background: #111;
+    color: #fff;
+}
+
+.pagination .item.ghost:hover,
+.pagination .arrow:hover {
+    background: #f4f4f4;
+}
+
+.pagination .arrow.disabled {
+    color: #d1d5db;
+    cursor: default;
+    pointer-events: none;
+}
+
+.pagination .ellipsis {
+    color: #6b6b6b;
+    padding: 0 4px;
+}

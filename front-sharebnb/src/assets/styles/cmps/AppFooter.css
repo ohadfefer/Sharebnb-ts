@@ -1,0 +1,198 @@
+/* === Airbnb-style Footer === */
+
+:root {
+    --af-text: #374151;
+    /* gray-700 */
+    --af-text-strong: #111827;
+    /* gray-900 */
+    --af-border: #e5e7eb;
+    /* gray-200 */
+    --af-muted: #9ca3af;
+    /* gray-400 */
+    --af-bg: #ffffff;
+    --af-link: #374151;
+    --af-link-hover: #111827;
+    --af-maxw: 80rem;
+    /* ~1280px */
+}
+
+.af-footer {
+    width: 100%;
+    background: var(--af-bg);
+    color: var(--af-text);
+    border-top: 1px solid var(--af-border);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* container */
+.af-container {
+    max-width: var(--af-maxw);
+    margin-inline: auto;
+    padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+    .af-container {
+        padding: 0 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .af-container {
+        padding: 0 2rem;
+    }
+}
+
+/* --- Columns --- */
+.af-cols {
+    display: grid;
+    gap: 2rem;
+    padding: 3rem 0;
+}
+
+@media (min-width: 768px) {
+    .af-cols {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.af-col h3 {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    color: var(--af-text-strong);
+    margin-bottom: 0.75rem;
+}
+
+.af-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.af-col li+li {
+    margin-top: 0.75rem;
+}
+
+.af-col a {
+    font-size: 0.9375rem;
+    /* ~15px */
+    color: var(--af-link);
+    text-decoration: none;
+}
+
+.af-col a:hover {
+    text-decoration: underline;
+    color: var(--af-link-hover);
+}
+
+/* --- Divider line between columns and bottom bar --- */
+.af-divider {
+    border-top: 1px solid var(--af-border);
+}
+
+/* --- Bottom bar --- */
+.af-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0 1.25rem;
+}
+
+@media (min-width: 640px) {
+    .af-bottom {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+/* left: legal links */
+.af-legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    font-size: 0.9375rem;
+}
+
+.af-legal a {
+    color: var(--af-link);
+    text-decoration: none;
+}
+
+.af-legal a:hover {
+    text-decoration: underline;
+}
+
+/* bullet dot separator */
+.af-dot {
+    color: #d1d5db;
+    /* gray-300 */
+}
+
+/* right: language / currency / social */
+.af-right {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+}
+
+.af-lang,
+.af-currency {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    color: var(--af-link);
+    text-decoration: none;
+}
+
+.af-lang:hover,
+.af-currency:hover {
+    text-decoration: underline;
+}
+
+/* icons */
+.af-icon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    color: var(--af-text);
+}
+
+.af-social {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.af-social a {
+    color: var(--af-text);
+    text-decoration: none;
+    line-height: 0;
+}
+
+.af-social a:hover {
+    opacity: 0.7;
+}
+
+/* small badge (for “Your Privacy Choices”) */
+.af-privacy-badge {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: -2px;
+    color: var(--af-text);
+}
+
+/* High-DPI tweaks for crisp borders */
+@media (min-resolution: 2dppx) {
+
+    .af-footer,
+    .af-divider {
+        border-top-color: rgba(229, 231, 235, .9);
+    }
+}

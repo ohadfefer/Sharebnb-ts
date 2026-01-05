@@ -1,0 +1,48 @@
+.where-panel {
+    width: 350px;
+    max-height: 420px;
+    overflow: auto;
+}
+
+.where-list {
+    list-style: none;
+    padding: 0;
+}
+
+.where-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 12px;
+    align-items: center;
+    text-align: left;
+    border: 0;
+    background: transparent;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.where-icon {
+    display: block;
+    border-radius: 10px;
+}
+
+.where-texts {
+    display: grid;
+}
+
+.where-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.where-sub {
+    font-size: .9rem;
+    color: var(--text-secondary);
+}
+
+li:hover {
+    .where-row {
+        background: var(--icons-bg);
+    }
+}

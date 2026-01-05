@@ -1,0 +1,96 @@
+.guests-panel {
+    min-width: 400px;
+    max-width: 450px;
+    padding: 0px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.guest-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.guest-row:last-of-type {
+    border-bottom: 0;
+}
+
+.guest-labels .label {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.guest-labels .desc {
+    font-size: 14px;
+    color: #6b6b6b;
+}
+
+.guest-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.guest-controls .round {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 0;
+    display: grid;
+    place-items: center;
+}
+
+.guest-controls .round:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+}
+
+.guest-controls .count {
+    min-width: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.guests-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    color: #222;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.done-btn {
+    background: #ff385c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.round {
+    color: var(--text-secondary);
+    font-family: Roboto;
+    font-family: 100;
+}
+
+.round:hover {
+    color: var(--text-primary);
+    border: solid 0.8px var(--text-primary);
+}

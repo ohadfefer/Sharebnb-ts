@@ -1,0 +1,112 @@
+.stay-picker.rdp {
+    position: relative;
+}
+
+.stay-picker .rdp-months {
+    display: flex;
+    gap: var(--rdp-months-gap, 32px);
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    z-index: 0;
+    margin: 24px 24px 24px 0;
+}
+
+.stay-picker .rdp-month {
+    flex: 0 0 auto;
+}
+
+.stay-picker .rdp-caption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stay-picker .rdp-caption_label {
+    display: block;
+    margin: 0 auto;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.stay-picker .rdp-nav {
+    position: absolute;
+    top: 0px;
+    left: 8px;
+    right: 8px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.stay-picker .rdp-button_previous,
+.stay-picker .rdp-button_next {
+    pointer-events: auto;
+    width: var(--rdp-nav_button-width, 36px);
+    height: var(--rdp-nav_button-height, 36px);
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+}
+
+.stay-picker .rdp-button_previous:hover,
+.stay-picker .rdp-button_next:hover {
+    background: #ececec;
+}
+
+.stay-picker .rdp-month {
+    padding-top: 8px;
+}
+
+.stay-picker .rdp-table {
+    border-collapse: separate;
+    border-spacing: 10px 8px;
+}
+
+.stay-picker .rdp-day:not(.rdp-day_disabled):not(.rdp-day_outside):hover {
+    background: none;
+}
+
+.stay-picker .rdp-day_range_middle {
+    background: var(--rdp-range_middle-background-color, #f3f4f6);
+    color: var(--rdp-range_middle-color, #111);
+    border-radius: 10px;
+}
+
+.stay-picker .rdp-day_range_start,
+.stay-picker .rdp-day_range_end,
+.stay-picker .rdp-day_selected:not(.rdp-day_range_middle) {
+    background: var(--rdp-accent-color, #111);
+    color: var(--rdp-accent-background-color, #fff);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, .12);
+    position: relative;
+    z-index: 1;
+}
+
+.stay-picker .rdp-day_outside {
+    opacity: var(--rdp-outside-opacity, .35);
+}
+
+.stay-picker .rdp-day_disabled {
+    opacity: var(--rdp-disabled-opacity, .35);
+}
+
+.rdp-day_button:hover {
+    border: solid 2px var(--text-primary);
+    border-radius: 999px;
+}
+
+/* highlight the tentative path while hovering */
+.stay-picker .is-range-hover {
+    background: var(--rdp-range_middle-background-color, #f3f4f6);
+    color: var(--rdp-range_middle-color, #111);
+    border-radius: 10px;
+}
+
+/* highlight the tentative path while hovering (custom modifier) */
+.stay-picker .is-range-hover .rdp-day_button {
+    background: var(--rdp-range_middle-background-color, #f3f4f6);
+    color: var(--rdp-range_middle-color, #111);
+    border-radius: 10px;
+}

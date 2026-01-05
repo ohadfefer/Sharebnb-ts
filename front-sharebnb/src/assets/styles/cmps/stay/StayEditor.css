@@ -1,0 +1,210 @@
+.wizard {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+.wizard__header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.wizard__title {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.stepper {
+    display: flex;
+    gap: 14px;
+    overflow: auto;
+    padding-bottom: 8px;
+}
+
+.stepper__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #9ca3af;
+}
+
+.stepper__item.active {
+    color: #111827;
+}
+
+.stepper__dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #e5e7eb;
+}
+
+.stepper__item.active .stepper__dot {
+    background: #111827;
+    color: #fff;
+    border-color: #111827;
+}
+
+.stepper__label {
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.wizard__card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.col-2 {
+    grid-column: span 2;
+}
+
+.col-3 {
+    grid-column: span 3;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.field input,
+.field select,
+.field textarea {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font: inherit;
+}
+
+.dropzone {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 140px;
+    border: 2px dashed #e5e7eb;
+    border-radius: 12px;
+    color: #6b7280;
+    margin-bottom: 10px;
+}
+
+.dropzone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.thumbs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.thumbs li {
+    position: relative;
+    list-style: none;
+}
+
+.thumbs img {
+    width: 120px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.thumbs button {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 999px;
+    background: #111827;
+    color: #fff;
+    cursor: pointer;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 6px 0 12px;
+}
+
+.amenity {
+    border: 1px solid #e5e7eb;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #fff;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.amenity.active {
+    background: #111827;
+    color: #fff;
+    border-color: #111827;
+}
+
+.wizard__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.btn {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    padding: 10px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.btn.ghost:hover {
+    background: #f9fafb;
+}
+
+.btn.primary {
+    background: linear-gradient(90deg, #ff385c, #e61e4d, #d70466);
+    color: #fff;
+    border: none;
+}
+
+.btn[disabled] {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.hint {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.review ul {
+    margin: 0;
+    padding-left: 18px;
+}

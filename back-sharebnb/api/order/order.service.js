@@ -1,0 +1,272 @@
+// api/order/order.service.js
+import { dbService } from '../../services/db.service.js'
+import { logger } from '../../services/logger.service.js'
+import { ObjectId } from 'mongodb'
+
+const COLLECTION_NAME = 'order'
+
+export const orderService = {
+    query,
+    getById,
+    add,
+    update,
+    remove,
+}
+
+// function isHex24(id) { // NEW
+//     return typeof id === 'string' && /^[a-fA-F0-9]{24}$/.test(id)
+// }
+
+// function safeObjId(id) { // NEW
+//     return isHex24(id) ? new ObjectId(id) : null
+// }
+
+function _buildCriteria(filterBy = {}) {
+    const criteria = {}
+    console.log('_buildCriteria -> filterBy:', filterBy)
+
+    // EDIT: only add filter if valid ObjectId (skip guest-user-id etc)
+    if (filterBy.hostId) {
+        console.log('Adding hostId filter:', filterBy.hostId)
+        criteria.hostId = ObjectId.createFromHexString(filterBy.hostId)
+    }
+    if (filterBy.userId) {
+        console.log('Adding userId filter:', filterBy.userId)
+        criteria.userId = ObjectId.createFromHexString(filterBy.userId)
+    }
+    // if (filterBy.guestId) criteria.userId = ObjectId.createFromHexString(filterBy.guestId) // EDIT
+    if (filterBy.status) {
+        console.log('Adding status filter:', filterBy.status)
+        criteria.status = filterBy.status
+    }
+
+    console.log('_buildCriteria -> final criteria:', criteria)
+    return criteria
+}
+
+async function query(filterBy) {
+    const criteria = _buildCriteria(filterBy)
+    const collection = await dbService.getCollection(COLLECTION_NAME)
+
+    const orders = await collection
+        .aggregate([
+            {
+                $match: criteria,
+            },
+            {
+                $lookup: {
+                    from: 'user',
+                    foreignField: '_id',
+                    localField: 'userId',
+                    as: 'guest',
+                },
+            },
+            {
+                $unwind: '$guest',
+            },
+            {
+                $lookup: {
+                    from: 'stay',
+                    foreignField: '_id',
+                    localField: 'stayId',
+                    as: 'stay',
+                },
+            },
+            {
+                $unwind: '$stay',
+            },
+            {
+                $lookup: {
+                    from: 'user',
+                    foreignField: '_id',
+                    localField: 'hostId',
+                    as: 'host',
+                },
+            },
+            {
+                $unwind: '$host',
+            },
+            {
+                $project: {
+                    startDate: 1,
+                    endDate: 1,
+                    status: 1,
+                    totalPrice: 1,
+                    guests: 1,
+                    createdAt: 1,
+
+                    guest: {
+                        _id: '$guest._id',
+                        imgUrl: '$guest.imgUrl',
+                        fullname: { $ifNull: ['$guest.fullname', '$guest.name'] },
+                        email: '$guest.email', // NEW
+                    },
+
+                    stay: {
+                        _id: '$stay._id',
+                        name: '$stay.name',
+                        imgUrls: '$stay.imgUrls',
+                        imgUrl: '$stay.imgUrl',
+                        price: '$stay.price',
+                    },
+                },
+
+            },
+        ])
+        .toArray()
+
+    return orders
+}
+
+async function getById(orderId) {
+    try {
+        // const _id = safeObjId(orderId) // EDIT
+        // if (!_id) throw new Error('Invalid order id') // NEW
+        const collection = await dbService.getCollection(COLLECTION_NAME)
+        return await collection.findOne({ _id: ObjectId.createFromHexString(orderId) })
+    } catch (err) {
+        logger.error(`ERROR: cannot find order ${orderId}`)
+        throw err
+    }
+}
+
+async function add(order) {
+    try {
+        const collection = await dbService.getCollection(COLLECTION_NAME)
+
+        // if (!order.stayId) throw new Error('stayId is required')
+        // if (!order.hostId) throw new Error('hostId is required')
+        // if (!order.totalPrice) throw new Error('totalPrice is required')
+        // if (!order.startDate) throw new Error('startDate is required')
+        // if (!order.endDate) throw new Error('endDate is required')
+        // if (!order.guests) throw new Error('guests is required')
+
+        const orderToAdd = {
+            userId: ObjectId.createFromHexString(order.userId),
+            stayId: ObjectId.createFromHexString(order.stayId),
+            hostId: ObjectId.createFromHexString(order.hostId),
+            totalPrice: order.totalPrice,
+            startDate: new Date(order.startDate),
+            endDate: new Date(order.endDate),
+            guests: order.guests,
+            status: order.status || 'pending',
+            createdAt: new Date(), // NEW
+            contactEmail: order.contactEmail || null,
+        }
+
+        const result = await collection.insertOne(orderToAdd)
+        return result
+    } catch (err) {
+        logger.error('ERROR: cannot add order')
+        throw err
+    }
+}
+
+async function update(order) {
+    try {
+        console.log('order status!!!!!!!!!!!!!!', typeof order.status)
+        console.log('order id!!!!!!!!!!!!!!', typeof order._id)
+        console.log('order id!!!!!!!!!!!!!!', order._id)
+
+        const collection = await dbService.getCollection(COLLECTION_NAME)
+        
+        // Update the order
+        await collection.updateOne({ _id: ObjectId.createFromHexString(order._id) },
+            { $set: { status: order.status } })
+        
+        // Return the updated order with populated guest data
+        const updatedOrder = await collection
+            .aggregate([
+                {
+                    $match: { _id: ObjectId.createFromHexString(order._id) }
+                },
+                {
+                    $lookup: {
+                        from: 'user',
+                        foreignField: '_id',
+                        localField: 'userId',
+                        as: 'guest',
+                    },
+                },
+                {
+                    $unwind: '$guest',
+                },
+                {
+                    $lookup: {
+                        from: 'stay',
+                        foreignField: '_id',
+                        localField: 'stayId',
+                        as: 'stay',
+                    },
+                },
+                {
+                    $unwind: '$stay',
+                },
+                {
+                    $lookup: {
+                        from: 'user',
+                        foreignField: '_id',
+                        localField: 'hostId',
+                        as: 'host',
+                    },
+                },
+                {
+                    $unwind: '$host',
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        userId: 1,
+                        hostId: 1,
+                        stayId: 1,
+                        startDate: 1,
+                        endDate: 1,
+                        status: 1,
+                        totalPrice: 1,
+                        guests: 1,
+                        createdAt: 1,
+                        contactEmail: 1,
+
+                        guest: {
+                            _id: '$guest._id',
+                            imgUrl: '$guest.imgUrl',
+                            fullname: { $ifNull: ['$guest.fullname', '$guest.name'] },
+                            email: '$guest.email',
+                        },
+
+                        stay: {
+                            _id: '$stay._id',
+                            name: '$stay.name',
+                            imgUrls: '$stay.imgUrls',
+                            loc: '$stay.loc',
+                        },
+
+                        host: {
+                            _id: '$host._id',
+                            imgUrl: '$host.imgUrl',
+                            fullname: { $ifNull: ['$host.fullname', '$host.name'] },
+                            email: '$host.email',
+                        },
+                    },
+                },
+            ])
+            .toArray()
+        
+        return updatedOrder[0]
+    } catch (err) {
+        logger.error(`ERROR: cannot update order ${order._id}`)
+        throw err
+    }
+}
+
+async function remove(orderId) {
+    try {
+        const _id = safeObjId(orderId) // EDIT
+        if (!_id) throw new Error('Invalid order id') // NEW
+        const collection = await dbService.getCollection(COLLECTION_NAME)
+        await collection.deleteOne({ _id })
+    } catch (err) {
+        logger.error(`ERROR: cannot remove order ${orderId}`)
+        throw err
+    }
+}

@@ -1,0 +1,211 @@
+.stay-listings-page {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.listings-header {
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+}
+
+.listings-nav {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--gray2);
+    font-family: 'Roboto-Medium', sans-serif;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--black);
+
+}
+
+.nav-link.active {
+    color: var(--black);
+}
+
+.listings-count {
+    padding: 24px 0px;
+}
+
+.listings-count span {
+    font-family: 'Roboto-Medium', sans-serif;
+    font-size: 22px;
+    color: var(--black);
+}
+
+.stays-grid-container {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stays-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Roboto-Regular', sans-serif;
+}
+
+.stays-table th {
+    background: var(--neutrals-o1);
+    padding: 16px 12px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    color: var(--gray3);
+    border-bottom: 1px solid var(--neutrals-o2);
+}
+
+.sort-icon {
+    margin-left: 5px;
+}
+
+.stays-table td {
+    padding: 16px 12px;
+    border-bottom: 1px solid var(--neutrals-o2);
+    text-align: center;
+    vertical-align: middle;
+}
+
+.stays-table tr:hover {
+    background: var(--neutrals-o1);
+}
+
+.stay-row:last-child td {
+    border-bottom: none;
+}
+
+.listing-cell {
+    width: 200px;
+}
+
+.listing-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.listing-info:hover {
+    opacity: 0.7;
+}
+
+.stay-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.stay-name {
+    font-family: 'Roboto-Medium', sans-serif;
+    font-size: 14px;
+    color: var(--black);
+    line-height: 1.3;
+}
+
+.todo-cell {
+    width: 100px;
+    text-align: center;
+}
+
+.update-btn {
+    background: var(--white);
+    color: var(--black);
+    border: 1px solid var(--gray1);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: 'Roboto-Medium', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.update-btn:hover {
+    border: 1px solid var(--form-nav-border);
+    color: var(--form-nav-color);
+}
+
+.capacity-cell,
+.rooms-cell,
+.bedrooms-cell {
+    width: 80px;
+    text-align: center;
+    font-family: 'Roboto-Medium', sans-serif;
+    font-size: 15px;
+    color: var(--gray3);
+}
+
+.price-cell {
+    width: 100px;
+    font-family: 'Roboto-Medium', sans-serif;
+    color: var(--gray3);
+    font-size: 15px;
+}
+
+.location-cell {
+    width: 150px;
+    color: var(--gray3);
+    font-size: 15px;
+    font-family: 'Roboto-Medium', sans-serif;
+
+}
+
+.date-cell {
+    font-family: 'Roboto-Medium';
+    width: 120px;
+    color: var(--gray3);
+    font-size: 15px;
+}
+
+@media (max-width: 1200px) {
+    .stay-listings-page {
+        padding: 16px;
+    }
+
+    .listings-nav {
+        gap: 24px;
+    }
+
+    .nav-link {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .listings-nav {
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+    }
+
+    .stays-table {
+        font-size: 12px;
+    }
+
+    .stays-table th,
+    .stays-table td {
+        padding: 12px 8px;
+    }
+
+    .stay-image {
+        width: 40px;
+        height: 40px;
+    }
+
+    .stay-name {
+        font-size: 12px;
+    }
+}
