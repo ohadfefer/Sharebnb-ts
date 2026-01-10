@@ -7,7 +7,7 @@ const BASE_URL = process.env.NODE_ENV === 'production'
 
 const axios = Axios.create({ withCredentials: true })
 
-export const httpService = {
+export const httpService: HttpService = {
     get(endpoint, data) {
         return ajax(endpoint, 'GET', data)
     },
@@ -39,4 +39,11 @@ async function ajax(endpoint, method = 'GET', data = null) {
         }
         throw err
     }
+}
+
+interface HttpService {
+    get<T = any>(endpoint: string, data?: any): Promise<T>
+    post<T = any>(endpoint: string, data?: any): Promise<T>
+    put<T = any>(endpoint: string, data?: any): Promise<T>
+    delete<T = any>(endpoint: string, data?: any): Promise<T>
 }
