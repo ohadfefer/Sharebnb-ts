@@ -1,4 +1,5 @@
 import { stayService } from '../../services/stay/index.js'
+import { Stay, FilterBy, StayMsg } from '../../types/global.js'
 
 export const SET_STAYS = 'SET_STAYS'
 export const SET_STAY = 'SET_STAY'
@@ -11,14 +12,14 @@ export const SET_FILTER_BY = 'SET_FILTER_BY'
 export const SET_IS_LOADING = 'SET_IS_LOADING'
 
 
-const initialState = {
+const initialState: InitialState = {
     stays: [],
     stay: null,
     filterBy: stayService.getDefaultFilter(),
     isLoading: false,
 }
 
-export function stayReducer(state = initialState, action) {
+export function stayReducer(state = initialState, action: Action) {
     let newState = state
     switch (action.type) {
         case SET_STAYS:
@@ -53,29 +54,48 @@ export function stayReducer(state = initialState, action) {
     return newState
 }
 
+// Discriminated union for actions - each action has type + specific payload
+type Action =
+    | { type: typeof SET_STAYS; stays: Stay[] }
+    | { type: typeof SET_STAY; stay: Stay | null }
+    | { type: typeof REMOVE_STAY; stayId: string }
+    | { type: typeof ADD_STAY; stay: Stay }
+    | { type: typeof UPDATE_STAY; stay: Stay }
+    | { type: typeof ADD_STAY_MSG; msg: StayMsg }
+    | { type: typeof SET_FILTER_BY; filterBy: Partial<FilterBy> }
+    | { type: typeof SET_IS_LOADING; isLoading: boolean }
 
-function unitTestReducer() {
-    var state = initialState
-    const stay1 = { _id: 'b101', name: 'Stay ' + parseInt('' + Math.random() * 10), price: 12, host: null, msgs: [] }
-    const stay2 = { _id: 'b102', name: 'Stay ' + parseInt('' + Math.random() * 10), price: 13, host: null, msgs: [] }
-
-    state = stayReducer(state, { type: SET_STAYS, stays: [stay1] })
-    // console.log('After SET_STAYS:', state)
-
-    state = stayReducer(state, { type: ADD_STAY, stay: stay2 })
-    // console.log('After ADD_STAY:', state)
-
-    state = stayReducer(state, { type: UPDATE_STAY, stay: { ...stay2, name: 'Good' } })
-    // console.log('After UPDATE_STAY:', state)
-
-    state = stayReducer(state, { type: REMOVE_STAY, stayId: stay2._id })
-    // console.log('After REMOVE_STAY:', state)
-
-    state = stayReducer(state, { type: SET_STAY, stay: stay1 })
-    // console.log('After SET_STAY:', state)
-
-    const msg = { id: 'm' + parseInt('' + Math.random() * 100), txt: 'Some msg', by: { _id: 'u123', fullname: 'test' } }
-    state = stayReducer(state, { type: ADD_STAY_MSG, stayId: stay1._id, msg })
-    // console.log('After ADD_STAY_MSG:', state)
+interface InitialState {
+    stays: Stay[]
+    stay: Stay | null
+    filterBy: FilterBy
+    isLoading: boolean
+    lastRemovedStay?: Stay
 }
 
+
+
+// function unitTestReducer() {
+//     var state = initialState
+//     const stay1 = { _id: 'b101', name: 'Stay ' + parseInt('' + Math.random() * 10), price: 12, host: null, msgs: [] }
+//     const stay2 = { _id: 'b102', name: 'Stay ' + parseInt('' + Math.random() * 10), price: 13, host: null, msgs: [] }
+
+//     state = stayReducer(state, { type: SET_STAYS, stays: [stay1] })
+//     // console.log('After SET_STAYS:', state)
+
+//     state = stayReducer(state, { type: ADD_STAY, stay: stay2 })
+//     // console.log('After ADD_STAY:', state)
+
+//     state = stayReducer(state, { type: UPDATE_STAY, stay: { ...stay2, name: 'Good' } })
+//     // console.log('After UPDATE_STAY:', state)
+
+//     state = stayReducer(state, { type: REMOVE_STAY, stayId: stay2._id })
+//     // console.log('After REMOVE_STAY:', state)
+
+//     state = stayReducer(state, { type: SET_STAY, stay: stay1 })
+//     // console.log('After SET_STAY:', state)
+
+//     const msg = { id: 'm' + parseInt('' + Math.random() * 100), txt: 'Some msg', by: { _id: 'u123', fullname: 'test' } }
+//     state = stayReducer(state, { type: ADD_STAY_MSG, stayId: stay1._id, msg })
+//     // console.log('After ADD_STAY_MSG:', state)
+// }

@@ -46,6 +46,12 @@ interface AvailableDate {
   end: string
 }
 
+interface StayMsg {
+  id: string
+  txt: string
+  by: { _id: string; fullname: string; imgUrl?: string }
+}
+
 interface Stay {
   _id?: string
   name: string
@@ -64,6 +70,7 @@ interface Stay {
   likedByUsers?: any
   availableDates?: AvailableDate[]
   labels: string[]
+  msgs?: StayMsg[]
   rating?: string | number
   guestFavorit?: boolean
   isGuestFavorite?: boolean
@@ -91,4 +98,4 @@ declare global {
   }
 }
 
-export { StayService, StayServiceRemote, Stay, FilterBy, Guests, Host, Location, Review, AvailableDate }  // important: makes this a module (otherwise TS treats it as ambient)
+export { StayService, StayServiceRemote, Stay, FilterBy, Guests, Host, Location, Review, AvailableDate, StayMsg }  // important: makes this a module (otherwise TS treats it as ambient)
