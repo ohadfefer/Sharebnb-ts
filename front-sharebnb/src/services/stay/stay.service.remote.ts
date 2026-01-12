@@ -1,6 +1,7 @@
 import { httpService } from '../http.service.js'
+import { StayServiceRemote, FilterBy, Stay } from '../../types/global.js'
 
-export const stayService = {
+export const stayService: StayServiceRemote = {
     query,
     getById,
     save,
@@ -75,74 +76,4 @@ async function getWishlistStays(userId: string) {
     return stays
 }
 
-interface FilterBy {
-    address: string,
-    maxPrice: string,
-    checkIn: string,
-    checkOut: string,
-    guests: Guests | string | number,
-    labels: string[],
-}
-
-interface Guests {
-    adults: number | string,
-    children: number | string,
-    infants: number | string,
-    pets: number | string
-}
-
-interface Stay {
-    _id?: string,
-    name: string,
-    type: string,
-    imgUrls: string[],
-    price: number,
-    summary: string,
-    capacity: number,
-    amenities: string[],
-    bathrooms: number,
-    bedrooms: number,
-    roomType: string,
-    host?: Host,
-    loc?: Location,
-    reviews?: review[] | string
-    likedByUsers?: any,
-    availableDates?: AvailableDate[],
-    labels: string[],
-    rating?: string | number,
-    guestFavorit?: boolean,
-    isGuestFavorite?: boolean,
-    wishlist?: { userId: string, addedAt: string }[]
-}
-
-interface Host {
-    _id?: string,
-    fullname: string,
-    location: string,
-    about: string,
-    responseTime: string,
-    isSuperhost: boolean,
-    pictureUrl: string
-}
-
-interface Location {
-    country: string,
-    countryCode: string,
-    city: string,
-    address: string,
-    lat: number,
-    lng: number
-}
-
-interface review {
-    at: string,
-    by: { fullname: string, imgUrl: string, id: string },
-    txt: string,
-    _id?: string
-}
-
-interface AvailableDate {
-    start: string,
-    end: string
-}
 

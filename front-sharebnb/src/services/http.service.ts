@@ -22,7 +22,7 @@ export const httpService: HttpService = {
     }
 }
 
-async function ajax(endpoint, method = 'GET', data = null) {
+async function ajax(endpoint: string, method = 'GET', data = null) {
     const url = `${BASE_URL}${endpoint}`
     const params = (method === 'GET') ? data : null
     const options = { url, method, data, params }
@@ -30,12 +30,15 @@ async function ajax(endpoint, method = 'GET', data = null) {
     try {
         const res = await axios(options)
         return res.data
-    } catch (err) {
+    } catch (err: unknown) {
         console.log(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
         console.dir(err)
-        if (err.response && err.response.status === 401) {
-            sessionStorage.clear()
-            window.location.assign('/')
+
+        if (Axios.isAxiosError(err)) {
+            if (err.response && err.response.status === 401) {
+                sessionStorage.clear()
+                window.location.assign('/')
+            }
         }
         throw err
     }
