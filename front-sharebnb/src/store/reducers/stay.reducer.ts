@@ -54,7 +54,7 @@ export function stayReducer(state = initialState, action: Action) {
     return newState
 }
 
-// Discriminated union for actions - each action has type + specific payload
+// each action has type + specific payload
 type Action =
     | { type: typeof SET_STAYS; stays: Stay[] }
     | { type: typeof SET_STAY; stay: Stay | null }
