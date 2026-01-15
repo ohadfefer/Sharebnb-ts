@@ -1,20 +1,22 @@
 // import { log } from '../../middlewares/logger.middleware.js'
+import { Request, Response } from 'express'
 import { logger } from '../../services/logger.service.js'
 import { stayService } from './stay.service.js'
 import { userService } from '../user/user.service.js'
+import { AuthenticatedRequest } from '../../types/express.js'
 
-export async function getStays(req, res) {
+export async function getStays(req: Request, res: Response) {
 	try {
 		// Pass through filters explicitly and KEEP types as strings.        // EDIT
 		const filterBy = {
-			address: req.query.address || '',
-			guests: +req.query.guests || 0,
-			maxPrice: +req.query.maxPrice || 0,
-			checkIn: +req.query.checkIn || '',
-			checkOut: +req.query.checkOut || '',
-            sortField: req.query.sortField || '',
-            sortDir: req.query.sortDir || 1,
-			hostId: req.query.hostId || '',
+			address: (req.query.address as string) || '',
+			guests: +(req.query.guests as string) || 0,
+			maxPrice: +(req.query.maxPrice as string) || 0,
+			checkIn: (req.query.checkIn as string) || '',
+			checkOut: (req.query.checkOut as string) || '',
+            sortField: (req.query.sortField as string) || '',
+            sortDir: +(req.query.sortDir as string) || 1,
+			hostId: (req.query.hostId as string) || '',
 		}
 
 		const stays = await stayService.query(filterBy)
@@ -25,7 +27,7 @@ export async function getStays(req, res) {
 	}
 }
 
-export async function getStayById(req, res) {
+export async function getStayById(req: Request, res: Response) {
 	try {
 		const stayId = req.params.id
 		const stay = await stayService.getById(stayId)
@@ -36,7 +38,7 @@ export async function getStayById(req, res) {
 	}
 }
 
-export async function addStay(req, res) {
+export async function addStay(req: AuthenticatedRequest, res: Response) {
 	const { loggedinUser, body } = req
 	const stay = body
 	try {
@@ -73,8 +75,14 @@ export async function addStay(req, res) {
 	}
 }
 
-export async function updateStay(req, res) {
+export async function updateStay(req: AuthenticatedRequest, res: Response) {
 	const { loggedinUser, body: stay } = req
+	
+	if (!loggedinUser) {
+		res.status(401).send('Not Authenticated')
+		return
+	}
+	
 	const { _id: userId, isAdmin } = loggedinUser
 
 	if (!isAdmin && stay.host._id !== userId) {
@@ -91,7 +99,7 @@ export async function updateStay(req, res) {
 	}
 }
 
-export async function removeStay(req, res) {
+export async function removeStay(req: Request, res: Response) {
 	try {
 		const stayId = req.params.id
 		const removedId = await stayService.remove(stayId)
@@ -103,8 +111,13 @@ export async function removeStay(req, res) {
 	}
 }
 
-export async function addStayMsg(req, res) {
+export async function addStayMsg(req: AuthenticatedRequest, res: Response) {
 	const { loggedinUser } = req
+
+	if (!loggedinUser) {
+		res.status(401).send('Not Authenticated')
+		return
+	}
 
 	try {
 		const stayId = req.params.id
@@ -120,7 +133,7 @@ export async function addStayMsg(req, res) {
 	}
 }
 
-export async function removeStayMsg(req, res) {
+export async function removeStayMsg(req: Request, res: Response) {
 	try {
 		const { id: stayId, msgId } = req.params
 		const removedId = await stayService.removeStayMsg(stayId, msgId)
@@ -131,9 +144,13 @@ export async function removeStayMsg(req, res) {
 	}
 }
 
-export async function addToWishlist(req, res) {
+export async function addToWishlist(req: AuthenticatedRequest, res: Response) {
 	try {
 		const { loggedinUser } = req
+		if (!loggedinUser) {
+			res.status(401).send('Not Authenticated')
+			return
+		}
 		const stayId = req.params.id
 		const userId = loggedinUser._id
 		
@@ -145,11 +162,15 @@ export async function addToWishlist(req, res) {
 	}
 }
 
-export async function removeFromWishlist(req, res) {
+export async function removeFromWishlist(req: AuthenticatedRequest, res: Response) {
 	try {
 		const { loggedinUser } = req
 		const stayId = req.params.id
-		const userId = req.params.userId || loggedinUser._id
+		if (!loggedinUser && !req.params.userId) {
+			res.status(401).send('Not Authenticated')
+			return
+		}
+		const userId = req.params.userId || loggedinUser!._id
 		
 		const updatedStay = await stayService.removeFromWishlist(stayId, userId)
 		res.json(updatedStay)
@@ -159,7 +180,7 @@ export async function removeFromWishlist(req, res) {
 	}
 }
 
-export async function getWishlistStays(req, res) {
+export async function getWishlistStays(req: Request, res: Response) {
 	try {
 		const userId = req.params.userId
 		const stays = await stayService.getWishlistStays(userId)

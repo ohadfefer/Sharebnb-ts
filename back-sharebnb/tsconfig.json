@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "strict": true,                         
+      "allowJs": true,
+  
+      /* Basic setup */
+      "target": "ES2022",                       
+      "module": "Node16",                      
+      "moduleResolution": "Node16",             
+  
+      /* Output control */
+      "outDir": "./dist",
+      "noEmitOnError": true,                          // Only type-check, don't emit (for gradual migration)
+  
+    },
+    "include": [
+      "api/**/*"
+    ],
+    "exclude": [
+      "node_modules",
+      "dist"
+    ]
+  }
