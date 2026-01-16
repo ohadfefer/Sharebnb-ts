@@ -1,4 +1,4 @@
-interface Host {
+export interface Host {
     _id?: string
     fullname: string
     location: string
@@ -8,7 +8,7 @@ interface Host {
     pictureUrl: string
 }
 
-interface Location {
+export interface Location {
     country: string
     countryCode: string
     city: string
@@ -17,25 +17,25 @@ interface Location {
     lng: number
 }
 
-interface Review {
+export interface Review {
     at: string
     by: { fullname: string; imgUrl: string; id: string }
     txt: string
     _id?: string
 }
 
-interface AvailableDate {
+export interface AvailableDate {
     start: string
     end: string
 }
 
-interface StayMsg {
+export interface StayMsg {
     id: string
     txt: string
     by: { _id: string; fullname: string; imgUrl?: string }
 }
 
-interface Stay {
+export interface Stay {
     _id?: string
     name: string
     type: string

@@ -3,7 +3,12 @@ import { Request, Response } from 'express'
 import { logger } from '../../services/logger.service.js'
 import { stayService } from './stay.service.js'
 import { userService } from '../user/user.service.js'
+
+// types
+
 import { AuthenticatedRequest } from '../../types/express.js'
+import { Stay } from '../../types/stay.js'
+import { User, LoggedInUser } from '../../types/user.js'
 
 export async function getStays(req: Request, res: Response) {
 	try {
@@ -14,12 +19,12 @@ export async function getStays(req: Request, res: Response) {
 			maxPrice: +(req.query.maxPrice as string) || 0,
 			checkIn: (req.query.checkIn as string) || '',
 			checkOut: (req.query.checkOut as string) || '',
-            sortField: (req.query.sortField as string) || '',
-            sortDir: +(req.query.sortDir as string) || 1,
+			sortField: (req.query.sortField as string) || '',
+			sortDir: +(req.query.sortDir as string) || 1,
 			hostId: (req.query.hostId as string) || '',
 		}
 
-		const stays = await stayService.query(filterBy)
+		const stays: Stay[] = await stayService.query(filterBy)
 		res.json(stays)
 	} catch (err) {
 		logger.error('Failed to get stays', err)
@@ -30,7 +35,7 @@ export async function getStays(req: Request, res: Response) {
 export async function getStayById(req: Request, res: Response) {
 	try {
 		const stayId = req.params.id
-		const stay = await stayService.getById(stayId)
+		const stay: Stay = await stayService.getById(stayId)
 		res.json(stay)
 	} catch (err) {
 		logger.error('Failed to get stay', err)
@@ -44,18 +49,18 @@ export async function addStay(req: AuthenticatedRequest, res: Response) {
 	try {
 		// Ensure host is always the logged-in user (subset of fields)
 		let hostImgUrl = loggedinUser?.imgUrl
-		
+
 		// If imgUrl is missing from token, fetch fresh user data
 		if (loggedinUser && !hostImgUrl) {
 			try {
-				const freshUser = await userService.getById(loggedinUser._id)
+				const freshUser: User = await userService.getById(loggedinUser._id)
 				hostImgUrl = freshUser?.imgUrl
 				logger.info('addStay -> fetched fresh user imgUrl:', hostImgUrl)
 			} catch (err) {
 				logger.warn('addStay -> failed to fetch fresh user data:', err)
 			}
 		}
-		
+
 		stay.host = loggedinUser ? {
 			_id: loggedinUser._id,
 			fullname: loggedinUser.fullname,
@@ -67,7 +72,7 @@ export async function addStay(req: AuthenticatedRequest, res: Response) {
 		logger.info('addStay -> loggedinUser.imgUrl:', loggedinUser?.imgUrl)
 		logger.info('addStay -> final hostImgUrl:', hostImgUrl)
 		logger.info('addStay -> final stay payload host:', stay.host)
-		const addedStay = await stayService.add(stay)
+		const addedStay: Stay = await stayService.add(stay)
 		res.json(addedStay)
 	} catch (err) {
 		logger.error('Failed to add stay', err)
@@ -77,12 +82,12 @@ export async function addStay(req: AuthenticatedRequest, res: Response) {
 
 export async function updateStay(req: AuthenticatedRequest, res: Response) {
 	const { loggedinUser, body: stay } = req
-	
+
 	if (!loggedinUser) {
 		res.status(401).send('Not Authenticated')
 		return
 	}
-	
+
 	const { _id: userId, isAdmin } = loggedinUser
 
 	if (!isAdmin && stay.host._id !== userId) {
@@ -91,7 +96,7 @@ export async function updateStay(req: AuthenticatedRequest, res: Response) {
 	}
 
 	try {
-		const updatedStay = await stayService.update(stay)
+		const updatedStay: Stay = await stayService.update(stay)
 		res.json(updatedStay)
 	} catch (err) {
 		logger.error('Failed to update stay', err)
@@ -102,7 +107,7 @@ export async function updateStay(req: AuthenticatedRequest, res: Response) {
 export async function removeStay(req: Request, res: Response) {
 	try {
 		const stayId = req.params.id
-		const removedId = await stayService.remove(stayId)
+		const removedId: string = await stayService.remove(stayId)
 
 		res.send(removedId)
 	} catch (err) {
@@ -153,8 +158,8 @@ export async function addToWishlist(req: AuthenticatedRequest, res: Response) {
 		}
 		const stayId = req.params.id
 		const userId = loggedinUser._id
-		
-		const updatedStay = await stayService.addToWishlist(stayId, userId)
+
+		const updatedStay: Stay = await stayService.addToWishlist(stayId, userId)
 		res.json(updatedStay)
 	} catch (err) {
 		logger.error('Failed to add to wishlist', err)
@@ -171,8 +176,8 @@ export async function removeFromWishlist(req: AuthenticatedRequest, res: Respons
 			return
 		}
 		const userId = req.params.userId || loggedinUser!._id
-		
-		const updatedStay = await stayService.removeFromWishlist(stayId, userId)
+
+		const updatedStay: Stay = await stayService.removeFromWishlist(stayId, userId)
 		res.json(updatedStay)
 	} catch (err) {
 		logger.error('Failed to remove from wishlist', err)
@@ -183,7 +188,7 @@ export async function removeFromWishlist(req: AuthenticatedRequest, res: Respons
 export async function getWishlistStays(req: Request, res: Response) {
 	try {
 		const userId = req.params.userId
-		const stays = await stayService.getWishlistStays(userId)
+		const stays: Stay[] | object = await stayService.getWishlistStays(userId)
 		res.json(stays)
 	} catch (err) {
 		logger.error('Failed to get wishlist stays', err)
