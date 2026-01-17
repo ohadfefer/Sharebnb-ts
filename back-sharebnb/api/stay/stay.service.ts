@@ -5,6 +5,9 @@ import { makeId } from '../../services/util.service.js'
 import { dbService } from '../../services/db.service.js'
 import { asyncLocalStorage } from '../../services/als.service.js'
 
+// types
+import { FilterBy, Stay, StayMsg } from '../../types/stay.js'
+
 const PAGE_SIZE = 3
 
 export const stayService = {
@@ -20,19 +23,19 @@ export const stayService = {
 	getWishlistStays,
 }
 
-function _asObjectId(id) {                 // NEW
+function _asObjectId(id: string) {                 // NEW
 	if (!id) return null
 	try { return new ObjectId(String(id)) } catch { return null }
 }
 
-async function query(filterBy = {}) {
+async function query(filterBy: FilterBy): Promise<Stay[]> {
 	try {
 		const criteria = _buildCriteria(filterBy)
 		const collection = await dbService.getCollection('stay')
 		// console.log('criteria =>', JSON.stringify(criteria)) // EDIT (debug-friendly)
 
 		const stayCursor = await collection.find(criteria)   // if needed: add sort later
-		const stays = await stayCursor.toArray()
+		const stays: Stay[] = await stayCursor.toArray()
 		return stays
 	} catch (err) {
 		logger.error('cannot find stays', err)
@@ -40,17 +43,17 @@ async function query(filterBy = {}) {
 	}
 }
 
-async function getById(stayId) {
+async function getById(stayId: string): Promise<Stay> {
 	try {
 		// const _id = _asObjectId(stayId)                     // NEW (robust)
 		// if (!_id) throw new Error(`Invalid stay id: ${stayId}`) // NEW
 
 		const collection = await dbService.getCollection('stay')
-		const stay = await collection.findOne({ _id: ObjectId.createFromHexString(stayId) })
+		const stay: Stay = await collection.findOne({ _id: ObjectId.createFromHexString(stayId) })
 
 		if (!stay) throw new Error(`Stay not found: ${stayId}`) // NEW
 
-		stay.createdAt = stay._id.getTimestamp()
+		// stay.createdAt = stay._id?.getTimestamp()
 		return stay
 	} catch (err) {
 		logger.error(`while finding stay ${stayId}`, err)
@@ -58,7 +61,7 @@ async function getById(stayId) {
 	}
 }
 
-async function remove(stayId) {
+async function remove(stayId: string): Promise<string> {
 	const { loggedinUser } = asyncLocalStorage.getStore()
 	const { _id: hostId, isAdmin } = loggedinUser
 
@@ -66,7 +69,7 @@ async function remove(stayId) {
 		const _id = _asObjectId(stayId)                     // NEW
 		if (!_id) throw new Error(`Invalid stay id: ${stayId}`) // NEW
 
-		const criteria = { _id }
+		const criteria: Record<string, any> = { _id }
 		if (!isAdmin) criteria['host._id'] = hostId
 
 		const collection = await dbService.getCollection('stay')
@@ -80,7 +83,7 @@ async function remove(stayId) {
 	}
 }
 
-async function add(stay) {
+async function add(stay: Stay): Promise<Stay> {
 	try {
 		if (stay.loc) {
 			stay.loc.lat = Number(stay.loc.lat)
@@ -97,17 +100,15 @@ async function add(stay) {
 	}
 }
 
-async function update(stay) {
-	const stayToSave = { 
+async function update(stay: Stay): Promise<Stay> {
+	const stayToSave: Partial<Stay> = { 
 		name: stay.name, 
 		price: stay.price,
 		capacity: stay.capacity,
-		rooms: stay.rooms,
 		bedrooms: stay.bedrooms,
 		bathrooms: stay.bathrooms,
 		labels: stay.labels,
 		amenities: stay.amenities,
-		description: stay.description,
 		imgUrls: stay.imgUrls
 	}
 	if (stay.loc) {
@@ -116,26 +117,25 @@ async function update(stay) {
 			city: stay.loc.city,
 			country: stay.loc.country,
 			countryCode: stay.loc.countryCode,
-			street: stay.loc.street,
 			lat: Number(stay.loc.lat),
 			lng: Number(stay.loc.lng),
 		}
 	}
 	try {
-		const _id = _asObjectId(stay._id)                   // NEW
+		const _id = _asObjectId(stay._id || '')                   // NEW
 		if (!_id) throw new Error(`Invalid stay id: ${stay?._id}`) // NEW
 
 		const collection = await dbService.getCollection('stay')
 		await collection.updateOne({ _id }, { $set: stayToSave })
 
-		return { ...stay, _id }
+		return { ...stay, _id: _id.toString() }
 	} catch (err) {
 		logger.error(`cannot update stay ${stay._id}`, err)
 		throw err
 	}
 }
 
-async function addStayMsg(stayId, msg) {
+async function addStayMsg(stayId: string, msg: StayMsg): Promise<StayMsg> {
 	try {
 		const _id = _asObjectId(stayId)                     // NEW
 		if (!_id) throw new Error(`Invalid stay id: ${stayId}`) // NEW
@@ -152,7 +152,7 @@ async function addStayMsg(stayId, msg) {
 	}
 }
 
-async function removeStayMsg(stayId, msgId) {
+async function removeStayMsg(stayId: string, msgId: string): Promise<string> {
 	try {
 		const _id = _asObjectId(stayId)                     // NEW
 		if (!_id) throw new Error(`Invalid stay id: ${stayId}`) // NEW
@@ -167,7 +167,7 @@ async function removeStayMsg(stayId, msgId) {
 	}
 }
 
-function _buildCriteria(filterBy) {
+function _buildCriteria(filterBy: FilterBy): Record<string, any> {
 	console.log('_buildCriteria -> filterBy:', filterBy)
 	
 	const criteria = {}
@@ -177,7 +177,7 @@ function _buildCriteria(filterBy) {
 	if (filterBy.hostId) {
 		const hostIdOr = [{ 'host._id': filterBy.hostId }]
 		try {
-			hostIdOr.push({ 'host._id': ObjectId.createFromHexString(filterBy.hostId) })
+			hostIdOr.push({ 'host._id': ObjectId.createFromHexString(filterBy.hostId).toString() })
 		} catch (e) { }
 		andConditions.push({ $or: hostIdOr })
 	}
@@ -264,7 +264,7 @@ function _buildCriteria(filterBy) {
 	}
 }
 
-async function addToWishlist(stayId, userId) {
+async function addToWishlist(stayId: string, userId: string): Promise<Stay> {
 	try {
 		const _id = _asObjectId(stayId)
 		if (!_id) throw new Error(`Invalid stay id: ${stayId}`)
@@ -278,7 +278,7 @@ async function addToWishlist(stayId, userId) {
 		const wishlistEntry = { userId, addedAt: new Date() }
 		
 		// Check if user is already in wishlist
-		const existingEntry = stay.wishlist?.find(entry => entry.userId === userId)
+		const existingEntry = stay.wishlist?.find((entry: { userId: string }) => entry.userId === userId)
 		if (existingEntry) {
 			return stay // Already in wishlist
 		}
@@ -289,7 +289,7 @@ async function addToWishlist(stayId, userId) {
 		)
 		
 		// Return updated stay
-		const updatedStay = await collection.findOne({ _id })
+		const updatedStay: Stay = await collection.findOne({ _id })
 		return updatedStay
 	} catch (err) {
 		logger.error(`cannot add to wishlist ${stayId}`, err)
@@ -297,7 +297,7 @@ async function addToWishlist(stayId, userId) {
 	}
 }
 
-async function removeFromWishlist(stayId, userId) {
+async function removeFromWishlist(stayId: string, userId: string): Promise<Stay> {
 	try {
 		const _id = _asObjectId(stayId)
 		if (!_id) throw new Error(`Invalid stay id: ${stayId}`)
@@ -310,7 +310,7 @@ async function removeFromWishlist(stayId, userId) {
 		)
 		
 		// Return updated stay
-		const updatedStay = await collection.findOne({ _id })
+		const updatedStay: Stay = await collection.findOne({ _id })
 		return updatedStay
 	} catch (err) {
 		logger.error(`cannot remove from wishlist ${stayId}`, err)
@@ -318,12 +318,12 @@ async function removeFromWishlist(stayId, userId) {
 	}
 }
 
-async function getWishlistStays(userId) {
+async function getWishlistStays(userId: string): Promise<Stay[]> {
 	try {
 		const collection = await dbService.getCollection('stay')
 		
 		// Find all stays where the user is in the wishlist
-		const stays = await collection.find({
+		const stays: Stay[] = await collection.find({
 			'wishlist.userId': userId
 		}).toArray()
 		

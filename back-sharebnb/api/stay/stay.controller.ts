@@ -3,11 +3,12 @@ import { Request, Response } from 'express'
 import { logger } from '../../services/logger.service.js'
 import { stayService } from './stay.service.js'
 import { userService } from '../user/user.service.js'
+import { makeId } from '../../services/util.service.js'
 
 // types
 
 import { AuthenticatedRequest } from '../../types/express.js'
-import { Stay } from '../../types/stay.js'
+import { Stay, StayMsg } from '../../types/stay.js'
 import { User, LoggedInUser } from '../../types/user.js'
 
 export async function getStays(req: Request, res: Response) {
@@ -34,7 +35,7 @@ export async function getStays(req: Request, res: Response) {
 
 export async function getStayById(req: Request, res: Response) {
 	try {
-		const stayId = req.params.id
+		const stayId = req.params.id as string
 		const stay: Stay = await stayService.getById(stayId)
 		res.json(stay)
 	} catch (err) {
@@ -106,7 +107,7 @@ export async function updateStay(req: AuthenticatedRequest, res: Response) {
 
 export async function removeStay(req: Request, res: Response) {
 	try {
-		const stayId = req.params.id
+		const stayId = req.params.id as string
 		const removedId: string = await stayService.remove(stayId)
 
 		res.send(removedId)
@@ -125,10 +126,15 @@ export async function addStayMsg(req: AuthenticatedRequest, res: Response) {
 	}
 
 	try {
-		const stayId = req.params.id
-		const msg = {
+		const stayId = req.params.id as string
+		const msg: StayMsg = {
+			id: makeId(),
 			txt: req.body.txt,
-			by: loggedinUser,
+			by: {
+				_id: loggedinUser._id,
+				fullname: loggedinUser.fullname,
+				imgUrl: loggedinUser.imgUrl || undefined,
+			},
 		}
 		const savedMsg = await stayService.addStayMsg(stayId, msg)
 		res.json(savedMsg)
@@ -140,7 +146,7 @@ export async function addStayMsg(req: AuthenticatedRequest, res: Response) {
 
 export async function removeStayMsg(req: Request, res: Response) {
 	try {
-		const { id: stayId, msgId } = req.params
+		const { id: stayId, msgId } = req.params as { id: string; msgId: string }
 		const removedId = await stayService.removeStayMsg(stayId, msgId)
 		res.send(removedId)
 	} catch (err) {
@@ -156,7 +162,7 @@ export async function addToWishlist(req: AuthenticatedRequest, res: Response) {
 			res.status(401).send('Not Authenticated')
 			return
 		}
-		const stayId = req.params.id
+		const stayId = req.params.id as string
 		const userId = loggedinUser._id
 
 		const updatedStay: Stay = await stayService.addToWishlist(stayId, userId)
@@ -170,12 +176,12 @@ export async function addToWishlist(req: AuthenticatedRequest, res: Response) {
 export async function removeFromWishlist(req: AuthenticatedRequest, res: Response) {
 	try {
 		const { loggedinUser } = req
-		const stayId = req.params.id
+		const stayId = req.params.id as string
 		if (!loggedinUser && !req.params.userId) {
 			res.status(401).send('Not Authenticated')
 			return
 		}
-		const userId = req.params.userId || loggedinUser!._id
+		const userId = req.params.userId as string || loggedinUser!._id
 
 		const updatedStay: Stay = await stayService.removeFromWishlist(stayId, userId)
 		res.json(updatedStay)
@@ -187,8 +193,8 @@ export async function removeFromWishlist(req: AuthenticatedRequest, res: Respons
 
 export async function getWishlistStays(req: Request, res: Response) {
 	try {
-		const userId = req.params.userId
-		const stays: Stay[] | object = await stayService.getWishlistStays(userId)
+		const userId = req.params.userId as string
+		const stays: Stay[] = await stayService.getWishlistStays(userId)
 		res.json(stays)
 	} catch (err) {
 		logger.error('Failed to get wishlist stays', err)

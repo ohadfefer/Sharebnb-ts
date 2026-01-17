@@ -58,4 +58,16 @@ export interface Stay {
     guestFavorit?: boolean
     isGuestFavorite?: boolean
     wishlist?: { userId: string; addedAt: string }[]
+    createdAt?: Date
+}
+
+export interface FilterBy {
+    address: string
+    guests: number
+    maxPrice: number
+    checkIn: string
+    checkOut: string
+    sortField: string
+    sortDir: number
+    hostId: string
 }
