@@ -54,7 +54,7 @@ export async function addStay(req: AuthenticatedRequest, res: Response) {
 		// If imgUrl is missing from token, fetch fresh user data
 		if (loggedinUser && !hostImgUrl) {
 			try {
-				const freshUser: User = await userService.getById(loggedinUser._id)
+				const freshUser: User = await userService.getById(loggedinUser._id!)
 				hostImgUrl = freshUser?.imgUrl
 				logger.info('addStay -> fetched fresh user imgUrl:', hostImgUrl)
 			} catch (err) {
@@ -131,7 +131,7 @@ export async function addStayMsg(req: AuthenticatedRequest, res: Response) {
 			id: makeId(),
 			txt: req.body.txt,
 			by: {
-				_id: loggedinUser._id,
+				_id: loggedinUser._id as string,
 				fullname: loggedinUser.fullname,
 				imgUrl: loggedinUser.imgUrl || undefined,
 			},
@@ -165,7 +165,7 @@ export async function addToWishlist(req: AuthenticatedRequest, res: Response) {
 		const stayId = req.params.id as string
 		const userId = loggedinUser._id
 
-		const updatedStay: Stay = await stayService.addToWishlist(stayId, userId)
+		const updatedStay: Stay = await stayService.addToWishlist(stayId, userId as string)
 		res.json(updatedStay)
 	} catch (err) {
 		logger.error('Failed to add to wishlist', err)
@@ -183,7 +183,7 @@ export async function removeFromWishlist(req: AuthenticatedRequest, res: Respons
 		}
 		const userId = req.params.userId as string || loggedinUser!._id
 
-		const updatedStay: Stay = await stayService.removeFromWishlist(stayId, userId)
+		const updatedStay: Stay = await stayService.removeFromWishlist(stayId, userId as string)
 		res.json(updatedStay)
 	} catch (err) {
 		logger.error('Failed to remove from wishlist', err)
