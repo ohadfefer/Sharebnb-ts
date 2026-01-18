@@ -1,10 +1,11 @@
 // api/auth/auth.controller.js
+import { Request, Response } from 'express'
 import { authService } from './auth.service.js'
 import { logger } from '../../services/logger.service.js'
 
 const isProd = process.env.NODE_ENV === 'production'
 
-export async function login(req, res) {
+export async function login(req: Request, res: Response) {
   const { username, password } = req.body
   try {
     const user = await authService.login(username, password)
@@ -29,7 +30,7 @@ export async function login(req, res) {
   }
 }
 
-export async function signup(req, res) {
+export async function signup(req: Request, res: Response) {
   try {
     const credentials = req.body
     const account = await authService.signup(credentials)
@@ -54,7 +55,7 @@ export async function signup(req, res) {
   }
 }
 
-export async function logout(req, res) {
+export async function logout(req: Request, res: Response) {
   try {
     res.clearCookie('loginToken')
     res.send({ msg: 'Logged out successfully' })
