@@ -3,6 +3,7 @@
     /* Strict type-checking options */
     "strict": true,                          // Enables all strict mode flags (recommended for safety)
     "allowJs": true,
+    "checkJs": false,
 
     /* Basic setup */
     "target": "ES2022",                       // Modern JS target (adjust to ES2020 or lower if needed for older browsers)
@@ -27,7 +28,8 @@
 
   },
   "include": [
-    "src/**/*"                                 // Include all files in src
+    "src/**/*.ts",                                 // Include all files in src
+    "src/**/*.tsx"
   ],
   "exclude": [
     "node_modules",

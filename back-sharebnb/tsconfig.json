@@ -2,7 +2,8 @@
     "compilerOptions": {
       "strict": true,                         
       "allowJs": true,
-  
+      "checkJs": false,
+
       /* Basic setup */
       "target": "ES2022",                       
       "module": "Node16",                      
@@ -14,7 +15,7 @@
   
     },
     "include": [
-      "api/**/*"
+      "api/**/*.ts"
     ],
     "exclude": [
       "node_modules",

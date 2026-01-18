@@ -9,7 +9,10 @@
         "dev": "node server.js",
         "server:dev": "nodemon server.js",
         "server:prod": "set NODE_ENV=production&node server.js",
-        "server:prod:mac": "export NODE_ENV=production && node server.js"
+        "server:prod:mac": "export NODE_ENV=production && node server.js",
+        "build:ts": "tsc",
+        "build:ts:watch": "tsc --watch",
+        "typecheck": "tsc --noEmit"
     },
     "author": "Me",
     "license": "ISC",
@@ -31,6 +34,7 @@
         "@types/express": "^5.0.6",
         "@types/node": "^25.0.8",
         "@upstash/qstash-cli": "^2.30.4",
-        "nodemon": "^3.1.9"
+        "nodemon": "^3.1.9",
+        "typescript": "^5.9.3"
     }
 }
