@@ -1,25 +1,34 @@
-// api/user/user.service.js
+import { ObjectId } from 'mongodb';
 import { dbService } from '../../services/db.service.js';
 import { logger } from '../../services/logger.service.js';
 import { reviewService } from '../review/review.service.js';
-import { ObjectId } from 'mongodb';
 export const userService = {
-    add, // Create (Signup)
-    getById, // Read (Profile page)
-    update, // Update (Edit profile)
-    remove, // Delete (remove user)
-    query, // List (of users)
-    getByUsername, // Used for Login
+    add,
+    getById,
+    update,
+    remove,
+    query,
+    getByUsername,
 };
+function _asObjectId(id) {
+    if (!id)
+        return null;
+    if (id instanceof ObjectId)
+        return id;
+    try {
+        return ObjectId.isValid(String(id)) ? new ObjectId(String(id)) : null;
+    }
+    catch {
+        return null;
+    }
+}
 async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy);
     try {
         const collection = await dbService.getCollection('user');
         let users = await collection.find(criteria).toArray();
-        users = users.map(user => {
+        users = users.map((user) => {
             delete user.password;
-            // Fake recent createdAt (kept from your code)
-            user.createdAt = Date.now() - (1000 * 60 * 60 * 24 * 3);
             return user;
         });
         return users;
@@ -31,33 +40,26 @@ async function query(filterBy = {}) {
 }
 async function getById(userId) {
     try {
-        // --- robust id handling ---
-        // EDIT: only convert valid hex strings to ObjectId
-        const _id = typeof userId === 'string'
-            ? (ObjectId.isValid(userId) ? new ObjectId(userId) : null) // EDIT
-            : userId;
-        if (!_id) { // NEW
-            throw new Error(`Invalid user id: ${userId}`); // NEW
+        const _id = _asObjectId(userId);
+        if (!_id) {
+            throw new Error(`Invalid user id: ${userId}`);
         }
         const collection = await dbService.getCollection('user');
-        // EDIT: project out password; keep email available
-        const user = await collection.findOne({ _id }, { projection: { password: 0 } } // EDIT
-        );
-        if (!user) { // NEW
-            throw new Error(`User not found: ${userId}`); // NEW
+        const user = await collection.findOne({ _id }, { projection: { password: 0 } });
+        if (!user) {
+            throw new Error(`User not found: ${userId}`);
         }
-        // Enrich with given reviews (best-effort)
         const criteria = { byUserId: userId };
         try {
             const givenReviews = await reviewService.query(criteria);
-            user.givenReviews = (givenReviews || []).map(review => {
+            user.givenReviews = (givenReviews || []).map((review) => {
                 const { byUser, ...rest } = review;
                 return rest;
             });
         }
         catch (e) {
-            logger.warn('getById: failed loading givenReviews', e); // NEW
-            user.givenReviews = []; // NEW
+            logger.warn('getById: failed loading givenReviews', e);
+            user.givenReviews = [];
         }
         return user;
     }
@@ -69,9 +71,7 @@ async function getById(userId) {
 async function getByUsername(username) {
     try {
         const collection = await dbService.getCollection('user');
-        // EDIT: include email (+ password for auth)
-        const user = await collection.findOne({ username }, { projection: { username: 1, fullname: 1, imgUrl: 1, isAdmin: 1, email: 1, password: 1 } } // EDIT
-        );
+        const user = await collection.findOne({ username }, { projection: { username: 1, fullname: 1, imgUrl: 1, isAdmin: 1, email: 1, password: 1 } });
         return user;
     }
     catch (err) {
@@ -81,12 +81,9 @@ async function getByUsername(username) {
 }
 async function remove(userId) {
     try {
-        // EDIT: safe id handling
-        const _id = typeof userId === 'string'
-            ? (ObjectId.isValid(userId) ? new ObjectId(userId) : null)
-            : userId;
+        const _id = _asObjectId(userId);
         if (!_id)
-            throw new Error(`Invalid user id: ${userId}`); // NEW
+            throw new Error(`Invalid user id: ${userId}`);
         const collection = await dbService.getCollection('user');
         await collection.deleteOne({ _id });
     }
@@ -97,21 +94,18 @@ async function remove(userId) {
 }
 async function update(user) {
     try {
-        // EDIT: allow updating email/imgUrl too (optional)
-        const _id = typeof user._id === 'string'
-            ? (ObjectId.isValid(user._id) ? new ObjectId(user._id) : null)
-            : user._id;
+        const _id = _asObjectId(user._id);
         if (!_id)
-            throw new Error(`Invalid user id: ${user?._id}`); // NEW
+            throw new Error(`Invalid user id: ${user?._id}`);
         const userToSave = {
             fullname: user.fullname,
             username: user.username,
-            imgUrl: user.imgUrl ?? null, // NEW
-            email: user.email ?? null, // NEW
+            imgUrl: user.imgUrl ?? null,
+            email: user.email ?? null,
         };
         const collection = await dbService.getCollection('user');
         await collection.updateOne({ _id }, { $set: userToSave });
-        return { _id, ...userToSave };
+        return { _id: _id.toString(), ...userToSave };
     }
     catch (err) {
         logger.error(`cannot update user ${user._id}`, err);
@@ -120,7 +114,6 @@ async function update(user) {
 }
 async function add(user) {
     try {
-        // peek only updatable fields!
         const userToAdd = {
             username: user.username,
             password: user.password,
@@ -131,7 +124,8 @@ async function add(user) {
         };
         const collection = await dbService.getCollection('user');
         await collection.insertOne(userToAdd);
-        return userToAdd;
+        const { password, ...userWithoutPassword } = userToAdd;
+        return userWithoutPassword;
     }
     catch (err) {
         logger.error('cannot add user', err);
