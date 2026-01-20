@@ -6,7 +6,7 @@ interface Guests {
   pets: number | string
 }
 
-interface FilterBy {
+interface StayFilterBy {
   address: string
   maxPrice: string
   checkIn: string
@@ -78,7 +78,7 @@ interface Stay {
 }
 
 interface StayServiceRemote {
-  query(filterBy: FilterBy): Promise<Stay[]>
+  query(filterBy: StayFilterBy): Promise<Stay[]>
   getById(stayId: string): Promise<Stay>
   save(stay: Stay): Promise<Stay>
   remove(stayId: string): Promise<void>
@@ -89,7 +89,7 @@ interface StayServiceRemote {
 }
 
 interface StayService extends StayServiceRemote {
-  getDefaultFilter(): FilterBy
+  getDefaultFilter(): StayFilterBy
 }
 
 declare global {
@@ -98,4 +98,4 @@ declare global {
   }
 }
 
-export { StayService, StayServiceRemote, Stay, FilterBy, Guests, Host, Location, Review, AvailableDate, StayMsg }  // important: makes this a module (otherwise TS treats it as ambient)
+export { StayService, StayServiceRemote, Stay, StayFilterBy, Guests, Host, Location, Review, AvailableDate, StayMsg }  // important: makes this a module (otherwise TS treats it as ambient)

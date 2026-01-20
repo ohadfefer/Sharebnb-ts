@@ -1,5 +1,5 @@
 import { stayService } from '../../services/stay/index.js'
-import { Stay, FilterBy, StayMsg } from '../../types/global.js'
+import { Stay, StayFilterBy, StayMsg } from '../../types/global.js'
 
 export const SET_STAYS = 'SET_STAYS'
 export const SET_STAY = 'SET_STAY'
@@ -19,7 +19,7 @@ const initialState: InitialState = {
     isLoading: false,
 }
 
-export function stayReducer(state = initialState, action: Action) {
+export function stayReducer(state = initialState, action: StayAction) {
     let newState = state
     switch (action.type) {
         case SET_STAYS:
@@ -55,20 +55,20 @@ export function stayReducer(state = initialState, action: Action) {
 }
 
 // each action has type + specific payload
-type Action =
+type StayAction =
     | { type: typeof SET_STAYS; stays: Stay[] }
     | { type: typeof SET_STAY; stay: Stay | null }
     | { type: typeof REMOVE_STAY; stayId: string }
     | { type: typeof ADD_STAY; stay: Stay }
     | { type: typeof UPDATE_STAY; stay: Stay }
     | { type: typeof ADD_STAY_MSG; msg: StayMsg }
-    | { type: typeof SET_FILTER_BY; filterBy: Partial<FilterBy> }
+    | { type: typeof SET_FILTER_BY; filterBy: Partial<StayFilterBy> }
     | { type: typeof SET_IS_LOADING; isLoading: boolean }
 
 interface InitialState {
     stays: Stay[]
     stay: Stay | null
-    filterBy: FilterBy
+    filterBy: StayFilterBy
     isLoading: boolean
     lastRemovedStay?: Stay
 }
