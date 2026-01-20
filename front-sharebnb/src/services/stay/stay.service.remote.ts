@@ -1,5 +1,5 @@
 import { httpService } from '../http.service.js'
-import { StayServiceRemote, FilterBy, Stay } from '../../types/global.js'
+import { StayServiceRemote, StayFilterBy, Stay } from '../../types/global.js'
 
 export const stayService: StayServiceRemote = {
     query,
@@ -12,8 +12,8 @@ export const stayService: StayServiceRemote = {
     getWishlistStays
 }
 
-async function query(filterBy: FilterBy) {
-    const f: FilterBy = { ...filterBy }
+async function query(filterBy: StayFilterBy) {
+    const f: StayFilterBy = { ...filterBy }
     console.log('stay.service.remote.query -> original filterBy:', filterBy)
 
     // Only sum if guests is an object from the UI.

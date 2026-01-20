@@ -1,6 +1,6 @@
 import { stayService } from '../../services/stay/index.js'
 import { store } from '../store.js'
-import { FilterBy, Stay } from '../../types/global.js'
+import { StayFilterBy, Stay } from '../../types/global.js'
 import {
     ADD_STAY,
     REMOVE_STAY,
@@ -74,7 +74,7 @@ export async function addStayMsg(stayId: string, txt: string) {
     }
 }
 
-export function setFilter(filterBy: FilterBy) {
+export function setFilter(filterBy: StayFilterBy) {
     console.log('from action:', filterBy);
     
     store.dispatch({ type: SET_FILTER_BY, filterBy })
