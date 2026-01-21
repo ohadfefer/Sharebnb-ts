@@ -1,4 +1,5 @@
-import { userService } from '../../services/user'
+import { userService } from '../../services/user/index.js'
+import { UserState, UserAction } from '../../types/user.js'
 
 export const INCREMENT = 'INCREMENT'
 export const DECREMENT = 'DECREMENT'
@@ -10,29 +11,19 @@ export const SET_USERS = 'SET_USERS'
 export const SET_SCORE = 'SET_SCORE'
 export const INIT_USER = 'INIT_USER'
 
-const initialState = {
-    count: 10,
-    user: userService.getLoggedinUser(), // Don't initialize from service here, use INIT_USER action instead
+const userState: UserState = {
+    user: userService.getLoggedinUser() || null, // Don't initialize from service here, use INIT_USER action instead
     users: [],
-    watchedUser : null
+    watchedUser: null
 }
 
-export function userReducer(state = initialState, action) {
+export function userReducer(state = userState, action: UserAction) {
     // console.log('userReducer called with action:', action.type, action)
     var newState = state
     switch (action.type) {
         case INIT_USER:
             // console.log('userReducer - INIT_USER case, setting user:', action.user)
             newState = { ...state, user: action.user }
-            break
-        case INCREMENT:
-            newState = { ...state, count: state.count + 1 }
-            break
-        case DECREMENT:
-            newState = { ...state, count: state.count - 1 }
-            break
-        case CHANGE_COUNT:
-            newState = { ...state, count: state.count + action.diff }
             break
         case SET_USER:
             // console.log('userReducer - SET_USER case, setting user:', action.user)
@@ -51,6 +42,7 @@ export function userReducer(state = initialState, action) {
             newState = { ...state, users: action.users }
             break
         case SET_SCORE:
+            if (!state.user) return state
             const user = { ...state.user, score: action.score }
             newState = { ...state, user }
             userService.saveLoggedinUser(user)

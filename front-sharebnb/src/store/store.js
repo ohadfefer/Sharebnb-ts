@@ -1,11 +1,11 @@
 import { legacy_createStore as createStore, combineReducers } from 'redux'
 
-import { stayReducer } from './reducers/stay.reducer'
-import { userReducer } from './reducers/user.reducer'
-import { reviewReducer } from './reducers/review.reducer'
-import { systemReducer } from './reducers/system.reducer'
-import { FilterPanelReducer } from './reducers/filter.panel.reducer'
-import { orderReducer } from './reducers/order.reducer'
+import { stayReducer } from './reducers/stay.reducer.js'
+import { userReducer } from './reducers/user.reducer.js'
+import { reviewReducer } from './reducers/review.reducer.js'
+import { systemReducer } from './reducers/system.reducer.js'
+import { FilterPanelReducer } from './reducers/filter.panel.reducer.js'
+import { orderReducer } from './reducers/order.reducer.js'
 
 const rootReducer = combineReducers({
     stayModule: stayReducer,
