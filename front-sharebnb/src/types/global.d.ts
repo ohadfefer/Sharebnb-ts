@@ -1,4 +1,7 @@
 // Type definitions for Stay-related entities
+import type { Order, OrderFilterBy } from './order.js'
+import type { AggregateOrder, Order as OrderBackend } from '../../../back-sharebnb/types/order.js'
+
 interface Guests {
   adults: number | string
   children: number | string
@@ -16,7 +19,7 @@ interface StayFilterBy {
 }
 
 interface Host {
-  _id?: string
+  _id: string
   fullname: string
   location: string
   about: string
@@ -92,10 +95,27 @@ interface StayService extends StayServiceRemote {
   getDefaultFilter(): StayFilterBy
 }
 
+// Order service types
+interface OrderServiceRemote {
+  query(params: OrderFilterBy): Promise<AggregateOrder[]>
+  getById(orderId: string): Promise<OrderBackend>
+  save(order: Order): Promise<AggregateOrder>
+  remove(orderId: string): Promise<void>
+  getStayById(stayId: string): Promise<Stay>
+  createOrder(stayId: string, stayData: Stay, overrides?: Partial<Order>): Promise<AggregateOrder>
+  updateStatus(orderId: string, status: string): Promise<AggregateOrder>
+}
+
+interface OrderService extends OrderServiceRemote {
+  getEmptyOrder(): Partial<Order>
+  getDefaultFilter(): OrderFilterBy
+}
+
 declare global {
   interface Window {
     stayService?: StayService  // ← use ? if it's optional / only in dev
+    orderService?: OrderService
   }
 }
 
-export { StayService, StayServiceRemote, Stay, StayFilterBy, Guests, Host, Location, Review, AvailableDate, StayMsg }  // important: makes this a module (otherwise TS treats it as ambient)
+export { StayService, StayServiceRemote, Stay, StayFilterBy, Guests, Host, Location, Review, AvailableDate, StayMsg, OrderService, OrderServiceRemote }  // important: makes this a module (otherwise TS treats it as ambient)

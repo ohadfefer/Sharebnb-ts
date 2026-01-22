@@ -3,6 +3,7 @@ import { store } from '../store.js'
 import { socketService } from '../../services/socket.service.js'
 import { SOCKET_EVENT_ORDER_UPDATED } from '../../services/socket.service.js'
 import { Order, OrderAction, OrderFilterBy, OrderMsg } from '../../types/order.js'
+import { AggregateOrder as OrderBackend } from '../../../../back-sharebnb/types/order.js'
 import {
     ADD_ORDER,
     REMOVE_ORDER,
@@ -16,13 +17,13 @@ import {
 
 type Dispatch = (action: OrderAction) => void
 
-export async function loadOrders(): Promise<Order[]> {
+export async function loadOrders(): Promise<OrderBackend[]> {
     const { filterBy } = store.getState().orderModule
 
     try {
         (store.dispatch as Dispatch)({ type: SET_IS_LOADING, isLoading: true })
         console.log('loadOrders -> filterBy:', filterBy)
-        const orders = await orderService.query(filterBy as OrderFilterBy) as Order[]
+        const orders = await orderService.query(filterBy as OrderFilterBy) as OrderBackend[]
         // console.log('loadOrders -> orders returned:', orders.length, 'orders')
         // console.log('loadOrders -> orders details:', orders)
 
@@ -38,7 +39,7 @@ export async function loadOrders(): Promise<Order[]> {
 
 export async function removeOrder(orderId: string): Promise<void> {
     try {
-        await orderService.remove(orderId)
+        await orderService.remove(orderId) as void
         (store.dispatch as Dispatch)(getCmdRemoveOrder(orderId))
     } catch (err) {
         console.log('Cannot remove order', err)
@@ -92,13 +93,13 @@ export async function updateOrderStatus(orderId: string, nextStatus: string): Pr
     }
 }
 
-export async function addOrderMsg(orderId: string, txt: string): Promise<OrderMsg | null> {
-    const msg = await orderService.addOrderMsg(orderId, txt) as OrderMsg | null
-    if (msg) {
-        (store.dispatch as Dispatch)({ type: ADD_ORDER_MSG, orderId, msg })
-    }
-    return msg
-}
+// export async function addOrderMsg(orderId: string, txt: string): Promise<OrderMsg | null> {
+//     const msg = await orderService.addOrderMsg(orderId, txt) as OrderMsg | null
+//     if (msg) {
+//         (store.dispatch as Dispatch)({ type: ADD_ORDER_MSG, orderId, msg })
+//     }
+//     return msg
+// }
 
 
 export function setFilter(filterBy: OrderFilterBy): void {

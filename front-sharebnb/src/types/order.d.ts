@@ -2,9 +2,9 @@ import { ADD_ORDER, ADD_ORDER_MSG, REMOVE_ORDER, SET_FILTER_BY, SET_IS_LOADING, 
 
 export interface Order {
     _id?: string
-    userId: string
-    stayId: string
-    hostId: string
+    userId?: string
+    stayId?: string
+    hostId?: string
     totalPrice: number
     startDate: Date | string
     endDate: Date | string

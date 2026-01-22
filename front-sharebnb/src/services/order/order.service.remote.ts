@@ -1,6 +1,9 @@
-// services/order/order.service.remote.js
-import { httpService } from '../http.service'
-import { userService } from '../user'
+// services/order/order.service.remote.ts
+import { httpService } from '../http.service.js'
+import { userService } from '../user/index.js'
+import { Order, OrderFilterBy } from '../../types/order.js'
+import { AggregateOrder, Order as OrderBackend } from '../../../../back-sharebnb/types/order.js'
+import { Stay } from '../../types/global.js'
 
 export const orderService = {
     query,
@@ -12,34 +15,34 @@ export const orderService = {
     updateStatus
 }
 
-function query(params) {
+function query(params: OrderFilterBy): Promise<AggregateOrder[]> {
     console.log(params)
-    return httpService.get('order', params)
+    return httpService.get<AggregateOrder[]>('order', params)
 }
 
-function getById(orderId) {
-    return httpService.get(`order/${orderId}`)
+function getById(orderId: string): Promise<OrderBackend> {
+    return httpService.get<OrderBackend>(`order/${orderId}`)
 }
 
-async function save(order) {
+async function save(order: Order): Promise<AggregateOrder> {
     console.log('Saving order in remote service:', order)
-    var savedOrder 
+    var savedOrder: AggregateOrder
     if (order._id) {
         console.log('Updating existing order:', order._id)
-        savedOrder = await httpService.put(`order/${order._id}`, order)
+        savedOrder = await httpService.put<AggregateOrder>(`order/${order._id}`, order)
     } else {
         console.log('Creating new order')
-        savedOrder = await httpService.post('order', order)
+        savedOrder = await httpService.post<AggregateOrder>('order', order)
     }
     // console.log('Order saved successfully:', savedOrder)
     return savedOrder
 }
 
-async function remove(orderId) {
-    return await httpService.delete(`order/${orderId}`)
+async function remove(orderId: string): Promise<void> {
+    return await httpService.delete<void>(`order/${orderId}`)
 }
 
-async function updateStatus(orderId, status) {
+async function updateStatus(orderId: string, status: string): Promise<AggregateOrder> {
     try {
         console.log(orderId, status, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         const order = await getById(orderId)
@@ -51,12 +54,16 @@ async function updateStatus(orderId, status) {
     }
 }
 
-async function getStayById(stayId) {
-    const { stayService } = await import('../stay')
+async function getStayById(stayId: string): Promise<Stay> {
+    const { stayService } = await import('../stay/index.js')
     return stayService.getById(stayId)
 }
 
-async function createOrder(stayId, stayData, overrides = {}) {
+async function createOrder(
+    stayId: string,
+    stayData: Stay,
+    overrides: Partial<Order> = {}
+): Promise<AggregateOrder> {
     try {
         // Get current user
         // const { userService } = await import('../user')
@@ -79,14 +86,6 @@ async function createOrder(stayId, stayData, overrides = {}) {
         let hostId = null
         if (stayData.host?._id) {
             hostId = stayData.host._id
-        } else if (stayData.host?.id) {
-            hostId = stayData.host.id
-        } else if (stayData.hostId) {
-            hostId = stayData.hostId
-        } else if (stayData.owner?._id) {
-            hostId = stayData.owner._id
-        } else if (stayData.ownerId) {
-            hostId = stayData.ownerId
         } else if (loggedInUser?._id) {
             // If no host found, assume the current user is the host (for user-created listings)
             hostId = loggedInUser._id
