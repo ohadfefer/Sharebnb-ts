@@ -6,6 +6,6 @@ export const hideTabbarMatchers = [
     /^\/order\/.+\/confirmation$/,    // confirmation page
 ];
 
-export function shouldHideTabbar(pathname) {
+export function shouldHideTabbar(pathname: any) {
     return hideTabbarMatchers.some(rx => rx.test(pathname));
 }

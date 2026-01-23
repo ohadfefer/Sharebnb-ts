@@ -58,5 +58,6 @@ declare global {
     stayService?: StayService  // ← use ? if it's optional / only in dev
     orderService?: OrderService
     userService?: UserService
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: () => any
   }
 }

@@ -1,11 +1,11 @@
 export const SET_ACTIVE_FILTER_CELL = 'SET_ACTIVE_FILTER_CELL'
 export const CLEAR_ACTIVE_FILTER_CELL = 'CLEAR_ACTIVE_FILTER_CELL'
 
-const initialState = {
+const filterPanelState: FilterPanelState = {
   activeFilterCell: null,
 }
 
-export function FilterPanelReducer(state = initialState, action) {
+export function FilterPanelReducer(state = filterPanelState, action: FilterPanelAction) {
   switch (action.type) {
     case SET_ACTIVE_FILTER_CELL:
       return { ...state, activeFilterCell: action.cellKey }
@@ -16,5 +16,13 @@ export function FilterPanelReducer(state = initialState, action) {
   }
 }
 
-export const setActiveFilterCell = (cellKey) => ({ type: SET_ACTIVE_FILTER_CELL, cellKey })
+export const setActiveFilterCell = (cellKey: any) => ({ type: SET_ACTIVE_FILTER_CELL, cellKey })
 export const clearActiveFilterCell = () => ({ type: CLEAR_ACTIVE_FILTER_CELL })
+
+interface FilterPanelState {
+  activeFilterCell: any
+}
+
+type FilterPanelAction =
+  | { type: typeof SET_ACTIVE_FILTER_CELL; cellKey: any }
+  | { type: typeof CLEAR_ACTIVE_FILTER_CELL }
