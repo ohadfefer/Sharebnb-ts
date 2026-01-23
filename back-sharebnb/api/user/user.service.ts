@@ -105,7 +105,7 @@ async function remove(userId: string): Promise<void> {
 	}
 }
 
-async function update(user: User): Promise<User> {
+async function update(user: Partial<User>): Promise<User> {
 	try {
 		const _id = _asObjectId(user._id)
 		if (!_id) throw new Error(`Invalid user id: ${user?._id}`)

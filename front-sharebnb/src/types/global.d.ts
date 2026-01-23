@@ -1,84 +1,9 @@
 // Type definitions for Stay-related entities
 import type { Order, OrderFilterBy } from './order.js'
 import type { AggregateOrder, Order as OrderBackend } from '../../../back-sharebnb/types/order.js'
-
-interface Guests {
-  adults: number | string
-  children: number | string
-  infants: number | string
-  pets: number | string
-}
-
-interface StayFilterBy {
-  address: string
-  maxPrice: string
-  checkIn: string
-  checkOut: string
-  guests: Guests | string | number
-  labels: string[]
-}
-
-interface Host {
-  _id: string
-  fullname: string
-  location: string
-  about: string
-  responseTime: string
-  isSuperhost: boolean
-  pictureUrl: string
-}
-
-interface Location {
-  country: string
-  countryCode: string
-  city: string
-  address: string
-  lat: number
-  lng: number
-}
-
-interface Review {
-  at: string
-  by: { fullname: string; imgUrl: string; id: string }
-  txt: string
-  _id?: string
-}
-
-interface AvailableDate {
-  start: string
-  end: string
-}
-
-interface StayMsg {
-  id: string
-  txt: string
-  by: { _id: string; fullname: string; imgUrl?: string }
-}
-
-interface Stay {
-  _id?: string
-  name: string
-  type: string
-  imgUrls: string[]
-  price: number
-  summary: string
-  capacity: number
-  amenities: string[]
-  bathrooms: number
-  bedrooms: number
-  roomType: string
-  host?: Host
-  loc?: Location
-  reviews?: Review[] | string
-  likedByUsers?: any
-  availableDates?: AvailableDate[]
-  labels: string[]
-  msgs?: StayMsg[]
-  rating?: string | number
-  guestFavorit?: boolean
-  isGuestFavorite?: boolean
-  wishlist?: { userId: string; addedAt: string }[]
-}
+import { StayFilterBy, Stay } from './stay.js'
+import type { User as UserBackend } from '../../../back-sharebnb/types/user.d.ts'
+import type { LoggedInUser, SignupCredentials } from '../types/user.d.ts'
 
 interface StayServiceRemote {
   query(filterBy: StayFilterBy): Promise<Stay[]>
@@ -111,11 +36,27 @@ interface OrderService extends OrderServiceRemote {
   getDefaultFilter(): OrderFilterBy
 }
 
+
+interface UserServiceRemote {
+  login(userCred: Partial<UserBackend>): Promise<LoggedInUser | undefined>
+  logout(): any
+  signup(userCred: SignupCredentials): Promise<LoggedInUser> 
+  getUsers(): Promise<UserBackend[]>
+  getById(userId: string): Promise<UserBackend>
+  remove(userId: string): any
+  update({ _id }: Partial<UserBackend>): Promise<UserBackend>
+  getLoggedinUser(): LoggedInUser | null
+  saveLoggedinUser<T>(user: T): T 
+}
+
+interface UserService extends UserServiceRemote {
+  getEmptyUser(): Partial<SignupCredentials>
+}
+
 declare global {
   interface Window {
     stayService?: StayService  // ← use ? if it's optional / only in dev
     orderService?: OrderService
+    userService?: UserService
   }
 }
-
-export { StayService, StayServiceRemote, Stay, StayFilterBy, Guests, Host, Location, Review, AvailableDate, StayMsg, OrderService, OrderServiceRemote }  // important: makes this a module (otherwise TS treats it as ambient)

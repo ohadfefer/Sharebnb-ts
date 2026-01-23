@@ -1,6 +1,6 @@
 import { stayService } from '../../services/stay/index.js'
 import { store } from '../store.js'
-import { StayFilterBy, Stay } from '../../types/global.js'
+import { StayFilterBy, Stay } from '../../types/stay.js'
 import {
     ADD_STAY,
     REMOVE_STAY,

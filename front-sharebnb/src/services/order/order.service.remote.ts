@@ -3,7 +3,7 @@ import { httpService } from '../http.service.js'
 import { userService } from '../user/index.js'
 import { Order, OrderFilterBy } from '../../types/order.js'
 import { AggregateOrder, Order as OrderBackend } from '../../../../back-sharebnb/types/order.js'
-import { Stay } from '../../types/global.js'
+import { Stay } from '../../types/stay.js'
 
 export const orderService = {
     query,

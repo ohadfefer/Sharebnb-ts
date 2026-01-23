@@ -1,5 +1,6 @@
 import { httpService } from '../http.service.js'
-import { StayServiceRemote, StayFilterBy, Stay } from '../../types/global.js'
+import { StayServiceRemote } from '../../types/global.js'
+import { StayFilterBy, Stay } from '../../types/stay.js'
 
 export const stayService: StayServiceRemote = {
     query,

@@ -48,3 +48,4 @@ export type UserAction =
     | { type: typeof REMOVE_USER; userId: string }
     | { type: typeof SET_USERS; users: WatchedUser[] }
     | { type: typeof SET_SCORE; score: number }
+

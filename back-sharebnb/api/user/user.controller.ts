@@ -41,7 +41,7 @@ export async function deleteUser(req: Request, res: Response) {
 
 export async function updateUser(req: Request, res: Response) {
 	try {
-		const user = req.body as User
+		const user = req.body as Partial<User>
 		const savedUser: User = await userService.update(user)
 		res.send(savedUser)
 	} catch (err) {

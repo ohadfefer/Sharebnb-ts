@@ -1,5 +1,5 @@
 import { stayService } from '../../services/stay/index.js'
-import { Stay, StayFilterBy, StayMsg } from '../../types/global.js'
+import { Stay, StayFilterBy, StayMsg } from '../../types/stay.js'
 
 export const SET_STAYS = 'SET_STAYS'
 export const SET_STAY = 'SET_STAY'
