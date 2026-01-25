@@ -26,9 +26,24 @@ export interface OrderFilterBy {
 }
 
 export interface OrderMsg {
-	id: string
-	txt: string
-	by: { _id: string; fullname: string; imgUrl?: string }
+    id: string
+    txt: string
+    by: { _id: string; fullname: string; imgUrl?: string }
+}
+
+export interface OccupancyDay {
+    label: string;   // e.g. "Jul 15"
+    occ: 0 | 1;
+}
+
+export interface LeadTimeBucket {
+    name: '0–3d' | '4–7d' | '8–14d' | '15–30d' | '30d+';
+    v: number;
+}
+
+export interface RevenueEntry {
+    name: string;
+    total: number;
 }
 
 export type OrderAction =

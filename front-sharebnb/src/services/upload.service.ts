@@ -2,14 +2,16 @@ export const uploadService = {
 	uploadImg,
 }
 
-async function uploadImg(ev) {
+async function uploadImg(ev: React.ChangeEvent<HTMLInputElement>): Promise<any> {
 	const CLOUD_NAME = 'vanilla-test-images'
 	const UPLOAD_PRESET = 'stavs_preset'
 	const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
 
+	const file =  ev.target.files?.[0]
+	if (!file) return
+
 	const formData = new FormData()
-	
-	formData.append('file', ev.target.files[0])
+	formData.append('file', file)
 	formData.append('upload_preset', UPLOAD_PRESET)
 	
 	try {
