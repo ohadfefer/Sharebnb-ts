@@ -12,8 +12,11 @@ import {
     SET_IS_LOADING,
 } from '../reducers/stay.reducer.js'
 
-export async function loadStays() {
-    const { filterBy } = store.getState().stayModule
+export async function loadStays(filterBy: StayFilterBy): Promise<Stay[]> {
+    
+    if (!filterBy) {
+        const { filterBy } = store.getState().stayModule
+    }
     
     try {
         store.dispatch({ type: SET_IS_LOADING, isLoading: true })

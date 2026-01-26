@@ -1,16 +1,22 @@
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { loadStays } from '../store/actions/stay.actions'
+import { loadStays } from '../store/actions/stay.actions.js'
 import Skeleton from 'react-loading-skeleton'
 
-import { StayList } from '../cmps/StayList'
-import { Pagination } from '../cmps/Pagination'
+import { StayList } from '../cmps/StayList.jsx'
+import { Pagination } from '../cmps/Pagination.jsx'
+
+// types
+
+import { useAppSelector } from '../store/hooks.js'
+import { Stay } from '../types/stay.js'
 
 const PER_PAGE = 20
 
 export function StayIndex({ autoLoad = true }) {
-    const { stays = [], filterBy, isLoading } = useSelector(s => s.stayModule)
+    
+    const { stays = [], filterBy, isLoading } = useAppSelector(s => s.stayModule)
     const [searchParams, setSearchParams] = useSearchParams()
 
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
@@ -20,7 +26,7 @@ export function StayIndex({ autoLoad = true }) {
     const pageStays = stays.slice(start, start + PER_PAGE)
     const shownEnd = Math.min(total, start + pageStays.length)
 
-    const setPage = (next) => {
+    const setPage = (next: number) => {
         const params = new URLSearchParams(searchParams)
         if (next === 1) params.delete('page')
         else params.set('page', String(next))

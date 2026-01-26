@@ -12,14 +12,14 @@ export const SET_FILTER_BY = 'SET_FILTER_BY'
 export const SET_IS_LOADING = 'SET_IS_LOADING'
 
 
-const initialState: InitialState = {
+const stayState: StayState = {
     stays: [],
     stay: null,
     filterBy: stayService.getDefaultFilter(),
     isLoading: false,
 }
 
-export function stayReducer(state = initialState, action: StayAction) {
+export function stayReducer(state = stayState, action: StayAction) {
     let newState = state
     switch (action.type) {
         case SET_STAYS:
@@ -65,7 +65,7 @@ type StayAction =
     | { type: typeof SET_FILTER_BY; filterBy: Partial<StayFilterBy> }
     | { type: typeof SET_IS_LOADING; isLoading: boolean }
 
-interface InitialState {
+interface StayState {
     stays: Stay[]
     stay: Stay | null
     filterBy: StayFilterBy
