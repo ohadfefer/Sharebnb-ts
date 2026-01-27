@@ -12,10 +12,14 @@ import { Pagination } from '../cmps/Pagination.jsx'
 import { useAppSelector } from '../store/hooks.js'
 import { Stay } from '../types/stay.js'
 
+interface StayIndexProps {
+    autoLoad?: boolean
+}
+
 const PER_PAGE = 20
 
-export function StayIndex({ autoLoad = true }) {
-    
+export function StayIndex({ autoLoad = true }: StayIndexProps) {
+
     const { stays = [], filterBy, isLoading } = useAppSelector(s => s.stayModule)
     const [searchParams, setSearchParams] = useSearchParams()
 

@@ -1,35 +1,36 @@
 {
   "compilerOptions": {
     /* Strict type-checking options */
-    "strict": true,                          // Enables all strict mode flags (recommended for safety)
+
+    "strict": true, // Enables all strict mode flags (recommended for safety)
     "allowJs": true,
     "checkJs": false,
+    "jsx": "react-jsx",
 
     /* Basic setup */
-    "target": "ES2022",                       // Modern JS target (adjust to ES2020 or lower if needed for older browsers)
-    "module": "Node16",                       // Use ES modules (great for modern Node.js or bundlers)
-    "moduleResolution": "Node16",             // Modern Node.js resolution (or "Bundler" if using Vite/Webpack/etc.)
+
+    "target": "ES2022", // Modern JS target (adjust to ES2020 or lower if needed for older browsers)
+    "module": "Node16", // Use ES modules (great for modern Node.js or bundlers)
+    "moduleResolution": "Node16", // Modern Node.js resolution (or "Bundler" if using Vite/Webpack/etc.)
 
     /* Output control */
-    "outDir": "./dist",                       // Compiled JS goes here
-    "rootDir": "./src",                       // Source files root
 
+    "outDir": "./dist", // Compiled JS goes here
+    "rootDir": "./src", // Source files root
     /* Additional useful strict-friendly options */
-
-    // "skipLibCheck": true,                     // Speeds up compilation (safe in most cases)
+    "skipLibCheck": true,                     // Speeds up compilation (safe in most cases)
     // "forceConsistentCasingInFileNames": true, // Prevents case-sensitive file issues
     // "esModuleInterop": true,                  // Better CommonJS interop (e.g., import React from 'react')
     // "resolveJsonModule": true,                // Allow importing .json files
     // "isolatedModules": true,                  // Ensures compatibility with tools like Babel/Vite
-
     /* Optional but recommended for modern projects */
     // "sourceMap": true,                        // Helpful for debugging
-    "noEmitOnError": true,                     // Don't emit JS if there are type errors
-
+    "noEmitOnError": true, // Don't emit JS if there are type errors
   },
   "include": [
-    "src/**/*.ts",                                 // Include all files in src
-    "src/**/*.tsx"
+    "src/**/*.ts", // Include all files in src
+    "src/**/*.tsx",
+    "src/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",

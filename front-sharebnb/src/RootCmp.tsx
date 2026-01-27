@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router'
 import { useEffect } from 'react'
 
 import { AboutUs, AboutTeam, AboutVision } from './pages/AboutUs.jsx'
-import { StayIndex } from './pages/StayIndex.jsx'
+import { StayIndex } from './pages/StayIndex.js'
 import { ReviewIndex } from './pages/ReviewIndex.jsx'
 import { ChatApp } from './pages/Chat.jsx'
 import { AdminIndex } from './pages/AdminIndex.jsx'
@@ -67,7 +67,7 @@ export function RootCmp() {
                 </Routes>
             </main>
             <AppFooter />
-            <MobileTabBar />
+            <MobileTabBar forceHide={true}/>
         </div>
     )
 }
