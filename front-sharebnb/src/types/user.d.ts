@@ -25,7 +25,7 @@ export interface SignupCredentials {
 }
 
 export interface LoggedInUser {
-    _id: string | undefined
+    _id: string
     fullname: string
     isAdmin: boolean
     email?: string | null | undefined

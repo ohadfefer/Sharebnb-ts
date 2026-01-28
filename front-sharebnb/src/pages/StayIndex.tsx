@@ -45,7 +45,7 @@ export function StayIndex({ autoLoad = true }: StayIndexProps) {
 
     const initialLoading = isLoading && total === 0
     const listForRender = initialLoading
-        ? Array.from({ length: PER_PAGE }).map(() => null)
+        ? Array(PER_PAGE).fill({} as Stay) 
         : pageStays
 
     return (

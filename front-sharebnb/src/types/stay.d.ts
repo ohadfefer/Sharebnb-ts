@@ -52,7 +52,7 @@ export interface StayMsg {
 }
 
 export interface Stay {
-    _id?: string
+    _id: string
     name: string
     type: string
     imgUrls: string[]

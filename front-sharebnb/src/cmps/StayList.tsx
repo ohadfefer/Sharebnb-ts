@@ -1,6 +1,9 @@
-import { StayPreview } from './StayPreview'
+import { StayPreview } from './StayPreview.jsx'
 
-export function StayList({ stays }) {
+// types
+import { Stay } from '../types/stay.js'
+
+export function StayList({ stays }: { stays: Stay[] }) {
     const list = Array.isArray(stays) ? stays : []
 
     return (
@@ -8,7 +11,7 @@ export function StayList({ stays }) {
             <ul className="stay-list">
                 {list.map((stay, i) => (
                     <li key={stay?._id || `skel-${i}`}>
-                        <StayPreview stay={stay || undefined} loading={!stay} />
+                        <StayPreview stay={stay} loading={!stay} />
                     </li>
                 ))}
             </ul>

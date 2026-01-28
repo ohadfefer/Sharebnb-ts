@@ -6,15 +6,20 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules'
-import { formatDateRangeShort } from '../services/util.service'
+import { formatDateRangeShort } from '../services/util.service.js'
 import { useSelector } from 'react-redux'
 import { stayService } from '../services/stay/stay.service.remote.js'
 import heart2 from '../assets/logo/icons/heart2.svg'
 import filledHeart2 from '../assets/logo/icons/filledHeart2.svg'
 import '../assets/styles/cmps/WishlistIndex.css'
 
-export function StayPreview({ stay, loading = false }) {
-    const { user } = useSelector(s => s.userModule)
+// types and declarations
+
+import { Stay } from '../types/stay.js'
+import { useAppSelector } from '../store/hooks.js'
+
+export function StayPreview({ stay, loading = false }: { stay: Stay; loading: boolean}) {
+    const { user } = useAppSelector(s => s.userModule)
     const [isSaved, setIsSaved] = useState(false)
 
     // Check if stay is already saved when component loads
@@ -25,7 +30,7 @@ export function StayPreview({ stay, loading = false }) {
         }
     }, [stay, user])
 
-    const handleSaveClick = async (e) => {
+    const handleSaveClick = async (e: any) => {
         e.preventDefault()
         e.stopPropagation()
         
