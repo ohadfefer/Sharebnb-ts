@@ -2,37 +2,42 @@ import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { showSuccessMsg, showRemoveMsg, showErrorMsg } from '../services/event-bus.service'
-import { addStayMsg, getCmdSetStay } from '../store/actions/stay.actions'
-import { stayService } from '../services/stay/index'
-import { StayGallery } from '../cmps/StayGallery'
-import { StayDescription } from '../cmps/StayDescription'
-import { StayAmenities } from '../cmps/StayAmenities'
-import { StayReviews } from '../cmps/StayReviews'
-import { StayMap } from '../cmps/StayMap'
-import { StickyCard } from '../cmps/StickyCard'
-import { DateRangePanel } from '../cmps/DateRangePanel'
-import { GuestsPanel } from '../cmps/GuestsPanel'
+import { showSuccessMsg, showRemoveMsg, showErrorMsg } from '../services/event-bus.service.js'
+import { addStayMsg, getCmdSetStay } from '../store/actions/stay.actions.js'
+import { stayService } from '../services/stay/index.js'
+import { StayGallery } from '../cmps/StayGallery.jsx'
+import { StayDescription } from '../cmps/StayDescription.jsx'
+import { StayAmenities } from '../cmps/StayAmenities.jsx'
+import { StayReviews } from '../cmps/StayReviews.jsx'
+import { StayMap } from '../cmps/StayMap.jsx'
+import { StickyCard } from '../cmps/StickyCard.jsx'
+import { DateRangePanel } from '../cmps/DateRangePanel.jsx'
+import { GuestsPanel } from '../cmps/GuestsPanel.jsx'
 import { buildSearchParams, parseSearchParams, formatGuestsLabel, nightsBetween, formatMoney } from '../services/util.service.js'
 
 import star from '../assets/logo/icons/star.svg'
+
+// types and declarations
+import { useAppSelector } from '../store/hooks.js'
+
+
 
 export function StayDetails() {
   const { stayId } = useParams()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const stay = useSelector((storeState) => storeState.stayModule.stay)
-  const { user } = useSelector(s => s.userModule)
+  const stay = useAppSelector((storeState) => storeState.stayModule.stay)
+  const { user } = useAppSelector(s => s.userModule)
   const dispatch = useDispatch()
   const [isSaved, setIsSaved] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState('')
   const [showNav, setShowNav] = useState(false)
   const [showCardLink, setShowCardLink] = useState(false)
   const [showMobileModal, setShowMobileModal] = useState(false)
   const [dateRange, setDateRange] = useState({ checkIn: '', checkOut: '' })
-  const galleryRef = useRef(null)
-  const stickyRef = useRef(null)
+  const galleryRef = useRef<HTMLDivElement>(null)
+  const stickyRef = useRef<HTMLDivElement>(null)
 
   // Mobile modal form state
   const [mobileFormData, setMobileFormData] = useState({
@@ -41,24 +46,24 @@ export function StayDetails() {
     guests: ''
   })
   const [mobileGuests, setMobileGuests] = useState({ adults: 0, children: 0, infants: 0, pets: 0 })
-  const [mobileActivePanel, setMobileActivePanel] = useState(null)
+  const [mobileActivePanel, setMobileActivePanel] = useState(null as any)
   const [mobileIsFilled, setMobileIsFilled] = useState(false)
-  const mobileDatePanelRef = useRef(null)
-  const mobileGuestsPanelRef = useRef(null)
+  const mobileDatePanelRef = useRef<HTMLDivElement>(null)
+  const mobileGuestsPanelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     async function fetchStay() {
       setIsLoading(true)
       try {
-        const stay = await stayService.getById(stayId)
+        const stay = await stayService.getById(stayId!)
         dispatch(getCmdSetStay(stay))
-        
+
         // Check if stay is already saved
         if (user && stay.wishlist) {
           const isInWishlist = stay.wishlist.some(entry => entry.userId === user._id)
           setIsSaved(isInWishlist)
         }
-        
+
         setIsLoading(false)
       } catch (err) {
         setError('Failed to load stay details')
@@ -122,7 +127,7 @@ export function StayDetails() {
   useEffect(() => {
     if (!mobileActivePanel) return
 
-    const handleDocumentMouseDown = (event) => {
+    const handleDocumentMouseDown = (event: any) => {
       const target = event.target
       const isInsideDates = mobileDatePanelRef.current && mobileDatePanelRef.current.contains(target)
       const isInsideGuests = mobileGuestsPanelRef.current && mobileGuestsPanelRef.current.contains(target)
@@ -135,14 +140,14 @@ export function StayDetails() {
     return () => document.removeEventListener('mousedown', handleDocumentMouseDown)
   }, [mobileActivePanel])
 
-  async function onAddStayMsg(stayId) {
-    try {
-      await addStayMsg(stayId, 'bla bla ' + parseInt(Math.random() * 10))
-      showSuccessMsg(`Stay msg added`)
-    } catch (err) {
-      showErrorMsg('Cannot add stay msg')
-    }
-  }
+  // async function onAddStayMsg(stayId: string) {
+  //   try {
+  //     await addStayMsg(stayId, 'bla bla ' + parseInt(Math.random() * 10))
+  //     showSuccessMsg(`Stay msg added`)
+  //   } catch (err) {
+  //     showErrorMsg('Cannot add stay msg')
+  //   }
+  // }
 
   function handleShare() {
     alert('share')
@@ -189,7 +194,9 @@ export function StayDetails() {
     return mobileIsFilled ? 'Reserve' : 'Check availability'
   }
 
-  const getMobileFieldValue = (fieldName) => {
+  type MobileFormData = "checkin" | "checkout" | "guests"
+
+  const getMobileFieldValue = (fieldName: MobileFormData): string => {
     if (!mobileIsFilled) {
       return fieldName === 'guests' ? 'Add guests' : 'Add date'
     }
@@ -203,8 +210,14 @@ export function StayDetails() {
   if (!stay) return <div>No stay found</div>
 
   const reviewsCount = stay.reviews?.length || 0
-  const avgRate = reviewsCount ? (stay.reviews.reduce((acc, r) => acc + r.rate, 0) / reviewsCount) : 0
-  
+
+  // calculation for the average review rate. right now, 
+  // the property "rate" is missing and the rate is hard-coded into the UI
+
+  // if (typeof stay.reviews !== 'string') {
+  //   const avgRate = reviewsCount ? (stay.reviews.reduce((acc, r) => acc + r.rate, 0) / reviewsCount) : 0
+  // }
+
   // Mobile modal calculations
   const nightlyPrice = Number(stay?.price) || 0
   const mobileNights = nightsBetween(mobileFormData.checkin, mobileFormData.checkout)
@@ -226,7 +239,7 @@ export function StayDetails() {
               <div className="sub">
                 <img src={star} alt="" width={10} />
                 {/* <span className='reviews-avg'>{avgRate.toFixed(2)} · </span>  */}
-                <span className='reviews-avg'>{stay.rating} · </span> 
+                <span className='reviews-avg'>{stay.rating} · </span>
                 <span>{reviewsCount} reviews</span>
               </div>
             </div>
@@ -253,7 +266,7 @@ export function StayDetails() {
             <p>Add your travel dates for exact pricing</p>
           </div>
           <div className="date-picker-container">
-            <DateRangePanel value={dateRange} onChange={setDateRange} />
+            <DateRangePanel value={dateRange} onChange={setDateRange} onToleranceChange={0} fromMonth={''} onComplete={undefined} />
           </div>
 
         </div>
@@ -282,12 +295,12 @@ export function StayDetails() {
             <div className="title">Add dates for prices</div>
             <div className="sub">
               <img src={star} alt="" width={10} />
-              <span className='reviews-avg'>{stay.rating} · </span> 
+              <span className='reviews-avg'>{stay.rating} · </span>
               <span>{reviewsCount} reviews</span>
             </div>
           </div>
-          <button 
-            className="mobile-check-availability-btn" 
+          <button
+            className="mobile-check-availability-btn"
             onClick={() => setShowMobileModal(true)}
           >
             Check availability
@@ -301,14 +314,14 @@ export function StayDetails() {
           <div className="mobile-modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="mobile-modal-header">
               <h3>Check availability</h3>
-              <button 
-                className="mobile-modal-close" 
+              <button
+                className="mobile-modal-close"
                 onClick={() => setShowMobileModal(false)}
               >
                 x
               </button>
             </div>
-            
+
             <div className="mobile-modal-sticky-content">
               <div className="mobile-sticky-header">
                 {mobileIsFilled && mobileFormData.checkin && mobileFormData.checkout ? (
@@ -324,7 +337,7 @@ export function StayDetails() {
                   <span className="add-dates">Add dates for prices</span>
                 )}
               </div>
-              
+
               <div className="mobile-sticky-fields">
                 <div className="field">
                   <label>Check-in</label>
@@ -354,7 +367,7 @@ export function StayDetails() {
                   >{getMobileFieldValue('guests')}</div>
                 </div>
               </div>
-              
+
               <button
                 className="mobile-sticky-btn"
                 type="button"
@@ -368,10 +381,12 @@ export function StayDetails() {
                   <div className="mobile-popover-small bottom-aligned" ref={mobileDatePanelRef} onClick={(e) => e.stopPropagation()}>
                     <DateRangePanel
                       value={{ checkIn: mobileFormData.checkin, checkOut: mobileFormData.checkout }}
-                      onChange={(next) => {
+                      onChange={(next: { checkIn: string, checkOut: string }) => {
                         setMobileFormData(prev => ({ ...prev, checkin: next.checkIn, checkout: next.checkOut }))
                         if (next.checkIn && next.checkOut) setMobileIsFilled(true)
                       }}
+                      onToleranceChange={0}
+                      fromMonth={''}
                       onComplete={closeMobilePanels}
                     />
                   </div>
@@ -383,7 +398,7 @@ export function StayDetails() {
                   <div className="mobile-popover-small-guests bottom-aligned" ref={mobileGuestsPanelRef} onClick={(e) => e.stopPropagation()}>
                     <GuestsPanel
                       value={mobileGuests}
-                      onChange={(partial) => {
+                      onChange={(partial: any) => {
                         if (partial?.guests) setMobileGuests(partial.guests)
                       }}
                       onComplete={closeMobilePanels}
@@ -399,3 +414,4 @@ export function StayDetails() {
     </section>
   )
 }
+

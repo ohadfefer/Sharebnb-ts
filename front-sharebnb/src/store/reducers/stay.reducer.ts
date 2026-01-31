@@ -14,7 +14,7 @@ export const SET_IS_LOADING = 'SET_IS_LOADING'
 
 const stayState: StayState = {
     stays: [],
-    stay: null,
+    stay: {} as Stay,
     filterBy: stayService.getDefaultFilter(),
     isLoading: false,
 }
@@ -57,7 +57,7 @@ export function stayReducer(state = stayState, action: StayAction) {
 // each action has type + specific payload
 type StayAction =
     | { type: typeof SET_STAYS; stays: Stay[] }
-    | { type: typeof SET_STAY; stay: Stay | null }
+    | { type: typeof SET_STAY; stay: Stay }
     | { type: typeof REMOVE_STAY; stayId: string }
     | { type: typeof ADD_STAY; stay: Stay }
     | { type: typeof UPDATE_STAY; stay: Stay }
@@ -67,7 +67,7 @@ type StayAction =
 
 interface StayState {
     stays: Stay[]
-    stay: Stay | null
+    stay: Stay
     filterBy: StayFilterBy
     isLoading: boolean
     lastRemovedStay?: Stay

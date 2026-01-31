@@ -30,7 +30,7 @@ function useIsMobile(q = '(max-width: 768px)') {
  * - onToleranceChange?: (days:number) => void   // 0,1,2,3,7  (optional)
  * - fromMonth?: Date                              // default: today
  */
-export function DateRangePanel({ value, onChange, onToleranceChange, fromMonth }) {
+export function DateRangePanel({ value, onChange, onToleranceChange, fromMonth, onComplete }) {
     const isMobile = useIsMobile()
     const today = useMemo(() => new Date(), [])
     const minMonth = fromMonth || today

@@ -65,7 +65,7 @@ export interface Stay {
     roomType: string
     host?: Host
     loc?: Location
-    reviews?: Review[] | string
+    reviews: Review[] | string
     likedByUsers?: any
     availableDates?: AvailableDate[]
     labels: string[]
