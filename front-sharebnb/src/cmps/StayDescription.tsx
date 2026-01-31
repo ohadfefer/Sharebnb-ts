@@ -2,27 +2,29 @@ import door from '../assets/logo/icons/door.svg'
 import pin from '../assets/logo/icons/pin.svg'
 import parking from '../assets/logo/icons/parking.svg'
 import star from '../assets/logo/icons/star.svg'
-import { eventBus, OPEN_REVIEWS_MODAL } from '../services/event-bus.service'
+import { eventBus, OPEN_REVIEWS_MODAL } from '../services/event-bus.service.js'
 
-export function StayDescription({ stay }) {
+import { Stay } from '../types/stay.js'
+
+export function StayDescription({ stay }: { stay: Stay }) {
     // guard input
     const reviews = Array.isArray(stay?.reviews) ? stay.reviews : []
 
     // numeric ratings only
-    const ratings = reviews
-        .map(r => Number(r?.rate))
-        .filter(n => Number.isFinite(n))
+    // calculation of average of ratings which does not exist as property on stay.reviews
+    // const ratings = reviews
+    //     .map(r => Number(r?.rate))
+    //     .filter(n => Number.isFinite(n))
 
-    const avgRate = ratings.length
-        ? ratings.reduce((a, b) => a + b, 0) / ratings.length
-        : null
+    // const avgRate = ratings.length
+    //     ? ratings.reduce((a, b) => a + b, 0) / ratings.length
+    //     : null
 
-    const ratingText = Number.isFinite(avgRate) ? avgRate.toFixed(2) : 'No ratings yet'
+    // const ratingText = Number.isFinite(avgRate) ? avgRate.toFixed(2) : 'No ratings yet'
     const reviewsCount = reviews.length
 
     const capacity = Number.isFinite(+stay?.capacity) ? +stay.capacity : null
     const bedrooms = Number.isFinite(+stay?.bedrooms) ? +stay.bedrooms : null
-    const beds = Number.isFinite(+stay?.beds) ? +stay.beds : null
     const baths = Number.isFinite(+stay?.bathrooms) ? +stay.bathrooms : null
 
     return (
@@ -33,7 +35,7 @@ export function StayDescription({ stay }) {
                 </div>
 
                 <p className="capacity">
-                    {capacity ?? '2'} guests · {bedrooms ?? '2'} bedrooms · {beds ?? '2'} beds · {baths ?? '2'} baths
+                    {capacity ?? '2'} guests · {bedrooms ?? '2'} bedrooms · {baths ?? '2'} baths
                 </p>
 
                 <div className="reviews-modal">
@@ -42,7 +44,7 @@ export function StayDescription({ stay }) {
                         {/* {Number.isFinite(avgRate)
                             ? `${ratingText} · ${reviewsCount} review${reviewsCount === 1 ? '' : 's'}`
                             : 'No ratings yet'} */}
-                        {stay.rating} · 
+                        {stay.rating} ·
                         <button className="reviews-count-btn" onClick={() => eventBus.emit(OPEN_REVIEWS_MODAL)}>
                             <span className='open-reviews-modal'>{reviewsCount} review{reviewsCount === 1 ? '' : 's'}</span>
                         </button>
@@ -54,17 +56,17 @@ export function StayDescription({ stay }) {
 
             <div className="stay-info-grid host-grid">
                 <div className="column-1">
-                    <img 
-                        src={stay.host.pictureUrl} 
-                        alt={stay.host.fullname} 
+                    <img
+                        src={stay.host?.pictureUrl}
+                        alt={stay.host?.fullname}
                         className="host-image"
-                        onError={(e) => {
-                            e.target.src = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
+                        onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                            e.currentTarget.src = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
                         }}
                     />
                 </div>
                 <div className="column-2">
-                    <p>Hosted by {stay.host.fullname}</p>
+                    <p>Hosted by {stay.host?.fullname}</p>
                     <p>Superhost · 3 years of hosting</p>
                 </div>
             </div>

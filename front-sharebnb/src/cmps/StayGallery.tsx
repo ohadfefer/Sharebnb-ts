@@ -3,7 +3,11 @@ import share from '../assets/logo/icons/share.svg'
 import filledHeart from '../assets/logo/icons/filledHeart.svg'
 import { Link } from 'react-router-dom'
 
-export function StayGallery({ stay, onShare, onSave, isSaved }) {
+import { Stay } from '../types/stay.js'
+
+type StayGallery = { stay: Stay; onShare: () => void; onSave: () => Promise<void>; isSaved: boolean }
+
+export function StayGallery({ stay, onShare, onSave, isSaved }: StayGallery) {
 
   return (
     <section className="stay-gallery">
@@ -48,7 +52,7 @@ export function StayGallery({ stay, onShare, onSave, isSaved }) {
         <div className="mobile-actions">
           <Link to="/" className="back-arrow">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
           <button className="mobile-share-btn" onClick={onShare}>

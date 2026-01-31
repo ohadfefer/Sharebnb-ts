@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams, useParams } from 'react-router-dom'
-import { DateRangePanel } from './DateRangePanel'
-import { GuestsPanel } from './GuestsPanel'
-import { useSelector } from "react-redux"
+import { DateRangePanel } from './DateRangePanel.jsx'
+import { GuestsPanel } from './GuestsPanel.jsx'
 import { buildSearchParams, parseSearchParams, formatGuestsLabel, nightsBetween, formatMoney } from "../services/util.service.js"
+import { useAppSelector } from '../store/hooks.js'
 
 
-export function StickyCard({ selectedDates }) {
+export function StickyCard({ selectedDates }: { selectedDates: { checkIn: string; checkOut: string } }) {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
     const { stayId } = useParams()
@@ -18,16 +18,16 @@ export function StickyCard({ selectedDates }) {
         guests: ''
     })
 
-    const [activePanel, setActivePanel] = useState(null)
-    const dateAnchorRef = useRef(null)
-    const guestsAnchorRef = useRef(null)
-    const stickyCardRef = useRef(null)
-    const datePanelRef = useRef(null)
-    const guestsPanelRef = useRef(null)
+    const [activePanel, setActivePanel] = useState('')
+    const dateAnchorRef = useRef<HTMLDivElement>(null)
+    const guestsAnchorRef = useRef<HTMLDivElement>(null)
+    const stickyCardRef = useRef<HTMLDivElement>(null)
+    const datePanelRef = useRef<HTMLDivElement>(null)
+    const guestsPanelRef = useRef<HTMLDivElement>(null)
 
     const [guests, setGuests] = useState({ adults: 0, children: 0, infants: 0, pets: 0 })
 
-    const stay = useSelector(selector => selector.stayModule.stay)
+    const stay = useAppSelector(selector => selector.stayModule.stay)
     const nightlyPrice = Number(stay?.price) || 0
 
     const nights = nightsBetween(formData.checkin, formData.checkout)
@@ -81,7 +81,7 @@ export function StickyCard({ selectedDates }) {
     useEffect(() => {
         if (!activePanel) return
 
-        const handleDocumentMouseDown = (event) => {
+        const handleDocumentMouseDown = (event: any) => {
             const target = event.target
             const isInsideDates = datePanelRef.current && datePanelRef.current.contains(target)
             const isInsideGuests = guestsPanelRef.current && guestsPanelRef.current.contains(target)
@@ -91,7 +91,7 @@ export function StickyCard({ selectedDates }) {
             )
 
             if (isInsideDates || isInsideGuests || isInsideAnchors) return
-            setActivePanel(null)
+            setActivePanel('')
         }
 
         document.addEventListener('mousedown', handleDocumentMouseDown)
@@ -116,14 +116,14 @@ export function StickyCard({ selectedDates }) {
         return isFilled ? 'Reserve' : 'Check availability'
     }
 
-    const getFieldValue = (fieldName) => {
+    const getFieldValue = (fieldName: 'checkin' | 'checkout' | 'guests') => {
         if (!isFilled) {
             return fieldName === 'guests' ? 'Add guests' : 'Add date'
         }
         return formData[fieldName]
     }
 
-    const closePanels = () => setActivePanel(null)
+    const closePanels = () => setActivePanel('')
 
     return (
         <aside className="sticky-card" ref={stickyCardRef}>
@@ -184,7 +184,7 @@ export function StickyCard({ selectedDates }) {
                     <div className="popover-small bottom-aligned" ref={datePanelRef}>
                         <DateRangePanel
                             value={{ checkIn: formData.checkin, checkOut: formData.checkout }}
-                            onChange={(next) => {
+                            onChange={(next: { checkIn: string; checkOut: string }) => {
                                 setFormData(prev => ({ ...prev, checkin: next.checkIn, checkout: next.checkOut }))
                                 if (next.checkIn && next.checkOut) setIsFilled(true) // DateRangePanel should fill only one field at a time 
                                 // if (next.checkIn && next.checkOut) {
@@ -192,6 +192,8 @@ export function StickyCard({ selectedDates }) {
                                 //     setActivePanel(null)
                                 // }
                             }}
+                            onToleranceChange={null}
+                            fromMonth={null}
                             onComplete={closePanels}
                         />
                     </div>
@@ -201,7 +203,7 @@ export function StickyCard({ selectedDates }) {
                     <div className="popover-small-guests bottom-aligned" ref={guestsPanelRef}>
                         <GuestsPanel
                             value={guests}
-                            onChange={(partial) => {
+                            onChange={(partial: { guests: any }) => {
                                 // partial is {guests: next}
                                 if (partial?.guests) setGuests(partial.guests)
                             }}

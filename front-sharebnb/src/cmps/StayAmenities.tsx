@@ -35,8 +35,10 @@ import stove from '../assets/logo/icons/stove.svg'
 import patioOrBalcony from '../assets/logo/icons/patioOrBalcony.svg'
 import { useState } from 'react'
 
-export function StayAmenities({ stay }) {
-    function getAmenityIcon(amenity) {
+import { Stay } from '../types/stay.js'
+
+export function StayAmenities({ stay }: { stay: Stay }) {
+    function getAmenityIcon(amenity: string) {
         switch (amenity) {
             case 'Pool':
                 return beach
