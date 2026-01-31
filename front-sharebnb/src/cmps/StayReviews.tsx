@@ -8,9 +8,11 @@ import star from '../assets/logo/icons/star.svg'
 
 import { FaStar } from 'react-icons/fa'
 import { useEffect, useState } from 'react'
-import { eventBus, OPEN_REVIEWS_MODAL } from '../services/event-bus.service'
+import { eventBus, OPEN_REVIEWS_MODAL } from '../services/event-bus.service.js'
 
-export function StayReviews({ stay }) {
+import { Stay } from '../types/stay.js'
+
+export function StayReviews({ stay }: { stay: Stay}) {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     if (!stay || !stay.reviews || stay.reviews.length === 0) {
@@ -22,7 +24,7 @@ export function StayReviews({ stay }) {
         )
     }
 
-    const renderStars = (rating) => {
+    const renderStars = (rating: number) => {
         return Array.from({ length: 5 }, (_, index) => (
             <FaStar
                 key={index}
@@ -108,7 +110,7 @@ export function StayReviews({ stay }) {
                 <div className="stay-reviews">
                     <div className="reviews-grid">
                         {stay.reviews.slice(0, 6).map((review) => (
-                            <div key={review.id} className="review-card">
+                            <div key={review._id} className="review-card">
                                 <div className="review-header">
                                     <div className="user-info">
                                         <div className="user-personal-info">
@@ -116,14 +118,14 @@ export function StayReviews({ stay }) {
                                                 src={review.by.imgUrl}
                                                 alt={review.by.fullname}
                                                 className="user-avatar"
-                                                onError={(e) => {
-                                                    e.target.src = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
+                                                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                                    e.currentTarget.src = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
                                                 }}
                                             />
                                             <div className="user-details">
                                                 <h4 className="user-name">{review.by.fullname}</h4>
                                                 <p className="user-location">
-                                                    {stay.loc.city}, {stay.loc.country}
+                                                    {stay.loc?.city}, {stay.loc?.country}
                                                 </p>
                                             </div>
                                         </div>
@@ -166,7 +168,7 @@ export function StayReviews({ stay }) {
                         </div>
                         <div className="modal-content">
                             {stay.reviews.map((review) => (
-                                <div key={review.id} className="modal-review-item">
+                                <div key={review._id} className="modal-review-item">
                                     <div className="review-header">
                                         <div className="user-info">
                                             <div className="user-personal-info">
@@ -174,14 +176,14 @@ export function StayReviews({ stay }) {
                                                     src={review.by.imgUrl}
                                                     alt={review.by.fullname}
                                                     className="user-avatar"
-                                                    onError={(e) => {
-                                                        e.target.src = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
+                                                    onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                                        e.currentTarget.src = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
                                                     }}
                                                 />
                                                 <div className="user-details">
                                                     <h4 className="user-name">{review.by.fullname}</h4>
                                                     <p className="user-location">
-                                                        {stay.loc.city}, {stay.loc.country}
+                                                        {stay.loc?.city}, {stay.loc?.country}
                                                     </p>
                                                 </div>
                                             </div>

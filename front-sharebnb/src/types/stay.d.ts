@@ -64,13 +64,13 @@ export interface Stay {
     bedrooms: number
     roomType: string
     host?: Host
-    loc?: Location
-    reviews: Review[] | string
+    loc: Location
+    reviews: Review[] | []
     likedByUsers?: any
     availableDates?: AvailableDate[]
     labels: string[]
     msgs?: StayMsg[]
-    rating?: string | number
+    rating: number
     guestFavorit?: boolean
     isGuestFavorite?: boolean
     wishlist?: { userId: string; addedAt: string }[]

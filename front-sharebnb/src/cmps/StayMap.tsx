@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react'
 
+import { Stay } from '../types/stay.js'
+
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY_DETAILS;
 
-export function StayMap({ stay }) {
+export function StayMap({ stay }: { stay: Stay}) {
     const mapRef = useRef(null)
     const mapInstanceRef = useRef(null)
     const markerRef = useRef(null)
@@ -62,7 +64,8 @@ export function StayMap({ stay }) {
 
         return () => {
             if (markerRef.current) {
-                markerRef.current.setMap(null)
+                // markerRef.current.setMap(null) // setMap does not exist; if the UI makes problems try to uncomment
+                markerRef.current = null
             }
             if (mapInstanceRef.current) {
                 mapInstanceRef.current = null
