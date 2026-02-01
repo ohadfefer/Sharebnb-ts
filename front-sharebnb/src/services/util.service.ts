@@ -244,7 +244,7 @@ export function formatGuestsLabel(guests: Record<string, number>): string {
  * Formats ISO date string to MM/DD/YYYY
  * Returns '—' for invalid or missing input
  */
-export function formatDateMMDDYYYY(iso: string | null | undefined): string {
+export function formatDateMMDDYYYY(iso: string | Date): string {
     if (!iso) return '—'
 
     const d = new Date(iso)

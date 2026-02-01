@@ -1,5 +1,4 @@
 import { Order, OccupancyDay, LeadTimeBucket, RevenueEntry } from '../types/order.js'
-import { AggregateOrder as OrderBackend} from '../../../back-sharebnb/types/order.js'
 
 // --- 30-day occupancy (booked=1, free=0) ---
 
@@ -63,14 +62,14 @@ export function leadTimeBuckets(orders: Order[] = []): LeadTimeBucket[] {
 /**
  * Returns top 5 listings by total revenue (only approved/completed orders)
  */
-export function revenueByListing(orders: OrderBackend[] = []): RevenueEntry[] {
+export function revenueByListing(orders: Order[] = []): RevenueEntry[] {
     const map = new Map < string, number> ();
 
     for (const o of orders) {
         const isRevenue = o.status === 'approved' || o.status === 'completed';
         if (!isRevenue) continue;
 
-        const name = o.stay?.name || '—';
+        const name = '—';       // missing o.stay property in Order type
         const amount = Number(o.totalPrice) || 0;
 
         map.set(name, (map.get(name) || 0) + amount);

@@ -1,26 +1,27 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import { loadOrders, setFilter as setOrderFilter } from '../store/actions/order.actions' // EDIT
+import { loadOrders, setFilter as setOrderFilter } from '../store/actions/order.actions.js' // EDIT
 import { formatDateMMDDYYYY as fmtDate, formatMoney } from '../services/util.service.js'
 import { KpiCards } from '../cmps/KpiCards.jsx'
 import { ReservationsToolbar } from '../cmps/ReservationsToolbar.jsx'
 import { ReservationsTable } from '../cmps/ReservationsTable.jsx'
 import { InsightsRow } from '../cmps/InsightsRow.jsx'
 import { setFilter } from '../store/actions/order.actions.js'
+import { useAppSelector } from '../store/hooks.js'
 
 
 export function StayReservations() {
-    const { orders, isLoading } = useSelector(s => s.orderModule)
-    const { user } = useSelector(s => s.userModule)
-    const { filterBy } = useSelector(s => s.orderModule)
+    const { orders, isLoading } = useAppSelector(s => s.orderModule)
+    const { user } = useAppSelector(s => s.userModule)
+    const { filterBy } = useAppSelector(s => s.orderModule)
 
 
     const [q, setQ] = useState('')
     const [status, setStatus] = useState('all') // all | pending | approved | rejected | completed
 
     useEffect(() => {
-        setFilter({ hostId: user._id })
+        setFilter({ hostId: user?._id })
         onLoadOrders()
     }, [])
 
@@ -37,8 +38,8 @@ export function StayReservations() {
             if (status !== 'all' && o.status !== status) return false
             if (!needle) return true
             const hay = [
-                o.guest?.fullname,
-                o.stay?.name,
+                // o.guest?.fullname,
+                // o.stay?.name,
                 o.status,
                 fmtDate(o.startDate),
                 fmtDate(o.endDate),
@@ -74,12 +75,12 @@ export function StayReservations() {
 
     function handleExportCsv() {
         const header = ['Guest', 'Check-in', 'Checkout', 'Listing', 'Total Payout', 'Status']
-        const csvSafe = (s) => /[",\n]/.test(s) ? `"${s.replaceAll('"', '""')}"` : s
+        const csvSafe = (s: string) => /[",\n]/.test(s) ? `"${s.replaceAll('"', '""')}"` : s
         const lines = rows.map(o => ([
-            csvSafe(o.guest?.fullname || ''),
+            // csvSafe(o.guest?.fullname || ''),
             csvSafe(fmtDate(o.startDate)),
             csvSafe(fmtDate(o.endDate)),
-            csvSafe(o.stay?.name || ''),
+            // csvSafe(o.stay?.name || ''),
             csvSafe(String(o.totalPrice ?? 0)),
             csvSafe(o.status || ''),
         ].join(',')))
