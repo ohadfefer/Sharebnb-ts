@@ -6,7 +6,7 @@ export interface WatchedUser {
     fullname: string
     isAdmin: boolean
     email?: string | null | undefined
-    imgUrl?: string | null | undefined
+    imgUrl: string 
     score?: number
 }
 

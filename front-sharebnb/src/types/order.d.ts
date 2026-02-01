@@ -1,10 +1,10 @@
 import { ADD_ORDER, ADD_ORDER_MSG, REMOVE_ORDER, SET_FILTER_BY, SET_IS_LOADING, SET_ORDER, SET_ORDERS, UPDATE_ORDER } from "../store/reducers/order.reducer.js"
 
 export interface Order {
-    _id?: string
-    userId?: string
-    stayId?: string
-    hostId?: string
+    _id: string
+    userId: string
+    stayId: string
+    hostId: string
     totalPrice: number
     startDate: Date | string
     endDate: Date | string
@@ -13,7 +13,7 @@ export interface Order {
         children: number
     }
     status: string
-    createdAt?: Date | string
+    createdAt: Date | string
     contactEmail?: string | null
     emails?: Record<string, any>
 }
@@ -37,7 +37,7 @@ export interface OccupancyDay {
 }
 
 export interface LeadTimeBucket {
-    name: '0–3d' | '4–7d' | '8–14d' | '15–30d' | '30d+';
+    name: '0-3d' | '4-7d' | '8-14d' | '15-30d' | '30d+';
     v: number;
 }
 

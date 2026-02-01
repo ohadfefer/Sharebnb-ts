@@ -1,5 +1,5 @@
 import { userService } from '../../services/user/index.js'
-import { UserState, UserAction } from '../../types/user.js'
+import { UserState, UserAction, LoggedInUser } from '../../types/user.js'
 
 export const INCREMENT = 'INCREMENT'
 export const DECREMENT = 'DECREMENT'
@@ -12,7 +12,7 @@ export const SET_SCORE = 'SET_SCORE'
 export const INIT_USER = 'INIT_USER'
 
 const userState: UserState = {
-    user: userService.getLoggedinUser() || null, // Don't initialize from service here, use INIT_USER action instead
+    user: userService.getLoggedinUser(), // Don't initialize from service here, use INIT_USER action instead
     users: [],
     watchedUser: null
 }

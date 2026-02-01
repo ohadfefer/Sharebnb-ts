@@ -1,5 +1,5 @@
 export interface Order {
-	_id?: string
+	_id: string
 	userId: string
 	stayId: string
 	hostId: string
@@ -11,7 +11,7 @@ export interface Order {
 		children: number
 	}
 	status: string
-	createdAt?: Date | string
+	createdAt: Date | string
 	contactEmail?: string | null
 	emails?: Record<string, any>
 }
@@ -53,7 +53,7 @@ export interface AggregateOrderHost {
 	email?: string | null
 }
 
-export interface AggregateOrder extends Omit<Order, 'userId' | 'stayId' | 'hostId'> {
+export interface AggregateOrder extends Order {
 	guest: AggregateOrderGuest
 	stay: AggregateOrderStay
 	host?: AggregateOrderHost

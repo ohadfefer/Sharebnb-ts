@@ -1,14 +1,17 @@
 
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { stayService } from '../services/stay'
-import { StayList } from '../cmps/StayList'
+import { stayService } from '../services/stay/index.js'
+import { StayList } from '../cmps/StayList.js'
 import Skeleton from 'react-loading-skeleton'
 import '../assets/styles/cmps/WishlistIndex.css'
 
+import { useAppSelector } from '../store/hooks.js'
+import { Stay } from '../types/stay.js'
+
 export function WishlistIndex() {
-    const { user } = useSelector(s => s.userModule)
-    const [wishlistStays, setWishlistStays] = useState([])
+    const { user } = useAppSelector(s => s.userModule)
+    const [wishlistStays, setWishlistStays] = useState([] as Stay[])
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
@@ -22,8 +25,10 @@ export function WishlistIndex() {
     const loadWishlistStays = async () => {
         try {
             setIsLoading(true)
-            const stays = await stayService.getWishlistStays(user._id)
-            setWishlistStays(stays)
+            if (user) {
+                const stays = await stayService.getWishlistStays(user._id)
+                setWishlistStays(stays)
+            }
         } catch (err) {
             console.error('Failed to load wishlist stays:', err)
         } finally {

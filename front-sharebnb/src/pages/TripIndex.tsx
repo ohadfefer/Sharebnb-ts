@@ -3,18 +3,19 @@ import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { loadOrders, setFilter, setupOrderSocketListeners, cleanupOrderSocketListeners } from "../store/actions/order.actions.js" // EDIT
+import { useAppSelector } from "../store/hooks.js"
 
-function formatDate(iso) {
+function formatDate(iso: string | Date) {
   if (!iso) return "—"
   const d = new Date(iso)
-  if (isNaN(d)) return "—"
+  if (isNaN(d as any)) return "—"
   const mm = String(d.getMonth() + 1).padStart(2, "0")
   const dd = String(d.getDate()).padStart(2, "0")
   const yyyy = d.getFullYear()
   return `${mm}/${dd}/${yyyy}`
 }
 
-function formatMoney(value, currency = "USD") {
+function formatMoney(value: string | number, currency = "USD") {
   const n = Number(value ?? 0)
   try {
     return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(n)
@@ -30,8 +31,8 @@ function capFirst(txt = "") {
 export function TripIndex() {
   const navigate = useNavigate()
 
-  const user = useSelector(s => s.userModule.user)
-  const { orders, isLoading } = useSelector(s => s.orderModule)
+  const user = useAppSelector(s => s.userModule.user)
+  const { orders, isLoading } = useAppSelector(s => s.orderModule)
 
   // console.log('TripIndex - user:', user)
   // console.log('TripIndex - orders:', orders)
@@ -70,7 +71,7 @@ export function TripIndex() {
     console.log(orders)
   }
 
-  function handleRowClick(stayId) {
+  function handleRowClick(stayId: string) {
     if (stayId) navigate(`/stay/${stayId}`)
   }
 
@@ -104,16 +105,18 @@ export function TripIndex() {
             </thead>
             <tbody>
               {!isLoading && Array.isArray(orders) && orders.length > 0 && orders.map((o, idx) => {
-                const stayName = o?.stay?.name || o?.stay?.title || o?.name || "—"
-                const stayThumb = o?.stay?.imgUrls?.[0] || o?.stay?.imgUrl || "https://via.placeholder.com/72?text=%20"
-                const checkIn = formatDate(o?.startDate || o?.checkIn || o?.from)
-                const checkOut = formatDate(o?.endDate || o?.checkOut || o?.to)
-                const bookedAt = formatDate(o?.createdAt || o?.bookedAt)
-                const total = formatMoney(o?.totalPrice ?? o?.price ?? 0)
+                // missing "stay" property from order object. Use aggregation for order collection or retrieve stay using
+                // stayId from the order object. For now, "stayName" and "stayThumb" are hard-coded.
+                const stayName = "—"
+                const stayThumb = "https://via.placeholder.com/72?text=%20"
+                const checkIn = formatDate(o?.startDate)
+                const checkOut = formatDate(o?.endDate)
+                const bookedAt = formatDate(o?.createdAt)
+                const total = formatMoney(o?.totalPrice ?? 0)
                 const status = capFirst(o?.status || "pending")
 
                 return (
-                  <tr key={o._id} className={idx % 2 ? "zebra" : ""} onClick={() => handleRowClick(o?.stay?._id)} role="button">
+                  <tr key={o._id} className={idx % 2 ? "zebra" : ""} onClick={() => handleRowClick(o?.stayId)} role="button">
                     <td className="col-destination">
                       <div className="dest-cell">
                         <img src={stayThumb} alt="" className="dest-thumb" width={72} height={72} loading="lazy" />

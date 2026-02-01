@@ -34,10 +34,10 @@ export function buildNext30Occupancy(orders: Order[] = []): OccupancyDay[] {
  */
 export function leadTimeBuckets(orders: Order[] = []): LeadTimeBucket[] {
     const buckets: LeadTimeBucket[] = [
-        { name: '0–3d', v: 0 },
-        { name: '4–7d', v: 0 },
-        { name: '8–14d', v: 0 },
-        { name: '15–30d', v: 0 },
+        { name: '0-3d', v: 0 },
+        { name: '4-7d', v: 0 },
+        { name: '8-14d', v: 0 },
+        { name: '15-30d', v: 0 },
         { name: '30d+', v: 0 },
     ];
 

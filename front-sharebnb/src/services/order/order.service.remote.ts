@@ -47,6 +47,7 @@ async function updateStatus(orderId: string, status: string): Promise<AggregateO
         console.log(orderId, status, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         const order = await getById(orderId)
         const updatedOrder = { ...order, status }
+        
         return await save(updatedOrder)
     } catch (err) {
         console.error('Error updating order status:', err)
@@ -114,7 +115,7 @@ async function createOrder(
         }
 
         console.log('Saving order:', newOrder)
-        const savedOrder = await save(newOrder)
+        const savedOrder = await save(newOrder as Order)
         console.log('Order saved successfully:', savedOrder)
         return savedOrder
     } catch (err) {
