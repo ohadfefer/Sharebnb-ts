@@ -12,6 +12,7 @@ export interface StayFilterBy {
     checkOut: string
     guests: Guests | string | number
     labels: string[]
+    hostId?: string
 }
 
 export interface Host {

@@ -9,6 +9,12 @@ import { formatDateMMDDYYYY, nightsBetween, parseSearchParams, buildStayPathWith
 
 import viza from '../assets/logo/vize-card.png'
 import arrow from '../assets/logo/arrow.png'
+import { useAppSelector } from '../store/hooks.js'
+
+// types
+
+import { Stay } from '../types/stay.js'
+import { Order } from '../types/order.js'
 
 export function StayOrder() {
     const dispatch = useDispatch()
@@ -16,14 +22,14 @@ export function StayOrder() {
     const { stayId } = useParams()
     const [searchParams] = useSearchParams()
 
-    const [order, setOrder] = useState(null)
+    const [order, setOrder] = useState({} as Order)
     const [isSaved, setIsSaved] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [stay, setStay] = useState(null)
+    const [error, setError] = useState('')
+    const [stay, setStay] = useState({} as Stay)
 
-    const backHref = buildStayPathWithParams(stayId, searchParams)
-    const { user } = useSelector(s => s.userModule)
+    const backHref = stayId ? buildStayPathWithParams(stayId, searchParams) : '/stay'
+    const { user } = useAppSelector(s => s.userModule)
 
     const { checkIn, checkOut, guests } = parseSearchParams(searchParams)
     const nights = nightsBetween(checkIn, checkOut)
@@ -39,8 +45,8 @@ export function StayOrder() {
     async function loadStay() {
         try {
             setIsLoading(true)
-            setError(null)
-            const stayData = await orderService.getStayById(stayId)
+            setError('')
+            const stayData =  stayId ? await orderService.getStayById(stayId) : null
             // console.log('loadStay - stayData loaded:', stayData)
             // console.log('loadStay - stayData.host:', stayData?.host)
             // console.log('loadStay - stayData.hostId:', stayData?.hostId)
@@ -146,8 +152,8 @@ export function StayOrder() {
                 stayId: stay._id,
                 userId: user._id,
                 hostId: stay.host?._id,
-                startDate: checkIn || base.startDate,
-                endDate: checkOut || base.endDate,
+                startDate: checkIn,
+                endDate: checkOut,
                 guests: validGuests,
                 totalPrice: computedTotal,
                 status: 'pending'
@@ -155,21 +161,21 @@ export function StayOrder() {
             
             console.log('Order to save:', orderToSave)
 
-            const savedOrder = await addOrder(orderToSave)
+            const savedOrder = await addOrder(orderToSave as Order)
             setOrder(savedOrder)
             setIsSaved(true)
             showSuccessMsg('Order confirmed successfully!')
             console.log(savedOrder)
 
             // Navigate to order confirmation page
-            navigate(`/order/${savedOrder.insertedId}/confirmation`)
+            navigate(`/order/${savedOrder._id}/confirmation`)
         } catch (err) {
             console.error('Cannot confirm and pay:', err)
             setError('Failed to confirm order. Please try again.')
         }
     }
 
-    function handleMouseMove(e) {
+    function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
         const el = e.currentTarget
         const r = el.getBoundingClientRect()
         const x = ((e.clientX - r.left) / r.width) * 100

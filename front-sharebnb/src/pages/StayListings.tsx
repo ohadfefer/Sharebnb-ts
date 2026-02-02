@@ -1,21 +1,23 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { loadStays, setFilter } from '../store/actions/stay.actions' // EDIT
+import { loadStays, setFilter } from '../store/actions/stay.actions.js' // EDIT
+import { useAppSelector } from '../store/hooks.js'
+import { StayFilterBy } from '../types/stay.js'
 
 export function StayListings() {
-    const { stays = [] } = useSelector(s => s.stayModule)
-    const loggedInUser = useSelector(s => s.userModule.user)
-    const [sortConfig, setSortConfig] = useState({ field: null, direction: null })
+    const { stays = [] } = useAppSelector(s => s.stayModule)
+    const loggedInUser = useAppSelector(s => s.userModule.user)
+    const [sortConfig, setSortConfig] = useState({ field: '', direction: '' })
     const navigate = useNavigate()
 
     useEffect(() => {
         if (!loggedInUser?._id) return
-        setFilter({ hostId: loggedInUser._id })  // EDIT
-        loadStays()                              // EDIT
+        setFilter({ hostId: loggedInUser._id } as StayFilterBy)  // EDIT
+        loadStays({} as StayFilterBy)                              // EDIT
         return () => {
             // NEW: clear host filter when leaving dashboard
-            setFilter({ hostId: '' })
+            setFilter({ hostId: '' } as StayFilterBy)
         }
     }, [loggedInUser?._id])
 
@@ -23,7 +25,7 @@ export function StayListings() {
         if (!sortConfig.field || !sortConfig.direction) return stays
         const arr = [...stays]
         const { field, direction } = sortConfig
-        const getVal = (s) => s?.[field] ?? 0
+        const getVal = (s: any) => s?.[field] ?? 0
         arr.sort((a, b) => {
             const av = getVal(a), bv = getVal(b)
             if (typeof av === 'number' && typeof bv === 'number') {
@@ -35,20 +37,20 @@ export function StayListings() {
         return arr
     }, [stays, sortConfig])
 
-    const handleListingClick = (stayId) => navigate(`/stay/${stayId}`)
-    const handleUpdateClick = (stayId) => navigate(`/hosting/listings/edit/${stayId}`)
-    const handleSort = (field) => {
+    const handleListingClick = (stayId: string) => navigate(`/stay/${stayId}`)
+    const handleUpdateClick = (stayId: string) => navigate(`/hosting/listings/edit/${stayId}`)
+    const handleSort = (field: string) => {
         if (sortConfig.field !== field) return setSortConfig({ field, direction: 'asc' })
         if (sortConfig.direction === 'asc') return setSortConfig({ field, direction: 'desc' })
-        setSortConfig({ field: null, direction: null })
+        setSortConfig({ field: '', direction: '' })
     }
-    const getSortIcon = (field) => {
+    const getSortIcon = (field: string) => {
         if (sortConfig.field !== field) return <span className="sort-icon">&#8597;</span>
         if (sortConfig.direction === 'asc') return <span className="sort-icon">&#x25BE;</span>
         if (sortConfig.direction === 'desc') return <span className="sort-icon">&#x25B4;</span>
         return <span className="sort-icon">&#8597;</span>
     }
-    const formatDate = (dateString) => {
+    const formatDate = (dateString: string) => {
         if (!dateString) return 'N/A'
         const d = new Date(dateString); const m = String(d.getMonth() + 1).padStart(2, '0'); const day = String(d.getDate()).padStart(2, '0'); const y = String(d.getFullYear()).slice(-2)
         return `${m}/${day}/${y}`
@@ -104,7 +106,9 @@ export function StayListings() {
                                 <td className="location-cell">
                                     {stay.loc?.city}{stay.loc?.city && stay.loc?.country ? ', ' : ''}{stay.loc?.country}
                                 </td>
-                                <td className="date-cell">{formatDate(stay.createdAt || stay.at)}</td>
+                                {/* missing 'createdAt' property on Stay type */}
+                                {/* <td className="date-cell">{formatDate(stay.createdAt || stay.at)}</td> */} 
+                                <td className="date-cell">{formatDate('')}</td>
                             </tr>
                         ))}
                     </tbody>
