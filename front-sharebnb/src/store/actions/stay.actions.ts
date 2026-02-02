@@ -77,7 +77,7 @@ export async function addStayMsg(stayId: string, txt: string) {
     }
 }
 
-export function setFilter(filterBy: StayFilterBy) {
+export function setFilter(filterBy: Partial<StayFilterBy>) {
     console.log('from action:', filterBy);
     
     store.dispatch({ type: SET_FILTER_BY, filterBy })

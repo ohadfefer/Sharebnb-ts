@@ -13,11 +13,11 @@ export function StayListings() {
 
     useEffect(() => {
         if (!loggedInUser?._id) return
-        setFilter({ hostId: loggedInUser._id } as StayFilterBy)  // EDIT
+        setFilter({ hostId: loggedInUser._id })  // EDIT
         loadStays({} as StayFilterBy)                              // EDIT
         return () => {
             // NEW: clear host filter when leaving dashboard
-            setFilter({ hostId: '' } as StayFilterBy)
+            setFilter({ hostId: '' })
         }
     }, [loggedInUser?._id])
 
