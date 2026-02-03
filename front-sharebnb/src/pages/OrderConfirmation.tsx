@@ -5,18 +5,19 @@ import confetti from 'canvas-confetti'
 import { orderService } from '../services/order/index.js'
 import { getCmdUpdateOrder } from '../store/actions/order.actions.js'
 import { formatGuestsLabel, formatDateMMDDYYYY, buildStayPathWithParams } from '../services/util.service.js'
+import { useAppSelector } from '../store/hooks.js'
 
 export function OrderConfirmation() {
     const { orderId: id } = useParams()
     const dispatch = useDispatch()
     const [searchParams] = useSearchParams()
 
-    const orders = useSelector(s => s.orderModule.orders)
+    const orders = useAppSelector(s => s.orderModule.orders)
     const fromStore = useMemo(() => orders.find(o => o._id === id), [orders, id])
 
     const [order, setOrder] = useState(fromStore || null)
     const [loading, setLoading] = useState(!fromStore)
-    const [error, setError] = useState(null)
+    const [error, setError] = useState('')
 
     // load fallback if not in store
     useEffect(() => {
@@ -25,7 +26,7 @@ export function OrderConfirmation() {
             ; (async () => {
                 try {
                     setLoading(true)
-                    const fetched = await orderService.getById(id)
+                    const fetched = id ? await orderService.getById(id) : null
                     if (!alive) return
                     if (fetched) {
                         setOrder(fetched)
@@ -57,8 +58,8 @@ export function OrderConfirmation() {
         return <section className="confirm-page"><div className="confirm-card">{error || 'Order not found'}</div></section>
     }
 
-    const backToStayHref = order.stay?._id
-        ? buildStayPathWithParams(order.stay._id, searchParams)
+    const backToStayHref = order.stayId
+        ? buildStayPathWithParams(order.stayId, searchParams)
         : '/trips'
 
     const statusLabel = 'Pending'
@@ -68,7 +69,7 @@ export function OrderConfirmation() {
             <div className="confirm-hero">
                 <div className="badge-check" aria-hidden>✓</div>
                 <h1>Booking requested!</h1>
-                <p>We’ve sent your request to the host. You’ll get a confirmation soon.</p>
+                <p>We've sent your request to the host. You'll get a confirmation soon.</p>
             </div>
 
             <div className="confirm-card">
@@ -76,8 +77,8 @@ export function OrderConfirmation() {
                     <div className="confirm-col">
                         <h3>Stay</h3>
                         <div className="stay-mini">
-                            {order.stay?.name || '—'}
-                            {order.stay?._id && (
+                            {'—'} {/* suppose to be *order.stay?.name || '-'* but order is missing stay property  */}
+                            {order.stayId && ( 
                                 <span className="muted"> &nbsp;·&nbsp; #{order._id}</span>
                             )}
                         </div>
@@ -85,7 +86,7 @@ export function OrderConfirmation() {
 
                     <div className="confirm-col">
                         <h3>Dates</h3>
-                        <div>{formatDateMMDDYYYY(order.startDate)} – {formatDateMMDDYYYY(order.endDate)}</div>
+                        <div>{formatDateMMDDYYYY(order.startDate)} - {formatDateMMDDYYYY(order.endDate)}</div>
                     </div>
 
                     <div className="confirm-col">
@@ -106,7 +107,7 @@ export function OrderConfirmation() {
 
                 <div className="confirm-actions">
                     <Link to="/trips" className="btn primary">View all trips</Link>
-                    {order.stay?._id && (
+                    {order.stayId && (
                         <Link to={backToStayHref} className="btn ghost">Go to stay</Link>
                     )}
                     <button
