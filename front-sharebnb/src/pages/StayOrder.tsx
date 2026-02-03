@@ -131,7 +131,7 @@ export function StayOrder() {
             //     dispatch(getCmdAddOrder(base))
             // }
 
-            const computedTotal = (stay?.price && nights ? stay.price * nights : 0)
+            const computedTotal = (stay?.price && nights ? Number(stay.price) * nights : 0)
 
             // const updated = await updateOrderAction({
             //     ...base,
@@ -290,7 +290,7 @@ export function StayOrder() {
                                 <div className="total-details">
                                     <div className="total">
                                         <p>Total</p>
-                                        <p>${(stay.price || 0) * Math.max(1, nights || 1)}</p>
+                                        <p>${(Number(stay.price) || 0) * Math.max(1, nights || 1)}</p>
                                     </div>
                                     <p className="item">Price breakdown</p>
                                 </div>

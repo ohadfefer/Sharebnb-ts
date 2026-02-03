@@ -57,13 +57,12 @@ export interface Stay {
     name: string
     type: string
     imgUrls: string[]
-    price: number
+    price: number | string
     summary: string
     capacity: number
     amenities: string[]
     bathrooms: number
     bedrooms: number
-    roomType: string
     host?: Host
     loc: Location
     reviews: Review[] | []

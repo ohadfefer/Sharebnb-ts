@@ -2,13 +2,19 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { addStay, updateStay, getCmdSetStay } from '../store/actions/stay.actions'
-import { stayService } from '../services/stay'
-import { uploadService } from '../services/upload.service'
-import { userService } from '../services/user'
-import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service'
+import { addStay, updateStay, getCmdSetStay } from '../store/actions/stay.actions.js'
+import { stayService } from '../services/stay/index.js'
+import { uploadService } from '../services/upload.service.js'
+import { userService } from '../services/user/index.js'
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
-import { AutoCompletePanel } from '../cmps/AutoCompletePanel'
+import { AutoCompletePanel } from '../cmps/AutoCompletePanel.jsx'
+import { useAppSelector } from '../store/hooks.js'
+
+// types
+
+import { StayFormData } from '../types/stay-form.js'
+import { Host, Location, Stay } from '../types/stay.js'
 
 // options
 const PROPERTY_TYPES = ['Apartment', 'House', 'Villa', 'Cabin', 'B&B', 'Loft', 'Unique Stay', 'Farm stay']
@@ -23,14 +29,14 @@ export function StayEditor() {
     const loggedinUser = useMemo(() => userService.getLoggedinUser(), [])
     useEffect(() => { if (!loggedinUser) navigate('/auth/login') }, [loggedinUser, navigate])
 
-    const { isLoading, stay } = useSelector(s => s.stayModule)
+    const { isLoading, stay } = useAppSelector(s => s.stayModule)
 
     const [step, setStep] = useState(0)
     const [saving, setSaving] = useState(false)
     const [addressQuery, setAddressQuery] = useState('')
 
     // main form state
-    const [form, setForm] = useState(() => {
+    const [form, setForm] = useState<StayFormData>(() => {
         // restore draft if exists (only for new stays)
         if (!isEditMode) {
             const draft = localStorage.getItem('addlist_draft')
@@ -38,11 +44,11 @@ export function StayEditor() {
         }
         return {
             name: '', type: '', price: '',
-            loc: { address: '', city: '', country: '', countryCode: '', street: '', lat: null, lng: null },
+            loc: { address: '', city: '', country: '', countryCode: '', lat: null, lng: null },
             imgUrls: [],
             capacity: 0, rooms: 0, bedrooms: 0, bathrooms: 0,
             labels: [], amenities: [],
-            description: ''
+            summary: ''
         }
     })
 
@@ -53,7 +59,7 @@ export function StayEditor() {
                 try {
                     const existingStay = await stayService.getById(stayId)
                     dispatch(getCmdSetStay(existingStay))
-                    
+
                     // Populate form with existing stay data
                     setForm({
                         name: existingStay.name || '',
@@ -64,18 +70,17 @@ export function StayEditor() {
                             city: existingStay.loc?.city || '',
                             country: existingStay.loc?.country || '',
                             countryCode: existingStay.loc?.countryCode || '',
-                            street: existingStay.loc?.street || '',
-                            lat: existingStay.loc?.lat || null,
-                            lng: existingStay.loc?.lng || null
+                            lat: existingStay.loc?.lat,
+                            lng: existingStay.loc?.lng
                         },
                         imgUrls: existingStay.imgUrls || [],
                         capacity: existingStay.capacity || 0,
-                        rooms: existingStay.rooms || 0,
+                        rooms: 0, // missing rooms property from stay 
                         bedrooms: existingStay.bedrooms || 0,
                         bathrooms: existingStay.bathrooms || 0,
                         labels: existingStay.labels || [],
                         amenities: existingStay.amenities || [],
-                        description: existingStay.description || ''
+                        summary: existingStay.summary || ''
                     })
                     setAddressQuery(existingStay.loc?.address || '')
                 } catch (err) {
@@ -94,7 +99,7 @@ export function StayEditor() {
         }
     }, [form, isEditMode])
 
-    function onChange(e) {
+    function onChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
         const { name, value, type } = e.target
         if (name.startsWith('loc.')) {
             const key = name.split('.')[1]
@@ -104,7 +109,7 @@ export function StayEditor() {
         }
     }
 
-    function toggle(field, val) {
+    function toggle(field: 'labels' | 'amenities' | 'imgUrls', val: string) {
         setForm(f => {
             const s = new Set(f[field])
             s.has(val) ? s.delete(val) : s.add(val)
@@ -112,7 +117,7 @@ export function StayEditor() {
         })
     }
 
-    async function onFileInput(e) {
+    async function onFileInput(e: React.ChangeEvent<HTMLInputElement>) {
         try {
             const res = await uploadService.uploadImg(e)
             const url = res?.secure_url || res?.url
@@ -121,14 +126,14 @@ export function StayEditor() {
         } catch (err) {
             showErrorMsg('Image upload failed')
         } finally {
-            e.target.value = null
+            e.target.value = ''
         }
     }
-    function removeImg(i) {
-        setForm(f => ({ ...f, imgUrls: f.imgUrls.filter((_, idx) => idx !== i) }))
+    function removeImg(i: number) {
+        setForm((f: StayFormData) => ({ ...f, imgUrls: f.imgUrls.filter((_, idx) => idx !== i) }))
     }
 
-    function validate(idx) {
+    function validate(idx: number) {
         if (idx === 0) return form.name && form.type && +form.price > 0
         if (idx === 1) return form.loc.city && form.loc.country && form.loc.address
         if (idx === 2) return form.imgUrls.length > 0
@@ -141,42 +146,52 @@ export function StayEditor() {
         localStorage.removeItem('addlist_draft')
         setForm({
             name: '', type: '', price: '',
-            loc: { address: '', city: '', country: '', countryCode: '', street: '', lat: null, lng: null },
+            loc: { address: '', city: '', country: '', countryCode: '', lat: 0, lng: 0 },
             imgUrls: [],
             capacity: 0, rooms: 0, bedrooms: 0, bathrooms: 0,
             labels: [], amenities: [],
-            description: ''
+            summary: ''
         })
         setAddressQuery('')
         setStep(0)
     }
 
-    async function publish(e) {
+    async function publish(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         if (saving || isLoading) return
         setSaving(true)
         try {
             const payload = {
                 ...form,
-                _id: isEditMode ? stayId : undefined,
+                _id: isEditMode ? stayId : '',
                 price: +form.price,
-                host: loggedinUser ? { 
-                    _id: loggedinUser._id, 
-                    fullname: loggedinUser.fullname, 
-                    pictureUrl: loggedinUser.imgUrl 
-                } : undefined
+                host: {
+                    _id: loggedinUser?._id,
+                    fullname: loggedinUser?.fullname,
+                    pictureUrl: loggedinUser?.imgUrl
+                } as Partial<Host>,
+
+                /// additional properties to make payload compatible with type Stay ///
+                reviews: [],
+                likedByUsers: null,
+                availableDates: undefined,
+                msgs: undefined,
+                rating: 0,
+                guestFavorit: undefined,
+                isGuestFavorite: undefined,
+                wishlist: undefined
             }
-            
-            let saved
+
+            let saved: Stay
             if (isEditMode) {
-                saved = await updateStay(payload) // dispatches internally
+                saved = await updateStay(payload as Stay)
                 showSuccessMsg('Listing updated')
             } else {
-                saved = await addStay(payload) // dispatches internally
+                saved = await addStay(payload as Stay) // dispatches internally
                 showSuccessMsg('Listing published')
                 localStorage.removeItem('addlist_draft')
             }
-            
+
             navigate(`/stay/${saved._id}`)
         } catch (err) {
             showErrorMsg(isEditMode ? 'Cannot update listing' : 'Cannot publish listing')
@@ -223,20 +238,20 @@ export function StayEditor() {
                     </div>
                     <AutoCompletePanel
                         value={{ address: addressQuery }}
-                        onChange={(loc) => {
+                        onChange={(loc: Location) => {
                             setForm(f => ({
                                 ...f, loc: {
                                     address: loc.address || f.loc.address,
                                     city: loc.city || f.loc.city,
                                     country: loc.country || f.loc.country,
                                     countryCode: loc.countryCode || f.loc.countryCode,
-                                    street: loc.street || f.loc.street,
                                     lat: loc.lat ?? f.loc.lat,
                                     lng: loc.lng ?? f.loc.lng
                                 }
                             }))
                             setAddressQuery(loc.address || '')
                         }}
+                        onComplete={null}
                         onAdvance={next}
                     />
                     <div className="grid" style={{ marginTop: 12 }}>
@@ -245,9 +260,6 @@ export function StayEditor() {
                         </div>
                         <div className="field"><label>Country</label>
                             <input name="loc.country" value={form.loc.country} onChange={onChange} />
-                        </div>
-                        <div className="field col-2"><label>Street</label>
-                            <input name="loc.street" value={form.loc.street} onChange={onChange} />
                         </div>
                     </div>
                     {!!(form.loc.lat && form.loc.lng) && (
@@ -292,7 +304,7 @@ export function StayEditor() {
                     </div>
                     <div className="field col-3">
                         <label>Description</label>
-                        <textarea name="description" value={form.description} onChange={onChange} rows={5} placeholder="What makes your place special?" />
+                        <textarea name="summary" value={form.summary} onChange={onChange} rows={5} placeholder="What makes your place special?" />
                     </div>
                 </div>
             )
@@ -325,7 +337,7 @@ export function StayEditor() {
                     <h4>Quick summary</h4>
                     <ul>
                         <li><b>{form.name || '—'}</b> — {form.type || '—'} — {form.price ? `$${form.price}/night` : '—'}</li>
-                        <li>{form.loc.address || form.loc.street ? `${form.loc.street ? form.loc.street + ', ' : ''}${form.loc.city}, ${form.loc.country}` : `${form.loc.city}, ${form.loc.country}`}</li>
+                        <li>{`${form.loc.city}, ${form.loc.country}`}</li>
                         <li>{form.bedrooms} bd · {form.bathrooms} ba · {form.capacity} guests</li>
                         {!!form.labels.length && <li>Labels: {form.labels.join(', ')}</li>}
                         {!!form.amenities.length && <li>Amenities: {form.amenities.join(', ')}</li>}
@@ -359,17 +371,18 @@ export function StayEditor() {
             </form>
         </section>
     )
-}
 
-function Stepper({ step, titles }) {
-    return (
-        <ol className="stepper">
-            {titles.map((t, i) => (
-                <li key={t} className={`stepper__item ${i <= step ? 'active' : ''}`}>
-                    <span className="stepper__dot">{i + 1}</span>
-                    <span className="stepper__label">{t}</span>
-                </li>
-            ))}
-        </ol>
-    )
+
+    function Stepper({ step, titles }: { step: number; titles: any }) {
+        return (
+            <ol className="stepper">
+                {titles.map((t: number, i: number) => (
+                    <li key={t} className={`stepper__item ${i <= step ? 'active' : ''}`}>
+                        <span className="stepper__dot">{i + 1}</span>
+                        <span className="stepper__label">{t}</span>
+                    </li>
+                ))}
+            </ol>
+        )
+    }
 }
