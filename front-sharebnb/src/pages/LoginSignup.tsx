@@ -3,9 +3,9 @@ import { Outlet, useNavigate } from 'react-router'
 import { NavLink } from 'react-router-dom'
 import { useState } from 'react'
 
-import { userService } from '../services/user'
-import { login, signup } from '../store/actions/user.actions'
-import { ImgUploader } from '../cmps/ImgUploader'
+import { userService } from '../services/user/index.js'
+import { login, signup } from '../store/actions/user.actions.js'
+import { ImgUploader } from '../cmps/ImgUploader.jsx'
 
 export function LoginSignup() {
     return (
@@ -19,14 +19,14 @@ export function Login() {
     const [credentials, setCredentials] = useState({ username: '', password: '' })
     const navigate = useNavigate()
 
-    async function onLogin(ev = null) {
+    async function onLogin(ev: React.FormEvent<HTMLFormElement>) {
         if (ev) ev.preventDefault()
         if (!credentials.username) return
         await login(credentials)
         navigate('/')
     }
 
-    async function onDemoLogin(ev) {
+    async function onDemoLogin(ev: React.FormEvent) {
         if (ev) ev.preventDefault()
         const demoCreds = {
             username: 'Alon Ben Ari',
@@ -49,9 +49,9 @@ export function Login() {
         navigate('/stay')
     }
 
-    function handleChange(ev) {
-        const field = ev.target.name
-        const value = ev.target.value
+    function handleChange(ev: React.ChangeEvent<HTMLInputElement>) {
+        const field = ev.currentTarget.name
+        const value = ev.currentTarget.value
         setCredentials({ ...credentials, [field]: value })
     }
 
@@ -101,16 +101,16 @@ export function Signup() {
     const navigate = useNavigate()
 
     function clearState() {
-        setCredentials({ username: '', password: '', fullname: '', email: '', imgUrl: '' })
+        setCredentials({ username: '', password: '', fullname: '', email: '', imgUrl: '', isAdmin: false})
     }
 
-    function handleChange(ev) {
+    function handleChange(ev: React.ChangeEvent<HTMLInputElement>) {
         const field = ev.target.name
         const value = ev.target.value
         setCredentials({ ...credentials, [field]: value })
     }
 
-    async function onSignup(ev = null) {
+    async function onSignup(ev: React.FormEvent) {
         if (ev) ev.preventDefault()
         // EDIT: also require email (we rely on it downstream)
         if (!credentials.username || !credentials.password || !credentials.fullname || !credentials.email) return // EDIT
@@ -119,7 +119,7 @@ export function Signup() {
         navigate('/')
     }
 
-    function onUploaded(imgUrl) {
+    function onUploaded(imgUrl: string) {
         setCredentials({ ...credentials, imgUrl })
     }
 

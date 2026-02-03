@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { uploadService } from '../services/upload.service'
+import { uploadService } from '../services/upload.service.js'
 
-export function ImgUploader({ onUploaded = null }) {
+export function ImgUploader({ onUploaded }: { onUploaded: (imgUrl: string) => void }) {
   const [imgData, setImgData] = useState({
     imgUrl: null,
     height: 500,
@@ -9,7 +9,7 @@ export function ImgUploader({ onUploaded = null }) {
   })
   const [isUploading, setIsUploading] = useState(false)
 
-  async function uploadImg(ev) {
+  async function uploadImg(ev: React.ChangeEvent<HTMLInputElement>) {
     setIsUploading(true)
     const { secure_url, height, width } = await uploadService.uploadImg(ev)
     setImgData({ imgUrl: secure_url, width, height })

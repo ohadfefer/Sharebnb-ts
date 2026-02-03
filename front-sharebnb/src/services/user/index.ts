@@ -10,7 +10,8 @@ function getEmptyUser() {
         username: '',
         password: '',
         fullname: '',
-        email: '',  
+        email: '',
+        imgUrl: '', 
         isAdmin: false,
     }
 }
