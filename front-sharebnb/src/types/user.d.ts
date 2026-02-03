@@ -1,12 +1,12 @@
-import { INIT_USER, SET_USER, SET_WATCHED_USER, REMOVE_USER, SET_USERS, SET_SCORE } from '../store/reducers/user.reducer.ts'
+import { INIT_USER, SET_USER, SET_WATCHED_USER, REMOVE_USER, SET_USERS, SET_SCORE, SET_IS_LOADING } from '../store/reducers/user.reducer.ts'
 
 export interface WatchedUser {
-    _id?: string
+    _id: string
     username: string
     fullname: string
     isAdmin: boolean
     email?: string | null | undefined
-    imgUrl: string 
+    imgUrl: string
     score?: number
 }
 
@@ -34,11 +34,11 @@ export interface LoggedInUser {
 }
 
 
-
 export interface UserState {
     user: LoggedInUser | null
     users: WatchedUser[]
     watchedUser: WatchedUser | null
+    isLoading: boolean
 }
 
 export type UserAction =
@@ -48,4 +48,5 @@ export type UserAction =
     | { type: typeof REMOVE_USER; userId: string }
     | { type: typeof SET_USERS; users: WatchedUser[] }
     | { type: typeof SET_SCORE; score: number }
+    | { type: typeof SET_IS_LOADING; isLoading: boolean }
 

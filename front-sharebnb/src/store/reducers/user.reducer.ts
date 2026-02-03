@@ -10,11 +10,13 @@ export const REMOVE_USER = 'REMOVE_USER'
 export const SET_USERS = 'SET_USERS'
 export const SET_SCORE = 'SET_SCORE'
 export const INIT_USER = 'INIT_USER'
+export const SET_IS_LOADING = 'SET_IS_LOADING'
 
 const userState: UserState = {
     user: userService.getLoggedinUser(), // Don't initialize from service here, use INIT_USER action instead
     users: [],
-    watchedUser: null
+    watchedUser: null,
+    isLoading: false
 }
 
 export function userReducer(state = userState, action: UserAction) {
@@ -47,9 +49,11 @@ export function userReducer(state = userState, action: UserAction) {
             newState = { ...state, user }
             userService.saveLoggedinUser(user)
             break
+        case SET_IS_LOADING:
+            return { ...state, isLoading: action.isLoading }
         default:
     }
-    
+
     // console.log('userReducer - new state:', newState)
     return newState
 
