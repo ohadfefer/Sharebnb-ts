@@ -8,7 +8,7 @@ export function useIsMobile(breakpoint = 768) {
 
     useEffect(() => {
         const mql = window.matchMedia(query)
-        const onChange = (e) => setIsMobile(e.matches)
+        const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches)
         setIsMobile(mql.matches)
         mql.addEventListener?.("change", onChange)
         return () => mql.removeEventListener?.("change", onChange)

@@ -95,7 +95,7 @@ export function AboutVision() {
 }
 
 
-function FancyBox(props) {
+function FancyBox(props: any) {
     return <div className="fancy-box">
         <button style={{ float: 'right' }} onClick={props.onClose}>x</button>
         {props.children}
@@ -129,7 +129,7 @@ function Projects() {
     </section>
 }
 
-function SplitPane(props) {
+function SplitPane(props: any) {
 
     const [width, setWidth] = useState(30)
 

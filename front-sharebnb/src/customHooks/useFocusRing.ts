@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 
 export function useFocusRing() {
-  const pillRef = useRef(null)
+  const pillRef = useRef<HTMLElement>(null)
   const [ring, setRing] = useState({ x: 0, y: 0, w: 0, h: 0, visible: false })
 
-  function moveTo(el) {
+  function moveTo(el: HTMLElement | null) {
     if (!pillRef.current || !el) return
     const p = pillRef.current.getBoundingClientRect()
     const r = el.getBoundingClientRect()
@@ -13,7 +13,7 @@ export function useFocusRing() {
 
   useEffect(() => {
     const reflow = () => {
-      const el = document.querySelector('[data-focus-ring-target="true"]')
+      const el = document.querySelector<HTMLElement>('[data-focus-ring-target="true"]')
       if (el) moveTo(el)
     }
     window.addEventListener('resize', reflow)

@@ -1,7 +1,7 @@
 import { useRef } from "react"
 
 export function useHoverVideo() {
-  const ref = useRef(null)
+  const ref = useRef<HTMLVideoElement>(null)
   const play = () => ref.current?.play().catch(() => {})
   const pauseReset = () => {
     const v = ref.current
