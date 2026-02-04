@@ -16,7 +16,7 @@ export function FilterPanelReducer(state = filterPanelState, action: FilterPanel
   }
 }
 
-export const setActiveFilterCell = (cellKey: any) => ({ type: SET_ACTIVE_FILTER_CELL, cellKey })
+export const setActiveFilterCell = (cellKey: string) => ({ type: SET_ACTIVE_FILTER_CELL, cellKey })
 export const clearActiveFilterCell = () => ({ type: CLEAR_ACTIVE_FILTER_CELL })
 
 interface FilterPanelState {

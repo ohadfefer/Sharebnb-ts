@@ -5,9 +5,9 @@ import { Stay } from '../types/stay.js'
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY_DETAILS;
 
 export function StayMap({ stay }: { stay: Stay}) {
-    const mapRef = useRef(null)
-    const mapInstanceRef = useRef(null)
-    const markerRef = useRef(null)
+    const mapRef = useRef<HTMLDivElement>(null)
+    const mapInstanceRef = useRef<google.maps.Map | null>(null)
+    const markerRef = useRef<google.maps.Marker | null>(null)
 
     useEffect(() => {
         if (!stay || !stay.loc || !mapRef.current) return
@@ -24,6 +24,8 @@ export function StayMap({ stay }: { stay: Stay}) {
         }
 
         function initMap() {
+            if (!mapRef.current) return
+            
             const { lat, lng } = stay.loc
             const position = { lat, lng }
 

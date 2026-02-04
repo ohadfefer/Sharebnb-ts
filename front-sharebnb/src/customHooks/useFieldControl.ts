@@ -3,19 +3,20 @@ import { useDispatch, useSelector } from "react-redux"
 import {
   setActiveFilterCell as setActiveFilterCellAction,
   clearActiveFilterCell as clearActiveFilterCellAction,
-} from "../store/reducers/filter.panel.reducer"
+} from "../store/reducers/filter.panel.reducer.js"
+import { useAppSelector } from "../store/hooks.js"
 
-export function useFieldControl(fieldOrder, { enableOutsideClickClose = true } = {}) {
+export function useFieldControl(fieldOrder: string[], { enableOutsideClickClose = true } = {}) {
   const dispatch = useDispatch()
 
-  const activeFilterCell = useSelector(
+  const activeFilterCell = useAppSelector(
     (state) => state.filterPanelModule?.activeFilterCell ?? null
   )
 
-  const pillElementRef = useRef(null)
-  const popoverElementRef = useRef(null)
+  const pillElementRef = useRef<HTMLElement>(null)
+  const popoverElementRef = useRef<HTMLElement>(null)
 
-  function focusCell(cellKey) {
+  function focusCell(cellKey: string) {
     const root = pillElementRef.current
     if (!root) return
 
@@ -32,16 +33,16 @@ export function useFieldControl(fieldOrder, { enableOutsideClickClose = true } =
         'input, textarea, select, button, [contenteditable="true"], [tabindex]:not([tabindex="-1"])'
       ) || cell
 
-    focusable.focus()
+    if (focusable instanceof HTMLElement) focusable.focus()
   }
 
-  function setActiveAndFocus(cellKey) {
+  function setActiveAndFocus(cellKey: string) {
     dispatch(setActiveFilterCellAction(cellKey))
     // wait for DOM/class to update, then focus
     requestAnimationFrame(() => focusCell(cellKey))
   }
 
-  function setActiveFilterCell(cellKey) {
+  function setActiveFilterCell(cellKey: string) {
     setActiveAndFocus(cellKey)
   }
 
@@ -57,14 +58,14 @@ export function useFieldControl(fieldOrder, { enableOutsideClickClose = true } =
     setActiveAndFocus(fieldOrder[nextIndex])
   }
 
-  function getCellProps(cellKey) {
+  function getCellProps(cellKey: string) {
     const isActive = activeFilterCell === cellKey
     return {
       className: `cell ${cellKey} ${isActive ? "active" : ""}`,
       "data-cell": cellKey,
       tabIndex: 0,
       onMouseDown: () => setActiveAndFocus(cellKey),
-      onKeyDown: (e) => {
+      onKeyDown: (e: React.KeyboardEvent) => {
         if (e.key === "Enter") {
           e.preventDefault()
           goToNextCell()
@@ -77,9 +78,9 @@ export function useFieldControl(fieldOrder, { enableOutsideClickClose = true } =
   useEffect(() => {
     if (!enableOutsideClickClose) return
 
-    function handleOutsideClick(ev) {
-      const inPill = pillElementRef.current?.contains(ev.target)
-      const inPopover = popoverElementRef.current?.contains(ev.target)
+    function handleOutsideClick(ev: MouseEvent | TouchEvent) {
+      const inPill = pillElementRef.current?.contains(ev.target as Node)
+      const inPopover = popoverElementRef.current?.contains(ev.target as Node)
       if (!inPill && !inPopover) clearActiveFilterCell()
     }
 

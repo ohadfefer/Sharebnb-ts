@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react"
 
 
-export const useEffectUpdate = (callBack, dependencies) => {
+export const useEffectUpdate = (callBack: any, dependencies: any) => {
 
     const isFirstRender = useRef(true)
 

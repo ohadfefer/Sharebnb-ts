@@ -1,16 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import { loadGoogleMapsPlaces } from "../services/googleMapsLoader"
+import { loadGoogleMapsPlaces } from "../services/googleMapsLoader.js"
 
-function debounce(fn, wait = 200) {
-    let t
+
+function debounce<T extends (...args: any[]) => any>(
+        fn: T,
+        wait?: number
+    ): (...args: Parameters<T>) => void {
+    let t: any
     return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait) }
 }
 
 export function usePlacesAutocomplete() {
     const [ready, setReady] = useState(false)
-    const acRef = useRef(null)
-    const detailsRef = useRef(null)
-    const sessionTokenRef = useRef(null)
+    const acRef = useRef<google.maps.places.AutocompleteService | null>(null)
+    const detailsRef = useRef<google.maps.places.PlacesService | null>(null)
+    const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null)
 
     useEffect(() => {
         let mounted = true
@@ -24,7 +28,7 @@ export function usePlacesAutocomplete() {
     }, [])
 
     const getPredictions = useMemo(() => debounce((input, cb) => {
-        const svc = acRef.current
+        const svc  = acRef.current
         if (!svc || !input || input.trim().length < 2) return cb([])
         if (!sessionTokenRef.current) {
             sessionTokenRef.current = new window.google.maps.places.AutocompleteSessionToken()
@@ -45,12 +49,12 @@ export function usePlacesAutocomplete() {
     }, 200), [])
 
     // NEW: lightweight details fetch
-    function getDetails(placeId, fields = ['geometry', 'address_components', 'formatted_address', 'name']) {
+    function getDetails(placeId: string, fields = ['geometry', 'address_components', 'formatted_address', 'name']) {
         return new Promise((resolve, reject) => {
             const svc = detailsRef.current;
             if (!svc || !placeId) return resolve(null);
             svc.getDetails(
-                { placeId, fields, sessionToken: sessionTokenRef.current },
+                { placeId, fields, sessionToken: sessionTokenRef.current ?? undefined},
                 (place, status) => {
                     const OK = window.google.maps.places.PlacesServiceStatus.OK
                     if (status !== OK || !place) return reject(new Error('Place details failed'))

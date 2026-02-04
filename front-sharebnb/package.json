@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.9.0",
+    "@types/google.maps": "^3.58.1",
     "@types/node": "^25.0.6",
     "@vitejs/plugin-react-swc": "^3.3.2",
     "eslint": "^8.45.0",
