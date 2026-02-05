@@ -13,6 +13,7 @@ export interface StayFilterBy {
     guests: Guests | string | number
     labels: string[]
     hostId?: string
+    loc?: any // for FilterSheet.tsx
 }
 
 export interface Host {

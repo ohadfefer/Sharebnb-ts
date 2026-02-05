@@ -1,8 +1,8 @@
 // src/cmps/WherePanel.jsx
 import { useMemo, useState } from "react"
-import { SUGGESTED } from "../services/helpers/where.suggestions.icons"
+import { SUGGESTED } from "../services/helpers/where.suggestions.icons.js"
 
-export function WhereSuggestionsPanel({ value = {}, onChange, onAdvance }) {
+export function WhereSuggestionsPanel({ value = {}, onChange, onAdvance }: {value: any, onChange: any, onAdvance: any}) {
     const [query, setQuery] = useState(value.address || "")
 
     const items = useMemo(() => {
@@ -13,7 +13,7 @@ export function WhereSuggestionsPanel({ value = {}, onChange, onAdvance }) {
         )
     }, [query])
 
-    function select(item) {
+    function select(item: Record<any, string>) {
         const address = item.id === "nearby" ? "Nearby" : `${item.label}${item.sub ? `, ${item.sub}` : ""}`
         onChange?.({ address })
         onAdvance?.(); // jump to Check-in

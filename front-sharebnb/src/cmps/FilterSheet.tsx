@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { setFilter } from "../store/actions/stay.actions"
+import { setFilter } from "../store/actions/stay.actions.js"
 import searchIcon from "../assets/logo/icons/search-black.svg"
 
 import {
@@ -10,15 +10,16 @@ import {
     buildStayPathWithParams,
     toIsoDate,
     fromIsoDate,
-} from "../services/util.service"
+} from "../services/util.service.js"
 
-import { WherePanel } from "../cmps/WherePanel.jsx"
-import { DateRangePanel } from "../cmps/DateRangePanel.jsx"
-import { loadGoogleMapsPlaces } from "../services/googleMapsLoader"
+import { WherePanel } from "./WherePanel.js"
+import { DateRangePanel } from "./DateRangePanel.jsx"
+import { loadGoogleMapsPlaces } from "../services/googleMapsLoader.js"
 
-const clamp = (n, min, max) => Math.max(min, Math.min(max, n))
+const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n))
 
-export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
+type Initial = Record<"address" | "checkIn" | "checkOut" | "guests" | "loc", any>
+export function FilterSheet({ id = "filter-sheet", initial, onClose }: { id: string; initial: Initial; onClose: any }) {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -27,7 +28,6 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
 
     const [draft, setDraft] = useState(() => ({
         address: initial.address || "",
-        placeId: initial.placeId || "",
         checkIn: initial.checkIn || "",
         checkOut: initial.checkOut || "",
         guests:
@@ -38,12 +38,12 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
     }))
 
     useEffect(() => {
-        const onKey = (e) => e.key === "Escape" && onClose?.()
+        const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose?.()
         window.addEventListener("keydown", onKey)
         return () => window.removeEventListener("keydown", onKey)
     }, [onClose])
 
-    function updateGuests(key, diff) {
+    function updateGuests(key: string, diff: number) {
         setDraft((d) => {
             const curr = Number(d.guests?.[key]) || 0
             const next = clamp(curr + diff, 0, 99)
@@ -53,7 +53,7 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
         })
     }
 
-    async function onPickPlace(sel) {
+    async function onPickPlace(sel: any) {
         const address = typeof sel === "string" ? sel : sel?.address || ""
         const placeId = typeof sel === "object" ? (sel.placeId || "") : ""
 
@@ -63,7 +63,7 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
             try {
                 await loadGoogleMapsPlaces()
                 const service = new window.google.maps.places.PlacesService(document.createElement("div"))
-                await new Promise((resolve) => {
+                await new Promise((resolve: any) => {
                     service.getDetails(
                         { placeId, fields: ["geometry.location", "address_components"] },
                         (res) => {
@@ -99,7 +99,6 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
     function onApply() {
         setFilter({
             address: draft.address,
-            placeId: draft.placeId,
             checkIn: draft.checkIn,
             checkOut: draft.checkOut,
             guests: draft.guests,
@@ -120,7 +119,6 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
     function onClearAll() {
         setDraft({
             address: "",
-            placeId: "",
             checkIn: "",
             checkOut: "",
             guests: {},
@@ -152,7 +150,7 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
 
                 <div className="m-sheet__body">
                     {stage !== "where" && (
-                        <DisclosureRow label="Where" value={addressSummary} onClick={() => setStage("where")} />
+                        <DisclosureRow label="Where" value={addressSummary} rightHint={''} onClick={() => setStage("where")} />
                     )}
 
                     {stage === "where" && (
@@ -173,6 +171,7 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
                                 <WherePanel
                                     value={{ address: draft.address }}
                                     onChange={onPickPlace}
+                                    onComplete={''}
                                     onAdvance={() => setStage("when")}
                                 />
                             </div>
@@ -190,6 +189,7 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
                             <DisclosureRow
                                 label="Who"
                                 value={guestsLabel !== "Add guests" ? guestsLabel : "Add guests"}
+                                rightHint={''}
                                 onClick={() => setStage("who")}
                             />
                         </>
@@ -214,9 +214,12 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
                                 <>
                                     <DateRangePanel
                                         value={{ checkIn: draft.checkIn, checkOut: draft.checkOut }}
-                                        onChange={({ checkIn, checkOut }) =>
+                                        onChange={({ checkIn, checkOut }: { checkIn: string; checkOut: string }) =>
                                             setDraft((d) => ({ ...d, checkIn, checkOut }))
                                         }
+                                        onToleranceChange={''}
+                                        fromMonth={''}
+                                        onComplete={''}
                                     />
                                     <div className="tolerances">
                                         {["Exact dates", "+ 1 day", "+ 2 days", "+ 3 days", "+ 7 days"].map(
@@ -238,6 +241,7 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
                         <DisclosureRow
                             label="Who"
                             value={guestsLabel !== "Add guests" ? guestsLabel : "Add guests"}
+                            rightHint={''}
                             onClick={() => setStage("who")}
                         />
                     )}
@@ -297,7 +301,7 @@ export function FilterSheet({ id = "filter-sheet", initial = {}, onClose }) {
 }
 
 /* helpers */
-function DisclosureRow({ label, value, rightHint, onClick }) {
+function DisclosureRow({ label, value, rightHint, onClick }: any) {
     return (
         <button type="button" className="disclosure-row" onClick={onClick}>
             <span className="discl-left">{label}</span>
@@ -307,7 +311,7 @@ function DisclosureRow({ label, value, rightHint, onClick }) {
     )
 }
 
-function CounterRow({ title, sub, value, onDec, onInc }) {
+function CounterRow({ title, sub, value, onDec, onInc }: any) {
     return (
         <div className="counter-row">
             <div className="counter-texts">
