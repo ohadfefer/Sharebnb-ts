@@ -1,3 +1,7 @@
+
+// types
+import { Guests } from "../types/stay.js"
+
 export function makeId(length = 6) {
     var txt = ''
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -127,24 +131,30 @@ export function parseSearchParams(searchParams: any): ParamsFilter {
 // "Guests" -> Adults + Children
 // "Infants" -> Infants
 // "Pets" -> Pets
-export function formatGuestsLabel(guests: Record<string, number>): string {
+export function formatGuestsLabel(guests: string | number | Partial<Guests>): string {
     if (!guests) return "Add guests"
     if (typeof guests === "number") return guests ? `${guests} guests` : "Add guests"
 
-    const adults = Number(guests.adults) || 0
-    const children = Number(guests.children) || 0
-    const infants = Number(guests.infants) || 0
-    const pets = Number(guests.pets) || 0
+    if (typeof guests !== 'string' && typeof guests !== 'number') {
 
-    const guestsLabel = adults + children
-    let label = guestsLabel ? `${guestsLabel} guest${guestsLabel === 1 ? "" : "s"}` : "Add guests"
+        const adults = Number(guests.adults) || 0
+        const children = Number(guests.children) || 0
+        const infants = Number(guests.infants) || 0
+        const pets = Number(guests.pets) || 0
 
-    const extras = []
-    if (infants) extras.push(`${infants} infant${infants === 1 ? "" : "s"}`)
-    if (pets) extras.push(`${pets} pet${pets === 1 ? "" : "s"}`)
+        const guestsLabel = adults + children
+        let label = guestsLabel ? `${guestsLabel} guest${guestsLabel === 1 ? "" : "s"}` : "Add guests"
 
-    if (extras.length) label += `, ${extras.join(", ")}`
-    return label
+        const extras = []
+        if (infants) extras.push(`${infants} infant${infants === 1 ? "" : "s"}`)
+        if (pets) extras.push(`${pets} pet${pets === 1 ? "" : "s"}`)
+
+        if (extras.length) label += `, ${extras.join(", ")}`
+        return label 
+    }
+    else {
+        return ''
+    }
 }
 
 // Dates & formatting

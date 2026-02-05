@@ -1,26 +1,27 @@
 // StayFilter.jsx
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, ChangeEvent } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { setFilter } from "../store/actions/stay.actions"
+import { setFilter } from "../store/actions/stay.actions.js"
 import { useFieldControl } from "../customHooks/useFieldControl.js"
-import { DynamicPanel } from "./DynamicPanel"
+import { DynamicPanel } from "./DynamicPanel.jsx"
 import { PANELS_BY_KEY } from "../services/helpers/registry.jsx"
 import { parseISO, isValid, format as formatDate } from "date-fns"
 import { buildSearchParams, parseSearchParams, formatGuestsLabel } from "../services/util.service.js"
 import searchIcon from "../assets/logo/icons/search.svg"
+import { useAppSelector } from "../store/hooks.js"
 
-function formatDateForDisplay(isoString) {
+function formatDateForDisplay(isoString: string) {
   if (!isoString) return ""
   const date = parseISO(isoString)
   return isValid(date) ? formatDate(date, "MMM d") : ""
 }
 
-export function StayFilter({ mini, onRequestExpand, onPopoverComplete }) {
+export function StayFilter({ mini, onRequestExpand, onPopoverComplete }: any) {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const storeFilter = useSelector((state) => state.stayModule.filterBy)
+  const storeFilter = useAppSelector((state) => state.stayModule.filterBy)
   const [filterByToEdit, setfilterByToEdit] = useState(storeFilter)
 
   // Handle serch from mini to large
@@ -68,15 +69,15 @@ export function StayFilter({ mini, onRequestExpand, onPopoverComplete }) {
   })()
 
 
-  function handleInputChange(event) {
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, type } = event.target
-    let { value } = event.target
-    if (type === "number") value = Number(value) || ""
+    let { value } = event.target 
+    if (type === "number") value = String(Number(value)) || ""
     setfilterByToEdit(prev => ({ ...prev, [name]: value }))
   }
 
   // Commit filterByToEdit -> Redux + URL only on submit
-  function handleSubmit(ev) {
+  function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault()
     setFilter(filterByToEdit)
     const params = buildSearchParams(filterByToEdit)
@@ -151,7 +152,7 @@ export function StayFilter({ mini, onRequestExpand, onPopoverComplete }) {
                 value={address || ""}
                 onChange={handleInputChange}
                 onFocus={() =>
-                  getCellProps("where").onMouseDown(new MouseEvent("mousedown"))
+                  getCellProps("where").onMouseDown?.() 
                 }
                 autoComplete="off"
                 onKeyDown={(e) => {
@@ -213,7 +214,7 @@ export function StayFilter({ mini, onRequestExpand, onPopoverComplete }) {
                 registry={PANELS_BY_KEY}
                 panelProps={{
                   value: filterByToEdit,
-                  onChange: (partial) =>
+                  onChange: (partial: React.ChangeEvent) =>
                     setfilterByToEdit((prev) => ({ ...prev, ...partial })),
                   onAdvance: goToNextCell,
                 }}

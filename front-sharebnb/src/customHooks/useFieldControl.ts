@@ -13,8 +13,8 @@ export function useFieldControl(fieldOrder: string[], { enableOutsideClickClose 
     (state) => state.filterPanelModule?.activeFilterCell ?? null
   )
 
-  const pillElementRef = useRef<HTMLElement>(null)
-  const popoverElementRef = useRef<HTMLElement>(null)
+  const pillElementRef = useRef<HTMLFormElement | null>(null)
+  const popoverElementRef = useRef<HTMLDivElement>(null)
 
   function focusCell(cellKey: string) {
     const root = pillElementRef.current

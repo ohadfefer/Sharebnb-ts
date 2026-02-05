@@ -1,22 +1,22 @@
-import { eventBus, showSuccessMsg } from '../services/event-bus.service'
+import { eventBus, showSuccessMsg } from '../services/event-bus.service.js'
 import { useState, useEffect, useRef } from 'react'
-import { socketService, SOCKET_EVENT_REVIEW_ABOUT_YOU } from '../services/socket.service'
+import { socketService, SOCKET_EVENT_REVIEW_ABOUT_YOU } from '../services/socket.service.js'
 
 export function UserMsg() {
-	const [msg, setMsg] = useState(null)
-	const timeoutIdRef = useRef()
+	const [msg, setMsg] = useState('') as any // notification system does not exist
+	const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | undefined>()
 
 	useEffect(() => {
-		const unsubscribe = eventBus.on('show-msg', msg => {
+		const unsubscribe = eventBus.on('show-msg', (msg: string) => {
 			setMsg(msg)
 			if (timeoutIdRef.current) {
-				timeoutIdRef.current = null
+				timeoutIdRef.current = undefined
 				clearTimeout(timeoutIdRef.current)
 			}
 			timeoutIdRef.current = setTimeout(closeMsg, 3000)
 		})
 
-		socketService.on(SOCKET_EVENT_REVIEW_ABOUT_YOU, review => {
+		socketService.on(SOCKET_EVENT_REVIEW_ABOUT_YOU, (review: Record<string, any>) => {
 			showSuccessMsg(`New review about me ${review.txt}`)
 		})
 
@@ -27,7 +27,7 @@ export function UserMsg() {
 	}, [])
 
 	function closeMsg() {
-		setMsg(null)
+		setMsg('')
 	}
 
     function msgClass() {
@@ -40,7 +40,7 @@ export function UserMsg() {
 					src={msg.stay.imgUrls?.[0]} 
 					alt={msg.stay.name}
 					className="stay-image"
-					onError={(e) => {
+					onError={(e: any) => {
 						e.target.src = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
 					}}
 				/>
