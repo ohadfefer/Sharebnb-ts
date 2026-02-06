@@ -8,9 +8,14 @@ import {
     getSortedRowModel,
     getPaginationRowModel,
     useReactTable,
+    Table
 } from '@tanstack/react-table'
-import { formatDateMMDDYYYY as fmtDate, formatMoney } from '../services/util.service'
-import { updateOrderStatus, setupOrderSocketListeners, cleanupOrderSocketListeners } from '../store/actions/order.actions'
+import { formatDateMMDDYYYY as fmtDate, formatMoney } from '../services/util.service.js'
+import { updateOrderStatus, setupOrderSocketListeners, cleanupOrderSocketListeners } from '../store/actions/order.actions.js'
+
+//types
+import { AggregateOrder as BackendOrder} from '../../../back-sharebnb/types/order.js'
+
 
 const STATUS = {
     pending: { cls: 'pending', label: 'Pending' },
@@ -18,16 +23,16 @@ const STATUS = {
     completed: { cls: 'ok', label: 'Approved' },
     rejected: { cls: 'bad', label: 'Rejected' },
 }
-const columnHelper = createColumnHelper()
+const columnHelper = createColumnHelper<BackendOrder>()
 const initials = (name = '') =>
     name.split(/\s+/).filter(Boolean).slice(0, 2).map(s => s[0]?.toUpperCase()).join('')
 
 // tiny hook (no deps)
-function useMediaQuery(q) {
+function useMediaQuery(q: string) {
     const [m, setM] = React.useState(() => window.matchMedia(q).matches)
     React.useEffect(() => {
         const mq = window.matchMedia(q)
-        const onChange = e => setM(e.matches)
+        const onChange = (e: any) => setM(e.matches)
         mq.addEventListener('change', onChange)
         return () => mq.removeEventListener('change', onChange)
     }, [q])
@@ -35,7 +40,9 @@ function useMediaQuery(q) {
 }
 
 /** ---------- MOBILE CARDS RENDERER ---------- */
-function ReservationsCards({ rows, isLoading }) {
+type ReservationsProps = { rows: BackendOrder[], isLoading: boolean}
+
+function ReservationsCards({ rows, isLoading }: ReservationsProps) {
     if (isLoading) {
         return <ul className="res-cards"><li className="res-card empty">Loading…</li></ul>
     }
@@ -87,7 +94,7 @@ function ReservationsCards({ rows, isLoading }) {
 }
 
 /** ---------- DESKTOP TABLE (your current renderer) ---------- */
-function ReservationsTableDesktop({ rows, isLoading }) {
+function ReservationsTableDesktop({ rows, isLoading }: ReservationsProps) {
     const columns = [
         columnHelper.accessor(r => r.guest?.fullname || '—', {
             id: 'guest',
@@ -239,7 +246,7 @@ function ReservationsTableDesktop({ rows, isLoading }) {
 }
 
 /** Pretty pagination bar (hidden on mobile by CSS) */
-function Pager({ table }) {
+function Pager({ table }: {table: Table<BackendOrder>}) {
     const state = table.getState().pagination
     const canPrev = table.getCanPreviousPage()
     const canNext = table.getCanNextPage()
@@ -281,7 +288,7 @@ function Pager({ table }) {
 }
 
 /** ---------- RESPONSIVE SWITCH ---------- */
-export function ReservationsTable({ rows, isLoading }) {
+export function ReservationsTable({ rows, isLoading }: ReservationsProps) {
     const isMobile = useMediaQuery('(max-width: 1060px)')
     
     // Set up socket listeners for real-time order updates

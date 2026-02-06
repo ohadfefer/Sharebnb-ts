@@ -10,7 +10,7 @@ export interface Order {
 		adults: number
 		children: number
 	}
-	status: string
+	status: "pending" | "approved" | "completed" | "rejected"
 	createdAt: Date | string
 	contactEmail?: string | null
 	emails?: Record<string, any>
