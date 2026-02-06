@@ -1,6 +1,7 @@
 import { ResponsiveContainer, AreaChart, Area, Tooltip, XAxis, YAxis } from 'recharts'
 
-export function KpiCards({ revenueLabel, approved, pending, total, spark }) {
+type KpiCardsProps = { revenueLabel: string, approved: number, pending: number, total: number, spark: any }
+export function KpiCards({ revenueLabel, approved, pending, total, spark }: KpiCardsProps) {
     return (
         <div className="dash-cards">
             <Card title="Revenue (this month)" value={revenueLabel}>
@@ -13,7 +14,8 @@ export function KpiCards({ revenueLabel, approved, pending, total, spark }) {
     )
 }
 
-function Card({ title, value, sub, children }) {
+type AllCardProps = { title: string, value: string | number, sub: string, children: any }
+function Card({ title, value, sub, children }: Partial<AllCardProps>) {
     return (
         <div className="dash-card">
             <div className="dash-card__texts">
@@ -26,7 +28,7 @@ function Card({ title, value, sub, children }) {
     )
 }
 
-function TinyArea({ data }) {
+function TinyArea({ data }: { data: any }) {
     return (
         <ResponsiveContainer width="100%" height={48}>
             <AreaChart data={data}>

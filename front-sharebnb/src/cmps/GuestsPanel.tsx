@@ -6,34 +6,40 @@
  *  - onComplete?: () => void
  */
 
-export function GuestsPanel({ value = {}, onChange, onComplete }) {
-  // Accept either shape: {guests:{...}} or {adults,...}
-  const src = value.guests ?? value
+import { Guests } from "../types/stay.js";
+
+type GuestsPanelProps = {
+  value: Guests
+  onChange: ((partial: any)=> void)
+  onComplete: ()=>void
+}
+
+export function GuestsPanel({ value, onChange, onComplete }: GuestsPanelProps) {
   const guests = {
-    adults: Number(src.adults ?? 0),
-    children: Number(src.children ?? 0),
-    infants: Number(src.infants ?? 0),
-    pets: Number(src.pets ?? 0),
+    adults: Number(value.adults ?? 0),
+    children: Number(value.children ?? 0),
+    infants: Number(value.infants ?? 0),
+    pets: Number(value.pets ?? 0),
   }
 
   const rows = [
     { key: "adults", label: "Adults", desc: "Ages 13 or above" },
-    { key: "children", label: "Children", desc: "Ages 2 – 12" },
+    { key: "children", label: "Children", desc: "Ages 2 - 12" },
     { key: "infants", label: "Infants", desc: "Under 2" },
     { key: "pets", label: "Pets", desc: <a href="#" onClick={(e) => e.preventDefault()}>Bringing a service animal?</a> },
   ]
 
-  function commit(next) {
+  function commit(next: any) {
     onChange?.({ guests: next })
   }
-
-  function inc(key) {
+ 
+  function inc(key: keyof Guests) {
     const next = { ...guests, [key]: guests[key] + 1 }
     if (key === "children" && next.adults === 0) next.adults = 1
     commit(next)
   }
 
-  function dec(key) {
+  function dec(key: keyof Guests) {
     let next = { ...guests, [key]: Math.max(0, guests[key] - 1) }
     // Keep at least 1 adult if there are children
     if (key === "adults" && next.adults === 0 && (next.children > 0)) {
@@ -42,7 +48,7 @@ export function GuestsPanel({ value = {}, onChange, onComplete }) {
     commit(next)
   }
 
-  function canDec(key) {
+  function canDec(key: keyof Guests) {
     if (guests[key] <= 0) return false
     // Can't drop adults to 0 while children exist
     if (key === "adults" && guests.adults === 1 && guests.children > 0) return false
@@ -67,17 +73,17 @@ export function GuestsPanel({ value = {}, onChange, onComplete }) {
               type="button"
               className="round minus"
               aria-label={`Decrease ${row.label}`}
-              disabled={!canDec(row.key)}
-              onClick={() => dec(row.key)}
-            >−</button>
+              disabled={!canDec(row.key as Partial<keyof Guests>)}
+              onClick={() => dec(row.key as Partial<keyof Guests>)}
+            >-</button>
 
-            <span className="count" aria-live="polite">{guests[row.key]}</span>
+            <span className="count" aria-live="polite">{guests[row.key as Partial<keyof Guests>]}</span>
 
             <button
               type="button"
               className="round plus"
               aria-label={`Increase ${row.label}`}
-              onClick={() => inc(row.key)}
+              onClick={() => inc(row.key as Partial<keyof Guests>)}
             >+</button>
           </div>
         </div>
