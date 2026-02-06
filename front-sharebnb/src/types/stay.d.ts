@@ -37,9 +37,10 @@ export interface Location {
 
 export interface Review {
     at: string
-    by: { fullname: string; imgUrl: string; id: string }
+    by: { fullname: string; imgUrl: string; _id: string }
     txt: string
-    _id?: string
+    _id: string
+    aboutUser?: { fullname: string; imgUrl: string; _id: string }
 }
 
 export interface AvailableDate {

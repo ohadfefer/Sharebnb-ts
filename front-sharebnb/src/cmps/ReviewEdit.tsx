@@ -1,20 +1,21 @@
-import { useState } from "react"
+import { FormEvent, useState } from "react"
 import { useSelector } from "react-redux"
 
-import { addReview } from "../store/actions/review.actions"
+import { addReview } from "../store/actions/review.actions.js"
 
-import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service"
+import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
+import { useAppSelector } from "../store/hooks.js"
 
 export function ReviewEdit() {
-	const users = useSelector(storeState => storeState.userModule.users)
+	const users = useAppSelector(storeState => storeState.userModule.users)
 	const [reviewToEdit, setReviewToEdit] = useState({ txt: '', aboutUserId: '' })
 
-	function handleChange(ev) {
+	function handleChange(ev: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
 		const { name, value } = ev.target
 		setReviewToEdit({ ...reviewToEdit, [name]: value })
 	}
 
-    async function onAddReview(ev) {
+    async function onAddReview(ev: FormEvent) {
 		ev.preventDefault()
 		if (!reviewToEdit.txt || !reviewToEdit.aboutUserId) return alert('All fields are required')
             

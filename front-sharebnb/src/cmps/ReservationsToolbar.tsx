@@ -1,4 +1,13 @@
-export function ReservationsToolbar({ q, onQuery, status, onStatus, onExport }) {
+
+type ReservationsToolbarProps = {
+    q: string
+    onQuery: any
+    status: string
+    onStatus: any
+    onExport: () => void
+}
+
+export function ReservationsToolbar({ q, onQuery, status, onStatus, onExport }: ReservationsToolbarProps) {
     return (
         <div className="res-toolbar">
             <input
