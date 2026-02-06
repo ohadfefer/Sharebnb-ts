@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'react'
 
+// types
+import { Stay } from '../types/stay.js'
+
 const AIRBNB_LITE_STYLE = [
     { featureType: "landscape.natural", elementType: "geometry.fill", stylers: [{ color: "#e8f2ca" }] },
     { featureType: "landscape.natural.terrain", elementType: "geometry.fill", stylers: [{ color: "#e8f2ca" }] },
@@ -8,7 +11,7 @@ const AIRBNB_LITE_STYLE = [
 ]
 
 
-let mapsPromise
+let mapsPromise: Promise<typeof google.maps>
 function loadGoogleMaps() {
     // Already loaded?
     if (window.google?.maps) return Promise.resolve(window.google.maps)
@@ -24,26 +27,28 @@ function loadGoogleMaps() {
         // JS Maps API (not Static Maps). Add libraries you use.
         script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&v=weekly&libraries=marker,places`
         script.async = true
-        script.onerror = (error) => reject(new Error('Failed to load Google Maps JS API', error))
         script.onload = () => resolve(window.google.maps)
+        script.onerror = (ev: Event | string) => {
+            const msg = typeof ev === 'string' ? ev : 'Script load error'
+            reject(new Error(`Failed to load Google Maps JS API: ${msg}`))
+        }
         document.head.appendChild(script)
     })
 
     return mapsPromise
 }
 
-export function ExploreMap({ stays }) {
+export function ExploreMap({ stays }: { stays: Stay[] }) {
     const ref = useRef(null)
-    const mapRef = useRef(null)
-    const markersRef = useRef([])
-
+    const mapRef = useRef<google.maps.Map | null>(null)
+    const markersRef = useRef<google.maps.Marker[]>([])
     useEffect(() => {
         let mounted = true;
 
         loadGoogleMaps()
             .then(() => {
                 if (!mounted || !ref.current) return
-                
+
                 // Default center to Santorini, Greece
                 const center = { lat: 36.4123, lng: 25.4321 }
 
@@ -59,7 +64,7 @@ export function ExploreMap({ stays }) {
 
                 renderMarkers(stays)
             })
-            .catch((err) => {
+            .catch((err: Error) => {
                 console.error('Maps load failed:', err)
             })
 
@@ -70,9 +75,9 @@ export function ExploreMap({ stays }) {
         if (mapRef.current) renderMarkers(stays)
     }, [stays])
 
-    function renderMarkers(items) {
+    function renderMarkers(items: Stay[]) {
         // clear old
-        markersRef.current.forEach(marker => marker.setMap(null))
+        markersRef.current?.forEach(marker => marker.setMap(null))
         markersRef.current = []
 
         if (!items?.length) return
@@ -85,11 +90,11 @@ export function ExploreMap({ stays }) {
                 position: pos,
                 map: mapRef.current,
                 label: {
-                    text: `$${Math.round(stay.price)}`,
+                    text: `$${Math.round(Number(stay.price))}`,
                     className: 'price-label',
                 }
             })
-            markersRef.current.push(marker)
+            markersRef.current?.push(marker)
             bounds.extend(pos)
         })
 
@@ -100,11 +105,11 @@ export function ExploreMap({ stays }) {
             const sw = bounds.getSouthWest()
             const latDiff = ne.lat() - sw.lat()
             const lngDiff = ne.lng() - sw.lng()
-            
+
             // Only fit bounds if the stays are reasonably close together
             // (within about 2 degrees of latitude/longitude)
             if (latDiff < 2 && lngDiff < 2) {
-                mapRef.current.fitBounds(bounds, { top: 40, right: 40, bottom: 40, left: 40 })
+                mapRef.current?.fitBounds(bounds, { top: 40, right: 40, bottom: 40, left: 40 })
             }
         }
     }
