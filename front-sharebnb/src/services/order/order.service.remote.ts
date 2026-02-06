@@ -3,7 +3,10 @@ import { httpService } from '../http.service.js'
 import { userService } from '../user/index.js'
 import { Order, OrderFilterBy } from '../../types/order.js'
 import { AggregateOrder, Order as OrderBackend } from '../../../../back-sharebnb/types/order.js'
+
+//types
 import { Stay } from '../../types/stay.js'
+import { OrderStatus } from '../../types/global.js'
 
 export const orderService = {
     query,
@@ -42,7 +45,7 @@ async function remove(orderId: string): Promise<void> {
     return await httpService.delete<void>(`order/${orderId}`)
 }
 
-async function updateStatus(orderId: string, status: string): Promise<AggregateOrder> {
+async function updateStatus(orderId: string, status: OrderStatus): Promise<AggregateOrder> {
     try {
         console.log(orderId, status, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         const order = await getById(orderId)

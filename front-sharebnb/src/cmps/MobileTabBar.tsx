@@ -7,11 +7,12 @@ import Wishlists from '../assets/logo/icons/wishlist.svg'
 import Trips from '../assets/logo/icons/trips.svg'
 import Messages from '../assets/logo/icons/messages.svg'
 import Profile from '../assets/logo/icons/login.svg'
+import { useAppSelector } from "../store/hooks.js"
 
-export function MobileTabBar({ forceHide }) {
+export function MobileTabBar({ forceHide }: { forceHide: boolean }) {
     const { pathname } = useLocation()
-    const user = useSelector(s => s.userModule?.user)
-    const unread = useSelector(s => s.inboxModule?.unreadCount || 0) 
+    const user = useAppSelector(s => s.userModule?.user)
+    const unread =  0 //  need to be useAppSelector(s => s.inboxModule?.unreadCount) but inboxModule is not existed
 
     const hidden = forceHide ?? shouldHideTabbar(pathname)
     if (hidden) return null
@@ -26,7 +27,7 @@ export function MobileTabBar({ forceHide }) {
         ]
         : [
             { to: "/stay", label: "Explore", icon: Explore },
-            { to: "/wishlists", label: "Wishlists", icon:Wishlists },
+            { to: "/wishlists", label: "Wishlists", icon: Wishlists },
             { to: "/auth/login", label: "Log in", icon: Profile },
         ]
 

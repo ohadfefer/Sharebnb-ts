@@ -15,6 +15,9 @@ import {
     SET_IS_LOADING,
 } from '../reducers/order.reducer.js'
 
+// types
+import { OrderStatus } from '../../types/global.js'
+
 type Dispatch = (action: OrderAction) => void
 
 export async function loadOrders(): Promise<OrderBackend[]> {
@@ -82,7 +85,7 @@ export async function updateOrder(order: Order): Promise<Order> {
 //     }
 // }
 
-export async function updateOrderStatus(orderId: string, nextStatus: string): Promise<Order> {
+export async function updateOrderStatus(orderId: string, nextStatus: OrderStatus): Promise<Order> {
     try {
         const updatedOrder = await orderService.updateStatus(orderId, nextStatus) as Order
         (store.dispatch as Dispatch)({ type: UPDATE_ORDER, order: updatedOrder })

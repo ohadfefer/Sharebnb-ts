@@ -12,7 +12,7 @@ export interface Order {
         adults: number
         children: number
     }
-    status: "pending" | "approved" | "completed" | "rejected"
+    status: OrderStatus
     createdAt: Date | string
     contactEmail?: string | null
     emails?: Record<string, any>
@@ -55,4 +55,5 @@ export type OrderAction =
     | { type: typeof UPDATE_ORDER; order: Order }
     | { type: typeof REMOVE_ORDER; orderId: string }
     | { type: typeof ADD_ORDER_MSG; orderId: string; msg: OrderMsg }
+
 

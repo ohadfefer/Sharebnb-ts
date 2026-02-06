@@ -10,7 +10,7 @@ export interface Order {
 		adults: number
 		children: number
 	}
-	status: "pending" | "approved" | "completed" | "rejected"
+	status: OrderStatus
 	createdAt: Date | string
 	contactEmail?: string | null
 	emails?: Record<string, any>
@@ -58,3 +58,5 @@ export interface AggregateOrder extends Order {
 	stay: AggregateOrderStay
 	host?: AggregateOrderHost
 }
+
+type OrderStatus = "pending" | "approved" | "completed" | "rejected"

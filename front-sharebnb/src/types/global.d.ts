@@ -53,6 +53,9 @@ interface UserService extends UserServiceRemote {
   getEmptyUser(): Partial<SignupCredentials>
 }
 
+
+type OrderStatus = "pending" | "approved" | "completed" | "rejected"
+
 declare global {
   interface Window {
     stayService?: StayService  // ← use ? if it's optional / only in dev

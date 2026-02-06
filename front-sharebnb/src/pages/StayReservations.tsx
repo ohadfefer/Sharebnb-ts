@@ -114,7 +114,7 @@ export function StayReservations() {
             <InsightsRow orders={orders} />
             <ReservationsToolbar q={q} onQuery={setQ} status={status} onStatus={setStatus} onExport={handleExportCsv} />
             <div className="res-card data-table">
-                <ReservationsTable rows={rows} isLoading={isLoading} />
+                <ReservationsTable rows={rows as any} isLoading={isLoading} />
             </div>
         </section>
     )

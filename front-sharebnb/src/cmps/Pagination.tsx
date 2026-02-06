@@ -1,8 +1,10 @@
-export function Pagination({ page, perPage = 18, total, onChange }) {
+
+type PaginationProps = { page: number, perPage: number, total: number, onChange: (clamped: number) => void }
+export function Pagination({ page, perPage = 18, total, onChange }: PaginationProps) {
     const totalPages = Math.max(1, Math.ceil(total / perPage))
     if (totalPages <= 1) return null
 
-    const go = (n) => {
+    const go = (n: number) => {
         const clamped = Math.min(totalPages, Math.max(1, n))
         if (clamped !== page) onChange?.(clamped)
     }
@@ -23,7 +25,7 @@ export function Pagination({ page, perPage = 18, total, onChange }) {
                 disabled={page === 1}
                 type="button"
             >
-                ‹
+                {"<"}
             </button>
 
             {pages.map((p, idx) =>
@@ -34,7 +36,7 @@ export function Pagination({ page, perPage = 18, total, onChange }) {
                         key={p}
                         type="button"
                         className={`item ${p === page ? "current" : "ghost"}`}
-                        onClick={() => go(p)}
+                        onClick={() => go(p as number)}
                         aria-current={p === page ? "page" : undefined}
                     >
                         {p}
@@ -49,7 +51,7 @@ export function Pagination({ page, perPage = 18, total, onChange }) {
                 disabled={page === totalPages}
                 type="button"
             >
-                ›
+                {">"}
             </button>
         </nav>
     )
