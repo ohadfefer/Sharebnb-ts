@@ -266,7 +266,7 @@ export function StayDetails() {
             <p>Add your travel dates for exact pricing</p>
           </div>
           <div className="date-picker-container">
-            <DateRangePanel value={dateRange} onChange={setDateRange} onToleranceChange={0} fromMonth={''} onComplete={undefined} />
+            <DateRangePanel value={dateRange} onChange={setDateRange} onToleranceChange={undefined} fromMonth={undefined} onComplete={Date} />
           </div>
 
         </div>
@@ -385,8 +385,8 @@ export function StayDetails() {
                         setMobileFormData(prev => ({ ...prev, checkin: next.checkIn, checkout: next.checkOut }))
                         if (next.checkIn && next.checkOut) setMobileIsFilled(true)
                       }}
-                      onToleranceChange={0}
-                      fromMonth={''}
+                      onToleranceChange={undefined}
+                      fromMonth={undefined}
                       onComplete={closeMobilePanels}
                     />
                   </div>

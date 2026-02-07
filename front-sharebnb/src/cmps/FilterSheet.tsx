@@ -217,9 +217,9 @@ export function FilterSheet({ id = "filter-sheet", initial, onClose }: { id: str
                                         onChange={({ checkIn, checkOut }: { checkIn: string; checkOut: string }) =>
                                             setDraft((d) => ({ ...d, checkIn, checkOut }))
                                         }
-                                        onToleranceChange={''}
-                                        fromMonth={''}
-                                        onComplete={''}
+                                        onToleranceChange={undefined}
+                                        fromMonth={undefined}
+                                        onComplete={Date}
                                     />
                                     <div className="tolerances">
                                         {["Exact dates", "+ 1 day", "+ 2 days", "+ 3 days", "+ 7 days"].map(

@@ -192,8 +192,8 @@ export function StickyCard({ selectedDates }: { selectedDates: { checkIn: string
                                 //     setActivePanel(null)
                                 // }
                             }}
-                            onToleranceChange={null}
-                            fromMonth={null}
+                            onToleranceChange={undefined}
+                            fromMonth={undefined}
                             onComplete={closePanels}
                         />
                     </div>

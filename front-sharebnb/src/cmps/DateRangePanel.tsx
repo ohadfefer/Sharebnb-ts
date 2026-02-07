@@ -1,12 +1,12 @@
 import 'react-day-picker/dist/style.css'
-import { DayPicker } from 'react-day-picker'
+import { DayPicker, type DateRange } from 'react-day-picker'
 import { parseISO, isValid, format } from 'date-fns'
 import { useEffect, useMemo, useState } from 'react'
 
 /** ---------- helpers (same API you used) ---------- */
 const ISO_FORMAT = 'yyyy-MM-dd'
-const toIso = d => (d ? format(d, ISO_FORMAT) : '')
-const fromIso = s => (s ? (isValid(parseISO(s)) ? parseISO(s) : undefined) : undefined)
+const toIso = (d: Date | undefined) => (d ? format(d, ISO_FORMAT) : '')
+const fromIso = (s: string | undefined) => (s ? (isValid(parseISO(s)) ? parseISO(s) : undefined) : undefined)
 
 /** tiny hook to detect mobile */
 function useIsMobile(q = '(max-width: 768px)') {
@@ -16,7 +16,7 @@ function useIsMobile(q = '(max-width: 768px)') {
     useEffect(() => {
         if (typeof window === 'undefined') return
         const mql = window.matchMedia(q)
-        const onChange = e => setIsMobile(e.matches)
+        const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches)
         mql.addEventListener?.('change', onChange)
         return () => mql.removeEventListener?.('change', onChange)
     }, [q])
@@ -30,7 +30,7 @@ function useIsMobile(q = '(max-width: 768px)') {
  * - onToleranceChange?: (days:number) => void   // 0,1,2,3,7  (optional)
  * - fromMonth?: Date                              // default: today
  */
-export function DateRangePanel({ value, onChange, onToleranceChange, fromMonth, onComplete }) {
+export function DateRangePanel({ value, onChange, onToleranceChange, fromMonth, onComplete }: DateRangePanelProps) {
     const isMobile = useIsMobile()
     const today = useMemo(() => new Date(), [])
     const minMonth = fromMonth || today
@@ -40,7 +40,7 @@ export function DateRangePanel({ value, onChange, onToleranceChange, fromMonth, 
         [value?.checkIn, value?.checkOut]
     )
 
-    const [hoverDay, setHoverDay] = useState()
+    const [hoverDay, setHoverDay] = useState<Date>()
     const hoverRange = useMemo(() => {
         if (!selectedRange.from || selectedRange.to || !hoverDay) return undefined
         const a = selectedRange.from
@@ -52,7 +52,7 @@ export function DateRangePanel({ value, onChange, onToleranceChange, fromMonth, 
         if (selectedRange.to) setHoverDay(undefined)
     }, [selectedRange.to])
 
-    function handleSelect(range) {
+    function handleSelect(range: DateRange | undefined ) {
         onChange({
             checkIn: toIso(range?.from),
             checkOut: toIso(range?.to),
@@ -60,10 +60,10 @@ export function DateRangePanel({ value, onChange, onToleranceChange, fromMonth, 
     }
 
     // optional: “Exact / +days” chips
-    const [tolerance, setTolerance] = useState(0)
-    function chooseTolerance(d) {
+    const [tolerance, setTolerance] = useState<string>('')
+    function chooseTolerance(d: string) {
         setTolerance(d)
-        onToleranceChange?.(d)
+        onToleranceChange?.(Number(d)) 
     }
 
     return (
@@ -90,7 +90,7 @@ export function DateRangePanel({ value, onChange, onToleranceChange, fromMonth, 
                 styles={{
                     root: {
                         // tokens for consistent sizing
-                        '--rdp-months-gap': isMobile ? '16px' : '32px',
+                        '--rdp-months-gap': isMobile ? '16px' : '32px' , 
                         '--rdp-day-width': '46px',
                         '--rdp-day-height': '46px',
                         '--rdp-day_button-width': '44px',
@@ -107,9 +107,17 @@ export function DateRangePanel({ value, onChange, onToleranceChange, fromMonth, 
                         '--rdp-nav_button-height': '36px',
                         '--rdp-animation_duration': '.25s',
                         '--rdp-animation_timing': 'cubic-bezier(.2,.8,.2,1)',
-                    },
+                    } as React.CSSProperties,
                 }}
             />
         </div>
     )
+}
+
+type DateRangePanelProps = {
+    value: { checkIn: string, checkOut: string }
+    onChange: (dates: { checkIn: string; checkOut: string }) => void
+    onToleranceChange?: (days: number) => void
+    fromMonth?: Date
+    onComplete: () => void
 }
