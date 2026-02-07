@@ -1,37 +1,38 @@
 import { NavLink, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, MouseEvent } from "react"
 
 import logo from '../assets/logo/sharebnb-logo.svg'
 import hamburger from '../assets/logo/icons/hamburger.svg'
 import language from '../assets/logo/icons/language.svg'
 
 import { useHeaderControl } from '../customHooks/useHeaderControl.js'
-import { StayFilter } from '../cmps/StayFilter.jsx'
-import { logout } from "../store/actions/user.actions"
+import { StayFilter } from './StayFilter.js'
+import { logout } from "../store/actions/user.actions.js"
+import { useAppSelector } from "../store/hooks.js"
 
 
 export function AppHeaderDesktop() {
     const navigate = useNavigate()
-    const { filterBy } = useSelector(state => state.stayModule)
-    const loggedInUser = useSelector(state => state.userModule.user)
+    const { filterBy } = useAppSelector(state => state.stayModule)
+    const loggedInUser = useAppSelector(state => state.userModule.user)
 
     const { mini: miniFromHook, sticky } = useHeaderControl(80, {
         forceMiniOnMatch: "/stay/:id",
         hysteresisPx: 12,
     })
 
-    const [manualMini, setManualMini] = useState(null)
+    const [manualMini, setManualMini] = useState(false)
     const mini = manualMini ?? miniFromHook
 
     const [openMenu, setOpenMenu] = useState(false)
-    const menuAnchorRef = useRef(null)
+    const menuAnchorRef = useRef<HTMLDivElement>(null)
     const toggleMenu = () => setOpenMenu(v => !v)
 
     // close on outside click
     useEffect(() => {
-        const onDown = (e) => {
-            if (!menuAnchorRef.current?.contains(e.target)) setOpenMenu(false);
+        const onDown = (e: globalThis.MouseEvent) => {
+            if (!menuAnchorRef.current?.contains(e.target as Node)) setOpenMenu(false);
         };
         document.addEventListener('mousedown', onDown);
         return () => document.removeEventListener('mousedown', onDown);
@@ -44,7 +45,7 @@ export function AppHeaderDesktop() {
 
     function handlePopoverComplete() {
         setManualMini(true)
-        setTimeout(() => setManualMini(null), 350);
+        setTimeout(() => setManualMini(false), 350);
     }
 
     return (

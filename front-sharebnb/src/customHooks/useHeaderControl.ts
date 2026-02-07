@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 
-export function useHeaderControl() {
+export function useHeaderControl(num: number, data: { forceMiniOnMatch: string, hysteresisPx: number }) {
   const { pathname } = useLocation()
   const isHome = pathname === "/" || pathname === "/stay"
   const isDetailPage = /^\/stay\/[^/]+$/.test(pathname)

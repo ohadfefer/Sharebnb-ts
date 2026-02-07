@@ -18,7 +18,7 @@ import { loadGoogleMapsPlaces } from "../services/googleMapsLoader.js"
 
 const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n))
 
-type Initial = Record<"address" | "checkIn" | "checkOut" | "guests" | "loc", any>
+type Initial = { address: string, checkIn: string, checkOut: string, guests: any, loc?: any }
 export function FilterSheet({ id = "filter-sheet", initial, onClose }: { id: string; initial: Initial; onClose: any }) {
     const dispatch = useDispatch()
     const navigate = useNavigate()

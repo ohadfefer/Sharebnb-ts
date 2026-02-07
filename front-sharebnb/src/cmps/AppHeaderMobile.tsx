@@ -1,9 +1,10 @@
 import { useSelector } from "react-redux"
 import { useState, useEffect } from "react"
 import { useLocation, NavLink } from "react-router-dom"
-import { formatGuestsLabel } from "../services/util.service"
+import { formatGuestsLabel } from "../services/util.service.js"
 import searchIcon from "../assets/logo/icons/search-black.svg"
-import { FilterSheet } from "./FilterSheet.jsx"
+import { FilterSheet } from "./FilterSheet.js"
+import { useAppSelector } from "../store/hooks.js"
 
 function useCenterActiveTab() {
     const { pathname } = useLocation()
@@ -19,7 +20,7 @@ function useCenterActiveTab() {
 export function AppHeaderMobile() {
     useCenterActiveTab()
 
-    const filterBy = useSelector(s => s.stayModule.filterBy)
+    const filterBy = useAppSelector(s => s.stayModule.filterBy)
     const [open, setOpen] = useState(false)
 
     const address = filterBy?.address || "Anywhere"
