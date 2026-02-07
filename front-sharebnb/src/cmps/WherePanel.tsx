@@ -2,7 +2,7 @@
 import { WhereSuggestionsPanel } from "./WhereSuggestionsPanel.js"
 import { AutoCompletePanel } from "./AutoCompletePanel.jsx"
 
-type WherePanelProps = {
+export type WherePanelProps = {
     value: {address: string}
     onChange: any
     onComplete: any

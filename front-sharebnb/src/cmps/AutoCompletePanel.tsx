@@ -3,29 +3,34 @@ import { useEffect, useState } from "react"
 import { usePlacesAutocomplete } from "../customHooks/usePlacesAutocomplete.js"
 import location from "../assets/imgs/location.png"
 
-function parseComponents(components = []) {
-    const out = {}
-    for (const c of components) {
-        const t = c.types || []
-        if (t.includes('country')) { out.country = c.long_name; out.countryCode = c.short_name }
-        if (t.includes('locality')) out.city = c.long_name
-        if (t.includes('postal_town') && !out.city) out.city = c.long_name
-        if (t.includes('administrative_area_level_2') && !out.city) out.city = c.long_name
-        if (t.includes('route')) out.route = c.long_name
-        if (t.includes('street_number')) out.streetNumber = c.long_name
+// types
+import { WherePanelProps } from "./WherePanel.js"
+
+function parseComponents(components: google.maps.GeocoderAddressComponent[] | undefined) {
+    if (components) {
+        const out = {} as any
+        for (const c of components) {
+            const t = c.types || []
+            if (t.includes('country')) { out.country = c.long_name; out.countryCode = c.short_name }
+            if (t.includes('locality')) out.city = c.long_name
+            if (t.includes('postal_town') && !out.city) out.city = c.long_name
+            if (t.includes('administrative_area_level_2') && !out.city) out.city = c.long_name
+            if (t.includes('route')) out.route = c.long_name
+            if (t.includes('street_number')) out.streetNumber = c.long_name
+        }
+        out.street = [out.streetNumber, out.route].filter(Boolean).join(' ')
+        return out
     }
-    out.street = [out.streetNumber, out.route].filter(Boolean).join(' ')
-    return out
 }
 
-export function AutoCompletePanel({ value = {}, onChange, onComplete, onAdvance }) {
+export function AutoCompletePanel({ value, onChange, onComplete, onAdvance }: WherePanelProps) {
     const query = value.address || ""
     const { ready, getPredictions, getDetails, resetSession } = usePlacesAutocomplete()
-    const [items, setItems] = useState([])
+    const [items, setItems] = useState<ItemProps[]>([])
 
     useEffect(() => {
         if (!ready || query.trim().length < 2) { setItems([]); return; }
-        getPredictions(query, (preds) =>
+        getPredictions(query, (preds: PredictionsProps) =>
             setItems((preds || []).slice(0, 5).map(p => ({
                 id: p.place_id,
                 label: p.structured_formatting?.main_text || p.description,
@@ -35,7 +40,7 @@ export function AutoCompletePanel({ value = {}, onChange, onComplete, onAdvance 
         )
     }, [ready, query, getPredictions])
 
-    async function select(item) {
+    async function select(item: ItemProps) {
         const fallbackAddress = item.description || item.label
         try {
             const details = await getDetails(item.id, ['geometry', 'address_components', 'formatted_address', 'name'])
@@ -74,7 +79,7 @@ export function AutoCompletePanel({ value = {}, onChange, onComplete, onAdvance 
                             onMouseDown={(e) => e.preventDefault()}
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); select(item) }}
                         >
-                            <span className="where-icon-mobile"><img src={location} alt="" className="location-icon"/></span>
+                            <span className="where-icon-mobile"><img src={location} alt="" className="location-icon" /></span>
                             <span className="where-texts">
                                 <span className="where-title">{item.label}</span>
                                 {item.sub && <span className="where-sub">{item.sub}</span>}
@@ -85,4 +90,17 @@ export function AutoCompletePanel({ value = {}, onChange, onComplete, onAdvance 
             </ul>
         </div>
     )
+}
+
+type PredictionsProps = {
+    place_id: string
+    structured_formatting?: { main_text: string, secondary_text?: string }
+    description: string
+}[]
+
+type ItemProps = {
+    id: string
+    label: string
+    sub: string
+    description: string
 }

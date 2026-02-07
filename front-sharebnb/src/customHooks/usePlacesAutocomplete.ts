@@ -49,7 +49,7 @@ export function usePlacesAutocomplete() {
     }, 200), [])
 
     // NEW: lightweight details fetch
-    function getDetails(placeId: string, fields = ['geometry', 'address_components', 'formatted_address', 'name']) {
+    function getDetails(placeId: string, fields: string[] = ['geometry', 'address_components', 'formatted_address', 'name']): Promise<PlaceResult | null> {
         return new Promise((resolve, reject) => {
             const svc = detailsRef.current;
             if (!svc || !placeId) return resolve(null);
@@ -58,7 +58,7 @@ export function usePlacesAutocomplete() {
                 (place, status) => {
                     const OK = window.google.maps.places.PlacesServiceStatus.OK
                     if (status !== OK || !place) return reject(new Error('Place details failed'))
-                    resolve(place)
+                    resolve(place as PlaceResult)
                 }
             )
         })
