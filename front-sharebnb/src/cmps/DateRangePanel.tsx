@@ -114,7 +114,7 @@ export function DateRangePanel({ value, onChange, onToleranceChange, fromMonth, 
     )
 }
 
-type DateRangePanelProps = {
+export type DateRangePanelProps = {
     value: { checkIn: string, checkOut: string }
     onChange: (dates: { checkIn: string; checkOut: string }) => void
     onToleranceChange?: (days: number) => void

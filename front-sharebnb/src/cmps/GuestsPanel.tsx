@@ -8,7 +8,7 @@
 
 import { Guests } from "../types/stay.js";
 
-type GuestsPanelProps = {
+export type GuestsPanelProps = {
   value: Guests
   onChange: ((partial: any)=> void)
   onComplete: ()=>void
