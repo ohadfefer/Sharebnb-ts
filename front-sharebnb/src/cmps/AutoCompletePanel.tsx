@@ -5,6 +5,7 @@ import location from "../assets/imgs/location.png"
 
 // types
 import { WherePanelProps } from "./WherePanel.js"
+import { ItemProps, PredictionsProps } from "../types/google-map.js"
 
 function parseComponents(components: google.maps.GeocoderAddressComponent[] | undefined) {
     if (components) {
@@ -30,7 +31,7 @@ export function AutoCompletePanel({ value, onChange, onComplete, onAdvance }: Wh
 
     useEffect(() => {
         if (!ready || query.trim().length < 2) { setItems([]); return; }
-        getPredictions(query, (preds: PredictionsProps) =>
+        getPredictions(query, (preds: PredictionsProps[]) =>
             setItems((preds || []).slice(0, 5).map(p => ({
                 id: p.place_id,
                 label: p.structured_formatting?.main_text || p.description,
@@ -92,15 +93,3 @@ export function AutoCompletePanel({ value, onChange, onComplete, onAdvance }: Wh
     )
 }
 
-type PredictionsProps = {
-    place_id: string
-    structured_formatting?: { main_text: string, secondary_text?: string }
-    description: string
-}[]
-
-type ItemProps = {
-    id: string
-    label: string
-    sub: string
-    description: string
-}
