@@ -1,5 +1,10 @@
-import io from 'socket.io-client'
-import { userService } from './user'
+import io, { Socket } from 'socket.io-client'
+import { userService } from './user/index.js'
+
+//types
+import { Order } from '../types/order.js'
+import { LoggedInUser } from '../types/user.js'
+
 const { VITE_LOCAL, DEV } = import.meta.env
 
 export const SOCKET_EMIT_SEND_MSG = 'chat-send-msg'
@@ -15,58 +20,64 @@ export const SOCKET_EVENT_ORDER_UPDATED = 'order-updated'
 const SOCKET_EMIT_LOGIN = 'set-user-socket'
 const SOCKET_EMIT_LOGOUT = 'unset-user-socket'
 
-const baseUrl = (process.env.NODE_ENV === 'production') ? '' : '//localhost:3030'
+const baseUrl = import.meta.env.PROD ? '' : '//localhost:3030'
 
-// Use real socket service for order updates
-export const socketService = createSocketService()
 
-if (DEV) window.socketService = socketService
-
-socketService.setup()
-
+type SocketCallback = (data?: any) => void
 
 function createSocketService() {
-  var socket = null
+  let socket: Socket | null = null
+
   const socketService = {
     setup() {
-      socket = io(baseUrl)
+      socket = io(baseUrl, {
+        autoConnect: true,
+      })
+
       console.log('Socket created, initial connection status:', socket.connected)
-      
+
       socket.on('connect', () => {
-        console.log('Socket connected successfully with ID:', socket.id)
-        const user = userService.getLoggedinUser()
-        if (user) {
+        console.log('Socket connected successfully with ID:', socket!.id)
+        const user = userService.getLoggedinUser() as LoggedInUser | null
+        if (user?._id) {
           console.log('User logged in, setting socket userId:', user._id)
           this.login(user._id)
         } else {
           console.log('No user logged in')
         }
       })
-      
+
       socket.on('disconnect', () => {
         console.log('Socket disconnected')
       })
-      
-      socket.on('order-updated', (data) => {
+
+      socket.on('order-updated', (data: Order) => {
         console.log('Received order-updated event:', data)
       })
-      
-      socket.on('connect_error', (error) => {
+
+      socket.on('connect_error', (error: Error) => {
         console.error('Socket connection error:', error)
       })
     },
-    on(eventName, cb) {
-      socket.on(eventName, cb)
+
+    on(eventName: string, cb: SocketCallback) {
+      if (socket) socket.on(eventName, cb)
     },
-    off(eventName, cb = null) {
+
+    off(eventName: string, cb?: SocketCallback | null) {
       if (!socket) return
-      if (!cb) socket.removeAllListeners(eventName)
-      else socket.off(eventName, cb)
+      if (!cb) {
+        socket.removeAllListeners(eventName)
+      } else {
+        socket.off(eventName, cb)
+      }
     },
-    emit(eventName, data) {
-      socket.emit(eventName, data)
+
+    emit(eventName: string, data?: any) {
+      if (socket) socket.emit(eventName, data)
     },
-    login(userId) {
+
+    login(userId: string) {
       console.log('Socket login called with userId:', userId)
       if (socket?.connected) {
         socket.emit(SOCKET_EMIT_LOGIN, userId)
@@ -75,25 +86,31 @@ function createSocketService() {
         console.log('Socket not connected, cannot emit login event')
       }
     },
+
     logout() {
-      socket.emit(SOCKET_EMIT_LOGOUT)
+      if (socket) socket.emit(SOCKET_EMIT_LOGOUT)
     },
+
     terminate() {
       socket = null
     },
+
     reconnect() {
       if (socket) {
         socket.disconnect()
       }
       this.setup()
     },
+
     testConnection() {
       console.log('=== Socket Connection Test ===')
       console.log('Socket exists:', !!socket)
       console.log('Socket connection status:', socket?.connected)
       console.log('Socket ID:', socket?.id)
-      const user = userService.getLoggedinUser()
+
+      const user = userService.getLoggedinUser() as LoggedInUser | null
       console.log('Current user:', user)
+
       if (user && socket?.connected) {
         console.log('Attempting to login user to socket...')
         this.login(user._id)
@@ -104,62 +121,92 @@ function createSocketService() {
       }
       console.log('=== End Socket Test ===')
     },
+
     ensureUserLoggedIn() {
-      const user = userService.getLoggedinUser()
-      if (user && socket?.connected) {
+      const user = userService.getLoggedinUser() as LoggedInUser | null
+      if (user?._id && socket?.connected) {
         console.log('Ensuring user is logged in to socket:', user._id)
         this.login(user._id)
       }
     },
-
   }
+
   return socketService
 }
 
 function createDummySocketService() {
-  var listenersMap = {}
+  let listenersMap: Record<string, SocketCallback[]> = {}
+
   const socketService = {
-    listenersMap,
     setup() {
       listenersMap = {}
     },
+
     terminate() {
       this.setup()
     },
+
     login() {
       console.log('Dummy socket service here, login - got it')
     },
+
     logout() {
       console.log('Dummy socket service here, logout - got it')
     },
-    on(eventName, cb) {
-      listenersMap[eventName] = [...(listenersMap[eventName]) || [], cb]
+
+    on(eventName: string, cb: SocketCallback) {
+      listenersMap[eventName] = [...(listenersMap[eventName] || []), cb]
     },
-    off(eventName, cb) {
+
+    off(eventName: string, cb?: SocketCallback) {
       if (!listenersMap[eventName]) return
-      if (!cb) delete listenersMap[eventName]
-      else listenersMap[eventName] = listenersMap[eventName].filter(l => l !== cb)
+      if (!cb) {
+        delete listenersMap[eventName]
+      } else {
+        listenersMap[eventName] = listenersMap[eventName].filter(l => l !== cb)
+      }
     },
-    emit(eventName, data) {
-      var listeners = listenersMap[eventName]
-      if (eventName === SOCKET_EMIT_SEND_MSG) {
-        listeners = listenersMap[SOCKET_EVENT_ADD_MSG]
+
+    emit(eventName: string, data?: any) {
+      let listeners = listenersMap[eventName]
+
+      // Special case for chat messages
+      if (eventName === 'chat-send-msg') {
+        listeners = listenersMap['chat-add-msg']
       }
 
       if (!listeners) return
 
-      listeners.forEach(listener => {
-        listener(data)
-      })
+      listeners.forEach(listener => listener(data))
     },
+
     testChatMsg() {
-      this.emit(SOCKET_EVENT_ADD_MSG, { from: 'Someone', txt: 'Aha it worked!' })
+      this.emit('chat-add-msg', { from: 'Someone', txt: 'Aha it worked!' })
     },
+
     testUserUpdate() {
-      this.emit(SOCKET_EVENT_USER_UPDATED, { ...userService.getLoggedinUser(), score: 555 })
-    }
+      const user = userService.getLoggedinUser() as LoggedInUser | null
+      if (user) {
+        this.emit('user-updated', { ...user, score: 555 })
+      }
+    },
   }
-  window.listenersMap = listenersMap
+
+  // For debugging
+  if (DEV) {
+    (window as any).listenersMap = listenersMap
+  }
+
   return socketService
 }
 
+
+export const socketService = import.meta.env.DEV && !import.meta.env.VITE_USE_REAL_SOCKET
+  ? createDummySocketService()
+  : createSocketService()
+
+if (DEV) {
+  (window as any).socketService = socketService
+}
+
+socketService.setup()
