@@ -10,16 +10,16 @@ import { useAppSelector } from '../store/hooks.js'
 
 // types
 
-import { Review } from '../types/stay.js' // Review type should taken from review.d.ts which does not exist right now 
+import { Review } from '../types/review.js' // Review type should taken from review.d.ts which does not exist right now 
 
 export function ReviewIndex() {
 	const loggedInUser = useAppSelector(storeState => storeState.userModule.user)
-	const reviews = useAppSelector(storeState => storeState.reviewModule.reviews)
+	const { reviews, filterBy } = useAppSelector(storeState => storeState.reviewModule)
 
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		loadReviews()
+		loadReviews(filterBy)
 		loadUsers()
 
 		socketService.on(SOCKET_EVENT_REVIEW_ADDED, (review: Review) => {
@@ -33,9 +33,9 @@ export function ReviewIndex() {
 		})
 
 		return () => {
-            socketService.off(SOCKET_EVENT_REVIEW_ADDED)
-            socketService.off(SOCKET_EVENT_REVIEW_REMOVED)
-        }
+			socketService.off(SOCKET_EVENT_REVIEW_ADDED)
+			socketService.off(SOCKET_EVENT_REVIEW_REMOVED)
+		}
 	}, [])
 
 	async function onRemoveReview(reviewId: string) {
@@ -46,12 +46,12 @@ export function ReviewIndex() {
 			showErrorMsg('Cannot remove')
 		}
 	}
-    console.log(reviews)
+	console.log(reviews)
 	return <div className="review-index">
-        <h2>Reviews and Gossip</h2>
-        {loggedInUser && <ReviewEdit/>}
-        <ReviewList 
-            reviews={reviews} 
-            onRemoveReview={onRemoveReview}/>
-    </div>
+		<h2>Reviews and Gossip</h2>
+		{loggedInUser && <ReviewEdit />}
+		<ReviewList
+			reviews={reviews}
+			onRemoveReview={onRemoveReview} />
+	</div>
 }

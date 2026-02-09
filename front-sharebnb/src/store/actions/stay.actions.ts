@@ -11,6 +11,7 @@ import {
     SET_FILTER_BY,
     SET_IS_LOADING,
 } from '../reducers/stay.reducer.js'
+import { Dispatch } from 'redux'
 
 export async function loadStays(filterBy: StayFilterBy): Promise<Stay[]> {
     
@@ -36,8 +37,8 @@ export async function loadStays(filterBy: StayFilterBy): Promise<Stay[]> {
 
 export async function removeStay(stayId: string) {
     try {
-        await stayService.remove(stayId)
-        store.dispatch(getCmdRemoveStay(stayId))
+        await stayService.remove(stayId);
+        (store.dispatch as Dispatch)(getCmdRemoveStay(stayId))
     } catch (err) {
         console.log('Cannot remove stay', err)
         throw err
@@ -46,8 +47,8 @@ export async function removeStay(stayId: string) {
 
 export async function addStay(stay: Stay) {
     try {
-        const savedStay = await stayService.save(stay)
-        store.dispatch(getCmdAddStay(savedStay))
+        const savedStay = await stayService.save(stay);
+        (store.dispatch as Dispatch)(getCmdAddStay(savedStay))
         return savedStay
     } catch (err) {
         console.log('Cannot add stay', err)
@@ -57,8 +58,8 @@ export async function addStay(stay: Stay) {
 
 export async function updateStay(stay: Stay) {
     try {
-        const savedStay = await stayService.save(stay)
-        store.dispatch(getCmdUpdateStay(savedStay))
+        const savedStay = await stayService.save(stay);
+        (store.dispatch as Dispatch)(getCmdUpdateStay(savedStay))
         return savedStay
     } catch (err) {
         console.log('Cannot save stay', err)
@@ -68,8 +69,8 @@ export async function updateStay(stay: Stay) {
 
 export async function addStayMsg(stayId: string, txt: string) {
     try {
-        const msg = await stayService.addStayMsg(stayId, txt)
-        store.dispatch(getCmdAddStayMsg(msg))
+        const msg = await stayService.addStayMsg(stayId, txt);
+        (store.dispatch as Dispatch)(getCmdAddStayMsg(msg))
         return msg
     } catch (err) {
         console.log('Cannot add stay msg', err)

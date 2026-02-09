@@ -3,11 +3,20 @@ export const ADD_REVIEW = 'ADD_REVIEW'
 export const REMOVE_REVIEW = 'REMOVE_REVIEW'
 export const UPDATE_REVIEW = 'UPDATE_REVIEW'
 
-const initialState = {
-  reviews: [],
+//types
+import { Review, ReviewAction } from '../../types/review.js'
+
+interface ReviewState {
+  reviews: Review[] | []
+  filterBy: {name: string}
 }
 
-export function reviewReducer(state = initialState, action = {}) {
+const reviewState: ReviewState = {
+  reviews: [],
+  filterBy: {name:''} // no SET_FILTER_BY in reducer (no filter for now)
+}
+
+export function reviewReducer(state: ReviewState = reviewState, action: ReviewAction): ReviewState {
   switch (action.type) {
     case SET_REVIEWS:
       return { ...state, reviews: action.reviews }
@@ -20,7 +29,8 @@ export function reviewReducer(state = initialState, action = {}) {
         ...state,
         reviews: state.reviews.map(review =>
           review._id === action.review._id ? action.review : review
-        )}
+        )
+      }
     default:
       return state
   }

@@ -4,6 +4,7 @@ import type { AggregateOrder, Order as OrderBackend } from '../../../back-shareb
 import { StayFilterBy, Stay } from './stay.js'
 import type { User as UserBackend } from '../../../back-sharebnb/types/user.d.ts'
 import type { LoggedInUser, SignupCredentials } from '../types/user.d.ts'
+import { Review } from './review.js'
 
 interface StayServiceRemote {
   query(filterBy: StayFilterBy): Promise<Stay[]>
@@ -40,19 +41,24 @@ interface OrderService extends OrderServiceRemote {
 interface UserServiceRemote {
   login(userCred: Partial<UserBackend>): Promise<LoggedInUser | undefined>
   logout(): any
-  signup(userCred: SignupCredentials): Promise<LoggedInUser> 
+  signup(userCred: SignupCredentials): Promise<LoggedInUser>
   getUsers(): Promise<UserBackend[]>
   getById(userId: string): Promise<UserBackend>
   remove(userId: string): any
   update({ _id }: Partial<UserBackend>): Promise<UserBackend>
   getLoggedinUser(): LoggedInUser | null
-  saveLoggedinUser<T>(user: T): T 
+  saveLoggedinUser<T>(user: T): T
 }
 
 interface UserService extends UserServiceRemote {
   getEmptyUser(): Partial<SignupCredentials>
 }
 
+interface ReviewService {
+  query(filterBy: { name: string }): Promise<Review[]> | Promise<[]>
+  remove(reviewId: string): Promise<void>
+  add(review: Partial<Review>): Promise<Review>
+}
 
 type OrderStatus = "pending" | "approved" | "completed" | "rejected"
 
@@ -61,6 +67,7 @@ declare global {
     stayService?: StayService  // ← use ? if it's optional / only in dev
     orderService?: OrderService
     userService?: UserService
+    reviewService?: ReviewService
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: () => any
   }
 }

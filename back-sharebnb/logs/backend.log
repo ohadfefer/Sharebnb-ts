@@ -5643,3 +5643,43 @@
 8.2.2026, 17:17:46 - INFO - db.service -> getting collection: | stay
 8.2.2026, 17:17:46 - INFO - db.service -> using existing connection
 8.2.2026, 17:17:46 - INFO - db.service -> collection obtained successfully: | stay
+9.2.2026, 8:55:12 - INFO - Server is running on port: 3030
+9.2.2026, 8:55:35 - INFO - attachLoggedinUser -> cookies: | {}
+9.2.2026, 8:55:35 - INFO - attachLoggedinUser -> cookies: | {}
+9.2.2026, 8:55:35 - INFO - /api/stay | GET | {} | {}
+9.2.2026, 8:55:35 - INFO - db.service -> getting collection: | stay
+9.2.2026, 8:55:35 - INFO - db.service -> connecting to: | mongodb+srv://bar:1234@cluster0.ebdiizq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0 | database: | tester_db
+9.2.2026, 8:55:36 - INFO - db.service -> connected successfully
+9.2.2026, 8:55:36 - INFO - db.service -> collection obtained successfully: | stay
+9.2.2026, 8:56:20 - INFO - attachLoggedinUser -> cookies: | {}
+9.2.2026, 8:56:20 - INFO - attachLoggedinUser -> cookies: | {}
+9.2.2026, 8:56:20 - DEBUG - auth.service - login with username: ohad16
+9.2.2026, 8:56:20 - INFO - db.service -> getting collection: | user
+9.2.2026, 8:56:20 - INFO - db.service -> using existing connection
+9.2.2026, 8:56:20 - INFO - db.service -> collection obtained successfully: | user
+9.2.2026, 8:56:20 - INFO - User login:  | {"_id":"6988a9194685eb401003b09d","username":"ohad16","fullname":"ohadfefer","imgUrl":"https://res.cloudinary.com/vanilla-test-images/image/upload/v1770563815/x2c6hm21wxxdadv4hp0p.png","isAdmin":false,"email":"ohadfefer16@gmail.com"}
+9.2.2026, 8:56:21 - INFO - attachLoggedinUser -> cookies: | {}
+9.2.2026, 8:56:21 - INFO - attachLoggedinUser -> cookies: | {"loginToken":"24d0d6975ebf938d4a399359c8c6ba1a53664ddc274d8905cb4cca85a9212eaafc8e20fa158e681ad33225a9fde25c20412e05ae656bef5794c65b67742f2784a17a6e7d794a3b12932a4bba62ede343fe296eedbaa35cc08bba2bcad414767cbf38b6633e04438d7153b791062453996262e22e2374790d444fabfd7e8c0322c2c51399f805e72aa47a9f64e0657daaf77f691e56448e86200b17e8a52dfb3d173a326ca52c141237c5995f1df0964fa58f44dcc29f6ca6b2da802dd59eca518de4838727e93152f140184390c98875725d7be37abc78097ccb4c186690876744af65c87703c247f19c9126882e3004d68d1a300f24f2b5a212429ac4c819c9c0054304029af58356178f4040a60cdf3cd744d972d2a88cca94376e91a49002b4eea4d7f9463178237c07fb69d4ef5557800b71a3"}
+9.2.2026, 8:56:21 - INFO - attachLoggedinUser -> user from token: | {"_id":"6988a9194685eb401003b09d","fullname":"ohadfefer","isAdmin":false,"email":"ohadfefer16@gmail.com","imgUrl":"https://res.cloudinary.com/vanilla-test-images/image/upload/v1770563815/x2c6hm21wxxdadv4hp0p.png"}
+9.2.2026, 8:56:21 - INFO - /api/stay | GET | {} | {}
+9.2.2026, 8:56:21 - INFO - db.service -> getting collection: | stay
+9.2.2026, 8:56:21 - INFO - db.service -> using existing connection
+9.2.2026, 8:56:21 - INFO - db.service -> collection obtained successfully: | stay
+9.2.2026, 8:56:36 - INFO - attachLoggedinUser -> cookies: | {"loginToken":"24d0d6975ebf938d4a399359c8c6ba1a53664ddc274d8905cb4cca85a9212eaafc8e20fa158e681ad33225a9fde25c20412e05ae656bef5794c65b67742f2784a17a6e7d794a3b12932a4bba62ede343fe296eedbaa35cc08bba2bcad414767cbf38b6633e04438d7153b791062453996262e22e2374790d444fabfd7e8c0322c2c51399f805e72aa47a9f64e0657daaf77f691e56448e86200b17e8a52dfb3d173a326ca52c141237c5995f1df0964fa58f44dcc29f6ca6b2da802dd59eca518de4838727e93152f140184390c98875725d7be37abc78097ccb4c186690876744af65c87703c247f19c9126882e3004d68d1a300f24f2b5a212429ac4c819c9c0054304029af58356178f4040a60cdf3cd744d972d2a88cca94376e91a49002b4eea4d7f9463178237c07fb69d4ef5557800b71a3"}
+9.2.2026, 8:56:37 - INFO - attachLoggedinUser -> user from token: | {"_id":"6988a9194685eb401003b09d","fullname":"ohadfefer","isAdmin":false,"email":"ohadfefer16@gmail.com","imgUrl":"https://res.cloudinary.com/vanilla-test-images/image/upload/v1770563815/x2c6hm21wxxdadv4hp0p.png"}
+9.2.2026, 8:56:37 - INFO - /api/stay | GET | {} | {"id":"6738ca4cae769d402b653c7c"}
+9.2.2026, 8:56:37 - INFO - db.service -> getting collection: | stay
+9.2.2026, 8:56:37 - INFO - db.service -> collection obtained successfully: | stay
+9.2.2026, 8:56:37 - INFO - db.service -> using existing connection
+9.2.2026, 9:14:06 - INFO - attachLoggedinUser -> cookies: | {"loginToken":"24d0d6975ebf938d4a399359c8c6ba1a53664ddc274d8905cb4cca85a9212eaafc8e20fa158e681ad33225a9fde25c20412e05ae656bef5794c65b67742f2784a17a6e7d794a3b12932a4bba62ede343fe296eedbaa35cc08bba2bcad414767cbf38b6633e04438d7153b791062453996262e22e2374790d444fabfd7e8c0322c2c51399f805e72aa47a9f64e0657daaf77f691e56448e86200b17e8a52dfb3d173a326ca52c141237c5995f1df0964fa58f44dcc29f6ca6b2da802dd59eca518de4838727e93152f140184390c98875725d7be37abc78097ccb4c186690876744af65c87703c247f19c9126882e3004d68d1a300f24f2b5a212429ac4c819c9c0054304029af58356178f4040a60cdf3cd744d972d2a88cca94376e91a49002b4eea4d7f9463178237c07fb69d4ef5557800b71a3"}
+9.2.2026, 9:14:06 - INFO - attachLoggedinUser -> user from token: | {"_id":"6988a9194685eb401003b09d","fullname":"ohadfefer","isAdmin":false,"email":"ohadfefer16@gmail.com","imgUrl":"https://res.cloudinary.com/vanilla-test-images/image/upload/v1770563815/x2c6hm21wxxdadv4hp0p.png"}
+9.2.2026, 9:14:06 - INFO - db.service -> getting collection: | stay
+9.2.2026, 9:14:06 - INFO - /api/stay | GET | {} | {"id":"6738ca4cae769d402b653c7c"}
+9.2.2026, 9:14:06 - INFO - db.service -> using existing connection
+9.2.2026, 9:14:06 - INFO - db.service -> collection obtained successfully: | stay
+9.2.2026, 9:14:06 - INFO - attachLoggedinUser -> cookies: | {"loginToken":"24d0d6975ebf938d4a399359c8c6ba1a53664ddc274d8905cb4cca85a9212eaafc8e20fa158e681ad33225a9fde25c20412e05ae656bef5794c65b67742f2784a17a6e7d794a3b12932a4bba62ede343fe296eedbaa35cc08bba2bcad414767cbf38b6633e04438d7153b791062453996262e22e2374790d444fabfd7e8c0322c2c51399f805e72aa47a9f64e0657daaf77f691e56448e86200b17e8a52dfb3d173a326ca52c141237c5995f1df0964fa58f44dcc29f6ca6b2da802dd59eca518de4838727e93152f140184390c98875725d7be37abc78097ccb4c186690876744af65c87703c247f19c9126882e3004d68d1a300f24f2b5a212429ac4c819c9c0054304029af58356178f4040a60cdf3cd744d972d2a88cca94376e91a49002b4eea4d7f9463178237c07fb69d4ef5557800b71a3"}
+9.2.2026, 9:14:06 - INFO - attachLoggedinUser -> user from token: | {"_id":"6988a9194685eb401003b09d","fullname":"ohadfefer","isAdmin":false,"email":"ohadfefer16@gmail.com","imgUrl":"https://res.cloudinary.com/vanilla-test-images/image/upload/v1770563815/x2c6hm21wxxdadv4hp0p.png"}
+9.2.2026, 9:14:06 - INFO - /api/stay | GET | {} | {"id":"6738ca4cae769d402b653c7c"}
+9.2.2026, 9:14:06 - INFO - db.service -> getting collection: | stay
+9.2.2026, 9:14:06 - INFO - db.service -> using existing connection
+9.2.2026, 9:14:06 - INFO - db.service -> collection obtained successfully: | stay

@@ -3,7 +3,7 @@ import { userService } from '../services/user/index.js'
 import { ReviewPreview } from './ReviewPreview.js'
 
 // types
-import { Review } from '../types/stay.js'
+import { Review } from '../types/review.js'
 
 type ReviewListProps = { reviews: Review[]; onRemoveReview: (reviewId: string) => void }
 

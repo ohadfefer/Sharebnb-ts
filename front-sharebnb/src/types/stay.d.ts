@@ -1,3 +1,5 @@
+import { Review } from "./review.js"
+
 export interface Guests {
     adults: number | string
     children: number | string
@@ -35,13 +37,6 @@ export interface Location {
     lng: number
 }
 
-export interface Review {
-    at: string
-    by: { fullname: string; imgUrl: string; _id: string }
-    txt: string
-    _id: string
-    aboutUser?: { fullname: string; imgUrl: string; _id: string }
-}
 
 export interface AvailableDate {
     start: string
