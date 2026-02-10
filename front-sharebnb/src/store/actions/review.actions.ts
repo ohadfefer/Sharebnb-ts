@@ -8,7 +8,9 @@ import { Dispatch } from 'redux'
 export async function loadReviews(filterBy: { name: string }) {
 	try {
 		const reviews = await reviewService.query(filterBy)
+		// console.log('Reviews coming from server:', reviews)
 		store.dispatch({ type: SET_REVIEWS, reviews })
+		// console.log('Just dispatched SET_REVIEWS with:', reviews)
 	} catch (err) {
 		console.log('ReviewActions: err in loadReviews', err)
 		throw err

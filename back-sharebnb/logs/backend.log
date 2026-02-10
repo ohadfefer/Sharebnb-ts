@@ -6113,3 +6113,94 @@
 10.2.2026, 17:47:24 - INFO - db.service -> getting collection: | stay
 10.2.2026, 17:47:24 - INFO - db.service -> using existing connection
 10.2.2026, 17:47:24 - INFO - db.service -> collection obtained successfully: | stay
+10.2.2026, 19:10:55 - INFO - Server is running on port: 3030
+10.2.2026, 19:11:57 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:11:57 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:11:57 - INFO - /api/stay | GET | {} | {}
+10.2.2026, 19:11:57 - INFO - db.service -> getting collection: | stay
+10.2.2026, 19:11:57 - INFO - db.service -> connecting to: | mongodb+srv://bar:1234@cluster0.ebdiizq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0 | database: | tester_db
+10.2.2026, 19:11:59 - INFO - db.service -> connected successfully
+10.2.2026, 19:11:59 - INFO - db.service -> collection obtained successfully: | stay
+10.2.2026, 19:14:28 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:14:28 - INFO - /api/review | GET | {} | {}
+10.2.2026, 19:14:28 - INFO - db.service -> getting collection: | review
+10.2.2026, 19:14:28 - INFO - db.service -> using existing connection
+10.2.2026, 19:14:28 - INFO - db.service -> collection obtained successfully: | review
+10.2.2026, 19:14:28 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:14:28 - INFO - /api/stay | GET | {} | {"id":"6738ca4cae769d402b653d12"}
+10.2.2026, 19:14:28 - INFO - db.service -> getting collection: | stay
+10.2.2026, 19:14:28 - INFO - db.service -> using existing connection
+10.2.2026, 19:14:28 - INFO - db.service -> collection obtained successfully: | stay
+10.2.2026, 19:22:33 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:22:33 - INFO - /api/review | GET | {} | {}
+10.2.2026, 19:22:33 - INFO - db.service -> getting collection: | review
+10.2.2026, 19:22:33 - INFO - db.service -> using existing connection
+10.2.2026, 19:22:33 - INFO - db.service -> collection obtained successfully: | review
+10.2.2026, 19:22:33 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:22:33 - INFO - /api/stay | GET | {} | {"id":"6738ca4cae769d402b653d12"}
+10.2.2026, 19:22:33 - INFO - db.service -> getting collection: | stay
+10.2.2026, 19:22:33 - INFO - db.service -> using existing connection
+10.2.2026, 19:22:34 - INFO - db.service -> collection obtained successfully: | stay
+10.2.2026, 19:22:47 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:22:47 - INFO - /api/review | GET | {} | {}
+10.2.2026, 19:22:47 - INFO - db.service -> using existing connection
+10.2.2026, 19:22:47 - INFO - db.service -> getting collection: | review
+10.2.2026, 19:22:47 - INFO - db.service -> collection obtained successfully: | review
+10.2.2026, 19:22:47 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:22:47 - INFO - /api/stay | GET | {} | {"id":"6738ca4cae769d402b653d12"}
+10.2.2026, 19:22:47 - INFO - db.service -> getting collection: | stay
+10.2.2026, 19:22:47 - INFO - db.service -> using existing connection
+10.2.2026, 19:22:47 - INFO - db.service -> collection obtained successfully: | stay
+10.2.2026, 19:27:02 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:27:02 - INFO - /api/review | GET | {} | {}
+10.2.2026, 19:27:02 - INFO - db.service -> getting collection: | review
+10.2.2026, 19:27:02 - INFO - db.service -> using existing connection
+10.2.2026, 19:27:02 - INFO - db.service -> collection obtained successfully: | review
+10.2.2026, 19:27:02 - INFO - /api/stay | GET | {} | {"id":"6738ca4cae769d402b653d12"}
+10.2.2026, 19:27:02 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:27:02 - INFO - db.service -> using existing connection
+10.2.2026, 19:27:02 - INFO - db.service -> collection obtained successfully: | stay
+10.2.2026, 19:27:02 - INFO - db.service -> getting collection: | stay
+10.2.2026, 19:35:21 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:35:21 - INFO - /api/review | GET | {} | {}
+10.2.2026, 19:35:21 - INFO - db.service -> getting collection: | review
+10.2.2026, 19:35:21 - INFO - db.service -> using existing connection
+10.2.2026, 19:35:21 - INFO - db.service -> collection obtained successfully: | review
+10.2.2026, 19:35:21 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:35:21 - INFO - /api/stay | GET | {} | {"id":"6738ca4cae769d402b653d12"}
+10.2.2026, 19:35:21 - INFO - db.service -> getting collection: | stay
+10.2.2026, 19:35:21 - INFO - db.service -> collection obtained successfully: | stay
+10.2.2026, 19:35:21 - INFO - db.service -> using existing connection
+10.2.2026, 19:37:41 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:37:41 - INFO - /api/review | GET | {} | {}
+10.2.2026, 19:37:41 - INFO - db.service -> getting collection: | review
+10.2.2026, 19:37:41 - INFO - db.service -> using existing connection
+10.2.2026, 19:37:41 - INFO - db.service -> collection obtained successfully: | review
+10.2.2026, 19:37:41 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:37:41 - INFO - /api/stay | GET | {} | {"id":"6738ca4cae769d402b653d12"}
+10.2.2026, 19:37:41 - INFO - db.service -> getting collection: | stay
+10.2.2026, 19:37:41 - INFO - db.service -> using existing connection
+10.2.2026, 19:37:41 - INFO - db.service -> collection obtained successfully: | stay
+10.2.2026, 19:39:20 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:39:20 - INFO - /api/review | GET | {} | {}
+10.2.2026, 19:39:20 - INFO - db.service -> getting collection: | review
+10.2.2026, 19:39:20 - INFO - db.service -> using existing connection
+10.2.2026, 19:39:20 - INFO - db.service -> collection obtained successfully: | review
+10.2.2026, 19:39:20 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:39:20 - INFO - /api/stay | GET | {} | {"id":"6738ca4cae769d402b653d12"}
+10.2.2026, 19:39:20 - INFO - db.service -> collection obtained successfully: | stay
+10.2.2026, 19:39:20 - INFO - db.service -> getting collection: | stay
+10.2.2026, 19:39:20 - INFO - db.service -> using existing connection
+10.2.2026, 19:47:19 - INFO - Server is running on port: 3030
+10.2.2026, 19:47:26 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:47:26 - INFO - /api/review | GET | {} | {}
+10.2.2026, 19:47:26 - INFO - db.service -> getting collection: | review
+10.2.2026, 19:47:26 - INFO - db.service -> connecting to: | mongodb+srv://bar:1234@cluster0.ebdiizq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0 | database: | tester_db
+10.2.2026, 19:47:26 - INFO - attachLoggedinUser -> cookies: | {}
+10.2.2026, 19:47:26 - INFO - /api/stay | GET | {} | {"id":"6738ca4cae769d402b653d12"}
+10.2.2026, 19:47:26 - INFO - db.service -> getting collection: | stay
+10.2.2026, 19:47:26 - INFO - db.service -> connecting to: | mongodb+srv://bar:1234@cluster0.ebdiizq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0 | database: | tester_db
+10.2.2026, 19:47:27 - INFO - db.service -> connected successfully
+10.2.2026, 19:47:27 - INFO - db.service -> collection obtained successfully: | review
+10.2.2026, 19:47:27 - INFO - db.service -> connected successfully
+10.2.2026, 19:47:27 - INFO - db.service -> collection obtained successfully: | stay

@@ -42,7 +42,7 @@ async function query(filterBy = {}) {
                 $project: {
                     'txt': true, 
                     'byUser._id': true, 'byUser.fullname': true, 'byUser.imgUrl': true,
-                    'aboutStay._id': true, 'aboutStay.fullname': true,
+                    'aboutStay._id': true, 'aboutStay.name': true,
                 } 
             }
         ]).toArray()
