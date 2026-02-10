@@ -11,11 +11,12 @@ import { useEffect, useState } from 'react'
 import { eventBus, OPEN_REVIEWS_MODAL } from '../services/event-bus.service.js'
 
 import { Stay } from '../types/stay.js'
+import { AggregateReview } from '../../../back-sharebnb/types/review.js'
 
-export function StayReviews({ stay }: { stay: Stay}) {
+export function StayReviews({ stay, reviews }: { stay: Stay, reviews: AggregateReview[]}) {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    if (!stay || !stay.reviews || stay.reviews.length === 0) {
+    if (!stay || !stay.reviews || stay.reviews.length === 0 || reviews.length === 0) {
         return (
             <div className="stay-reviews">
                 <h2>Reviews</h2>
@@ -23,6 +24,8 @@ export function StayReviews({ stay }: { stay: Stay}) {
             </div>
         )
     }
+
+    const stayReviews = reviews.filter((review) => review.aboutStay._id === stay._id)
 
     const renderStars = (rating: number) => {
         return Array.from({ length: 5 }, (_, index) => (
@@ -55,7 +58,7 @@ export function StayReviews({ stay }: { stay: Stay}) {
                         <img src={star} alt="average rating" width={20} />
                         <span>
                             {/* {avgRate.toFixed(2)} · {stay.reviews.length} reviews */}
-                            {avgRate} · {stay.reviews.length} reviews
+                            {avgRate} · {stayReviews.length} reviews
                         </span>
                     </div>
                     <div className="rates-details">
@@ -109,21 +112,21 @@ export function StayReviews({ stay }: { stay: Stay}) {
                 </div>
                 <div className="stay-reviews">
                     <div className="reviews-grid">
-                        {stay.reviews.slice(0, 6).map((review) => (
+                        {stayReviews.slice(0, 6).map((review) => (
                             <div key={review._id} className="review-card">
                                 <div className="review-header">
                                     <div className="user-info">
                                         <div className="user-personal-info">
                                             <img
-                                                src={review.by.imgUrl}
-                                                alt={review.by.fullname}
+                                                src={review.byUser.imgUrl}
+                                                alt={review.byUser.fullname}
                                                 className="user-avatar"
                                                 onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
                                                     e.currentTarget.src = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
                                                 }}
                                             />
                                             <div className="user-details">
-                                                <h4 className="user-name">{review.by.fullname}</h4>
+                                                <h4 className="user-name">{review.byUser.fullname}</h4>
                                                 <p className="user-location">
                                                     {stay.loc?.city}, {stay.loc?.country}
                                                 </p>
@@ -145,9 +148,9 @@ export function StayReviews({ stay }: { stay: Stay}) {
                             </div>
                         ))}
                     </div>
-                    {stay.reviews.length > 8 && (
+                    {stayReviews.length > 8 && (
                         <div className="show-all-reviews">
-                            <button onClick={openModal}>Show all {stay.reviews.length} reviews</button>
+                            <button onClick={openModal}>Show all {stayReviews.length} reviews</button>
                         </div>
                     )}
                 </div>
@@ -161,27 +164,27 @@ export function StayReviews({ stay }: { stay: Stay}) {
                         <div className="modal-header">
                             <div className="modal-title">
                                 <img src={star} alt="average rating" width={20} />
-                                {/* <span>{avgRate.toFixed(2)} · {stay.reviews.length} reviews</span> */}
-                                <span>{stay.rating} · {stay.reviews.length} reviews</span>
+                                {/* <span>{avgRate.toFixed(2)} · {stayReviews.length} reviews</span> */}
+                                <span>{stay.rating} · {stayReviews.length} reviews</span>
                             </div>
                             <button className="modal-close" onClick={closeModal}>x</button>
                         </div>
                         <div className="modal-content">
-                            {stay.reviews.map((review) => (
+                            {stayReviews.map((review) => (
                                 <div key={review._id} className="modal-review-item">
                                     <div className="review-header">
                                         <div className="user-info">
                                             <div className="user-personal-info">
                                                 <img
-                                                    src={review.by.imgUrl}
-                                                    alt={review.by.fullname}
+                                                    src={review.byUser.imgUrl}
+                                                    alt={review.byUser.fullname}
                                                     className="user-avatar"
                                                     onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
                                                         e.currentTarget.src = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
                                                     }}
                                                 />
                                                 <div className="user-details">
-                                                    <h4 className="user-name">{review.by.fullname}</h4>
+                                                    <h4 className="user-name">{review.byUser.fullname}</h4>
                                                     <p className="user-location">
                                                         {stay.loc?.city}, {stay.loc?.country}
                                                     </p>

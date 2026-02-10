@@ -3,6 +3,7 @@ import { httpService } from '../http.service.js'
 //types
 import { ReviewService } from '../../types/global.js'
 import { Review } from '../../types/review.js'
+import { AggregateReview as ReviewBackend} from '../../../../back-sharebnb/types/review.js'
 
 export const reviewService: ReviewService = {
 	add,
@@ -10,7 +11,7 @@ export const reviewService: ReviewService = {
 	remove,
 }
 
-function query(filterBy: { name: string }): Promise<Review[]> | Promise<[]> {
+function query(filterBy: { name: string }): Promise<ReviewBackend[]> | Promise<[]> {
 	var queryStr = !filterBy ? '' : `?name=${filterBy.name}&sort=anaAref`
 	return httpService.get(`review${queryStr}`)
 }

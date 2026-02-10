@@ -19,15 +19,17 @@ import star from '../assets/logo/icons/star.svg'
 
 // types and declarations
 import { useAppSelector } from '../store/hooks.js'
+import { loadReviews } from '../store/actions/review.actions.js'
 
 
 
 export function StayDetails() {
+  const stay = useAppSelector((storeState) => storeState.stayModule.stay)
+  const reviews = useAppSelector((storeState) => storeState.reviewModule.reviews)
+  const { user } = useAppSelector(s => s.userModule)
   const { stayId } = useParams()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const stay = useAppSelector((storeState) => storeState.stayModule.stay)
-  const { user } = useAppSelector(s => s.userModule)
   const dispatch = useDispatch()
   const [isSaved, setIsSaved] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -50,6 +52,11 @@ export function StayDetails() {
   const [mobileIsFilled, setMobileIsFilled] = useState(false)
   const mobileDatePanelRef = useRef<HTMLDivElement>(null)
   const mobileGuestsPanelRef = useRef<HTMLDivElement>(null)
+
+  /// add useEffect that loads reviews from the backend adn then pass them to StayReview cmp /// 
+  useEffect (() => {
+    loadReviews({name: ''})
+  }, [])
 
   useEffect(() => {
     async function fetchStay() {
@@ -279,7 +286,7 @@ export function StayDetails() {
       <hr className='divider-long' />
 
       <div id="reviews">
-        <StayReviews stay={stay} />
+        <StayReviews stay={stay} reviews={reviews} />
       </div>
 
       <hr className='divider-long' />

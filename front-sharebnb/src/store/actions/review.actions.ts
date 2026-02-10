@@ -2,11 +2,10 @@ import { reviewService } from '../../services/review/index.js'
 
 import { store } from '../store.js'
 import { ADD_REVIEW, REMOVE_REVIEW, SET_REVIEWS } from '../reducers/review.reducer.js'
-import { SET_SCORE } from '../reducers/user.reducer.js'
 import { Review } from '../../types/review.js'
 import { Dispatch } from 'redux'
 
-export async function loadReviews(filterBy: {name: string}) {
+export async function loadReviews(filterBy: { name: string }) {
 	try {
 		const reviews = await reviewService.query(filterBy)
 		store.dispatch({ type: SET_REVIEWS, reviews })

@@ -5,15 +5,16 @@ export const UPDATE_REVIEW = 'UPDATE_REVIEW'
 
 //types
 import { Review, ReviewAction } from '../../types/review.js'
+import { AggregateReview as ReviewBackend } from '../../../../back-sharebnb/types/review.js'
 
 interface ReviewState {
-  reviews: Review[] | []
-  filterBy: {name: string}
+  reviews: ReviewBackend[] | []
+  filterBy: { name: string }
 }
 
 const reviewState: ReviewState = {
   reviews: [],
-  filterBy: {name:''} // no SET_FILTER_BY in reducer (no filter for now)
+  filterBy: { name: '' } // no SET_FILTER_BY in reducer (no filter for now)
 }
 
 export function reviewReducer(state: ReviewState = reviewState, action: ReviewAction): ReviewState {

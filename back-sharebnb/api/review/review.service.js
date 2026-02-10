@@ -29,20 +29,20 @@ async function query(filterBy = {}) {
             },
             {
                 $lookup: {
-                    localField: 'aboutUserId',
-                    from: 'user',
+                    localField: 'aboutStayId',
+                    from: 'stay',
                     foreignField: '_id',
-                    as: 'aboutUser',
+                    as: 'aboutStay',
                 },
             },
             {
-                $unwind: '$aboutUser',
+                $unwind: '$aboutStay',
             },
             { 
                 $project: {
                     'txt': true, 
-                    'byUser._id': true, 'byUser.fullname': true,
-                    'aboutUser._id': true, 'aboutUser.fullname': true,
+                    'byUser._id': true, 'byUser.fullname': true, 'byUser.imgUrl': true,
+                    'aboutStay._id': true, 'aboutStay.fullname': true,
                 } 
             }
         ]).toArray()
@@ -78,8 +78,9 @@ async function add(review) {
     try {
         const reviewToAdd = {
             byUserId: ObjectId.createFromHexString(review.byUserId),
-			aboutUserId: ObjectId.createFromHexString(review.aboutUserId),
+			aboutStayId: ObjectId.createFromHexString(review.aboutStayId),
 			txt: review.txt,
+            createdAt: new Date()
 		}
 		const collection = await dbService.getCollection('review')
 		await collection.insertOne(reviewToAdd)

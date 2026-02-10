@@ -5,7 +5,7 @@ import { StayFilterBy, Stay } from './stay.js'
 import type { User as UserBackend } from '../../../back-sharebnb/types/user.d.ts'
 import type { LoggedInUser, SignupCredentials } from '../types/user.d.ts'
 import { Review } from './review.js'
-
+import { AggregateReview as ReviewBackend } from '../../../back-sharebnb/types/review.d.ts'
 interface StayServiceRemote {
   query(filterBy: StayFilterBy): Promise<Stay[]>
   getById(stayId: string): Promise<Stay>
@@ -55,7 +55,7 @@ interface UserService extends UserServiceRemote {
 }
 
 interface ReviewService {
-  query(filterBy: { name: string }): Promise<Review[]> | Promise<[]>
+  query(filterBy: { name: string }): Promise<ReviewBackend[]> | Promise<[]>
   remove(reviewId: string): Promise<void>
   add(review: Partial<Review>): Promise<Review>
 }

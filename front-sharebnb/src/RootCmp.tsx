@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 
 import { AboutUs, AboutTeam, AboutVision } from './pages/AboutUs.jsx'
 import { StayIndex } from './pages/StayIndex.js'
-import { ReviewIndex } from './pages/ReviewIndex.jsx'
+// import { ReviewIndex } from './pages/ReviewIndex.jsx' 
 import { ChatApp } from './pages/Chat.jsx'
 import { AdminIndex } from './pages/AdminIndex.jsx'
 import { StayExplore } from './pages/StayExplore.jsx'
@@ -55,7 +55,7 @@ export function RootCmp() {
                     <Route path="wishlists" element={<WishlistIndex />} />
                     <Route path="order/:orderId/confirmation" element={<OrderConfirmation />} />
                     <Route path="user/:id" element={<UserDetails />} />
-                    <Route path="review" element={<ReviewIndex />} />
+                    {/* <Route path="review" element={<ReviewIndex />} /> */}
                     <Route path="chat" element={<ChatApp />} />
                     <Route path="admin" element={<AdminIndex />} />
                     <Route path="auth" element={<LoginSignup />}>
