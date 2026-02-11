@@ -98,5 +98,8 @@ function _buildCriteria(filterBy) {
 	if (filterBy.byUserId) {
         criteria.byUserId = ObjectId.createFromHexString(filterBy.byUserId)
     }
+    if (filterBy.aboutStayId) {
+        criteria.aboutStayId = ObjectId.createFromHexString(filterBy.aboutStayId)
+    }
 	return criteria
 }

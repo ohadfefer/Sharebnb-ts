@@ -25,7 +25,7 @@ import { loadReviews } from '../store/actions/review.actions.js'
 
 export function StayDetails() {
   const stay = useAppSelector((storeState) => storeState.stayModule.stay)
-  const reviews = useAppSelector((storeState) => storeState.reviewModule.reviews)
+  const stayReviews = useAppSelector((storeState) => storeState.reviewModule.reviews)
   const { user } = useAppSelector(s => s.userModule)
   const { stayId } = useParams()
   const navigate = useNavigate()
@@ -55,8 +55,10 @@ export function StayDetails() {
 
   /// add useEffect that loads reviews from the backend adn then pass them to StayReview cmp /// 
   useEffect (() => {
-    loadReviews({name: ''})
-  }, [])
+    if (!stayId) return
+
+    loadReviews({byUserId: '', aboutStayId: stayId}) // backend filtering the review collection by stayId
+  }, [stayId])
 
   useEffect(() => {
     async function fetchStay() {
@@ -286,7 +288,7 @@ export function StayDetails() {
       <hr className='divider-long' />
 
       <div id="reviews">
-        <StayReviews stay={stay} reviews={reviews} />
+        <StayReviews stay={stay} stayReviews={stayReviews} />
       </div>
 
       <hr className='divider-long' />

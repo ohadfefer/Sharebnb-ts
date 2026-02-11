@@ -11,8 +11,8 @@ export const reviewService: ReviewService = {
 	remove,
 }
 
-function query(filterBy: { name: string }): Promise<ReviewBackend[]> | Promise<[]> {
-	var queryStr = !filterBy ? '' : `?name=${filterBy.name}&sort=anaAref`
+function query(filterBy: { byUserId: string, aboutStayId: string}): Promise<ReviewBackend[]> | Promise<[]> {
+	var queryStr = !filterBy ? '' : `?byUserId=${filterBy.byUserId}&aboutStayId=${filterBy.aboutStayId}`
 	return httpService.get(`review${queryStr}`)
 }
 

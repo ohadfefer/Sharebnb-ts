@@ -5,7 +5,7 @@ import { ADD_REVIEW, REMOVE_REVIEW, SET_REVIEWS } from '../reducers/review.reduc
 import { Review } from '../../types/review.js'
 import { Dispatch } from 'redux'
 
-export async function loadReviews(filterBy: { name: string }) {
+export async function loadReviews(filterBy: { byUserId: string, aboutStayId: string}) {
 	try {
 		const reviews = await reviewService.query(filterBy)
 		// console.log('Reviews coming from server:', reviews)

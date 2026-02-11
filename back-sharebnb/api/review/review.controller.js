@@ -7,6 +7,7 @@ import { stayService } from '../stay/stay.service.js'
 
 export async function getReviews(req, res) {
 	try {
+		// logger.info('req.query ----------->', req.query)
 		const reviews = await reviewService.query(req.query)
 		res.send(reviews)
 	} catch (err) {

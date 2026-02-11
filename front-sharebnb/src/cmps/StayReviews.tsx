@@ -13,10 +13,10 @@ import { eventBus, OPEN_REVIEWS_MODAL } from '../services/event-bus.service.js'
 import { Stay } from '../types/stay.js'
 import { AggregateReview as ReviewBackend} from '../../../back-sharebnb/types/review.js'
 
-export function StayReviews({ stay, reviews }: { stay: Stay, reviews: ReviewBackend[]}) {
+export function StayReviews({ stay, stayReviews }: { stay: Stay, stayReviews: ReviewBackend[]}) {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    if (!stay || !stay.reviews || stay.reviews.length === 0 || reviews.length === 0) {
+    if (!stay || stayReviews.length === 0) {
         return (
             <div className="stay-reviews">
                 <h2>Reviews</h2>
@@ -25,8 +25,6 @@ export function StayReviews({ stay, reviews }: { stay: Stay, reviews: ReviewBack
         )
     }
 
-    const stayReviews = reviews.filter((review) => review.aboutStay._id === stay._id)
-    console.log(stayReviews)
 
     const renderStars = (rating: number) => {
         return Array.from({ length: 5 }, (_, index) => (
