@@ -58,15 +58,15 @@ export async function addReview(req, res) {			/// this is the review that sent b
 		review.byUser = { fullname: loggedinUser.fullname, imgUrl: loggedinUser.imgUrl }
 		review.aboutStay = { fullname: stay.name }
 
-		// delete review.aboutStay.givenReviews
+		// delete unnecessary fields from the client-side review object 
 		delete review.aboutStayId
 		delete review.byUserId
 
-		socketService.broadcast({ type: 'review-added', data: review, userId: loggedinUser._id })
-		socketService.emitToUser({ type: 'review-about-you', data: review, userId: review.aboutStay._id })
+		// socketService.broadcast({ type: 'review-added', data: review, userId: loggedinUser._id })
+		// socketService.emitToUser({ type: 'review-about-stay', data: review, userId: review.aboutStay._id })
 
-		const fullUser = await userService.getById(loggedinUser._id)
-		socketService.emitTo({ type: 'user-updated', data: fullUser, label: fullUser._id })
+		// const fullUser = await userService.getById(loggedinUser._id)
+		// socketService.emitTo({ type: 'user-updated', data: fullUser, label: fullUser._id })
 
 		res.send(review)
 	} catch (err) {

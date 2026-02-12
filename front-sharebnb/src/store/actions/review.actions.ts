@@ -2,10 +2,10 @@ import { reviewService } from '../../services/review/index.js'
 
 import { store } from '../store.js'
 import { ADD_REVIEW, REMOVE_REVIEW, SET_REVIEWS } from '../reducers/review.reducer.js'
-import { Review } from '../../types/review.js'
+import { AggregateReview as ReviewBackend } from '../../../../back-sharebnb/types/review.js'
 import { Dispatch } from 'redux'
 
-export async function loadReviews(filterBy: { byUserId: string, aboutStayId: string}) {
+export async function loadReviews(filterBy: { byUserId: string, aboutStayId: string }) {
 	try {
 		const reviews = await reviewService.query(filterBy)
 		// console.log('Reviews coming from server:', reviews)
@@ -17,7 +17,7 @@ export async function loadReviews(filterBy: { byUserId: string, aboutStayId: str
 	}
 }
 
-export async function addReview(review: Partial<Review>) {
+export async function addReview(review: { txt: string, aboutStayId: string }) {
 	try {
 		const addedReview = await reviewService.add(review);
 		(store.dispatch as Dispatch)(getActionAddReview(addedReview))
@@ -39,6 +39,6 @@ export async function removeReview(reviewId: string) {
 export function getActionRemoveReview(reviewId: string) {
 	return { type: REMOVE_REVIEW, reviewId }
 }
-export function getActionAddReview(review: Review) {
+export function getActionAddReview(review: ReviewBackend) {
 	return { type: ADD_REVIEW, review }
 }

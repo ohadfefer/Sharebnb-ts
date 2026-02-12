@@ -12,6 +12,7 @@ import { eventBus, OPEN_REVIEWS_MODAL } from '../services/event-bus.service.js'
 
 import { Stay } from '../types/stay.js'
 import { AggregateReview as ReviewBackend} from '../../../back-sharebnb/types/review.js'
+import { ReviewEdit } from './ReviewEdit.js'
 
 export function StayReviews({ stay, stayReviews }: { stay: Stay, stayReviews: ReviewBackend[]}) {
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -152,6 +153,8 @@ export function StayReviews({ stay, stayReviews }: { stay: Stay, stayReviews: Re
                             <button onClick={openModal}>Show all {stayReviews.length} reviews</button>
                         </div>
                     )}
+                    {/* input for adding a review */}
+                    <ReviewEdit />
                 </div>
 
             </div>

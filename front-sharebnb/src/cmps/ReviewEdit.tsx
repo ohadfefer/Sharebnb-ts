@@ -8,40 +8,58 @@ import { useAppSelector } from "../store/hooks.js"
 
 // types
 import { Review } from "../types/review.js"
+import { useParams } from "react-router"
+import { error } from "node:console"
 
+type ReviewToEdit = { txt: string }
 export function ReviewEdit() {
-	const users = useAppSelector(storeState => storeState.userModule.users)
-	const [reviewToEdit, setReviewToEdit] = useState<Partial<Review>>({})
+	const { stayId } = useParams()
+	const [reviewToEdit, setReviewToEdit] = useState<ReviewToEdit>({ txt: '' })
 
 	function handleChange(ev: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
 		const { name, value } = ev.target
 		setReviewToEdit({ ...reviewToEdit, [name]: value })
 	}
 
-    async function onAddReview(ev: FormEvent) {
+	async function onAddReview(ev: FormEvent) {
 		ev.preventDefault()
-		if (!reviewToEdit.txt || !reviewToEdit.aboutStayId) return alert('All fields are required')
-            
+		if (!reviewToEdit.txt) return alert('All fields are required')
+		if (!stayId) {
+			showErrorMsg('Cannot add review — missing stayId')
+			return
+		}
+
 		try {
-			await addReview(reviewToEdit)
+			await addReview({ ...reviewToEdit, aboutStayId: stayId })
 			showSuccessMsg('Review added')
-			setReviewToEdit({ txt: '', aboutStayId: '' })
+			setReviewToEdit({ txt: '' })
 		} catch (err) {
 			showErrorMsg('Cannot add review')
 		}
 	}
 
-   return <form className="review-edit" onSubmit={onAddReview}>
-        <select onChange={handleChange} value={reviewToEdit.aboutStayId} name="aboutUserId">
-            <option value="">Review about...</option>
-            {users.map(user =>
-                <option key={user._id} value={user._id}>
-                    {user.fullname}
-                </option>
-            )}
-        </select>
-        <textarea name="txt" onChange={handleChange} value={reviewToEdit.txt}></textarea>
-        <button>Add</button>
-    </form>
+	return (
+		<div className="review-edit-container">
+			<form className="review-edit-form" onSubmit={onAddReview}>
+				<textarea
+					name="txt"
+					placeholder="Write your review..."
+					onChange={handleChange}
+					value={reviewToEdit.txt}
+					className="review-textarea"
+					rows={4}
+				/>
+				<div className="review-edit-actions">
+					<button
+						type="submit"
+						className="btn-submit-review"
+						disabled={!reviewToEdit.txt?.trim()}
+					>
+						Submit review
+					</button>
+				</div>
+			</form>
+		</div>
+	)
 
 }

@@ -20,6 +20,6 @@ async function remove(reviewId: string): Promise<void> {
 	await httpService.delete(`review/${reviewId}`)
 }
 
-async function add({ txt, aboutStayId }: { txt: string, aboutStayId: string }): Promise<Review> {
+async function add({ txt, aboutStayId }: { txt: string, aboutStayId: string }): Promise<ReviewBackend> {
 	return await httpService.post(`review`, { txt, aboutStayId })
 }

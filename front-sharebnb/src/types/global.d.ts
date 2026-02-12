@@ -55,9 +55,9 @@ interface UserService extends UserServiceRemote {
 }
 
 interface ReviewService {
-  query(filterBy: { byUserId: string, aboutStayId: string}): Promise<ReviewBackend[]> | Promise<[]>
+  query(filterBy: { byUserId: string, aboutStayId: string }): Promise<ReviewBackend[]> | Promise<[]>
   remove(reviewId: string): Promise<void>
-  add(review: Partial<Review>): Promise<Review>
+  add(review: { txt: string, aboutStayId: string }): Promise<ReviewBackend>
 }
 
 type OrderStatus = "pending" | "approved" | "completed" | "rejected"
