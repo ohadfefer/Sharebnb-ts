@@ -1,3 +1,4 @@
+import { AggregateOrder as OrderBackend} from '../../../../back-sharebnb/types/order.js'
 import { Order, OrderAction, OrderFilterBy } from '../../types/order.js'
 
 
@@ -12,7 +13,7 @@ export const SET_FILTER_BY = 'SET_FILTER_BY'
 export const SET_IS_LOADING = 'SET_IS_LOADING'
 
 interface OrderState {
-	orders: Order[]
+	orders: OrderBackend[]
 	isLoading: boolean
 	filterBy: OrderFilterBy
 }

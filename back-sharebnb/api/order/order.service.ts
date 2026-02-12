@@ -49,7 +49,7 @@ async function query(filterBy: OrderFilterBy): Promise<AggregateOrder[]> {
 	const criteria = _buildCriteria(filterBy)
 	const collection = await dbService.getCollection(COLLECTION_NAME)
 
-	const orders = await collection
+	const orders: AggregateOrder[] = await collection
 		.aggregate([
 			{
 				$match: criteria,
@@ -114,8 +114,7 @@ async function query(filterBy: OrderFilterBy): Promise<AggregateOrder[]> {
 			},
 		])
 		.toArray()
-
-	return orders as AggregateOrder[]
+	return orders
 }
 
 async function getById(orderId: string): Promise<Order> {
@@ -137,7 +136,7 @@ async function getById(orderId: string): Promise<Order> {
 	}
 }
 
-async function add(order: Order): Promise<Order> {
+async function add(order: Omit<Order, "_id" | "createdAt">): Promise<Order> {
 	try {
 		const collection = await dbService.getCollection(COLLECTION_NAME)
 

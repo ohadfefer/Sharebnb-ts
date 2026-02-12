@@ -27,7 +27,7 @@ export function StayReservations() {
 
     async function onLoadOrders() {
         console.log(filterBy)
-        const orders = await loadOrders()
+        const orders = await loadOrders(filterBy)
         console.log(orders)
     }
 

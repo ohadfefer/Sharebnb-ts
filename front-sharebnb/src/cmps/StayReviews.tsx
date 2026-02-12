@@ -11,12 +11,17 @@ import { useEffect, useState } from 'react'
 import { eventBus, OPEN_REVIEWS_MODAL } from '../services/event-bus.service.js'
 
 import { Stay } from '../types/stay.js'
-import { AggregateReview as ReviewBackend} from '../../../back-sharebnb/types/review.js'
+import { AggregateReview as ReviewBackend } from '../../../back-sharebnb/types/review.js'
 import { ReviewEdit } from './ReviewEdit.js'
+import { useAppSelector } from '../store/hooks.js'
+import { AggregateOrder as OrderBackend} from '../../../back-sharebnb/types/order.js'
 
-export function StayReviews({ stay, stayReviews }: { stay: Stay, stayReviews: ReviewBackend[]}) {
+type StayReviewsProp = { stay: Stay, stayReviews: ReviewBackend[], userIsGuest: boolean }
+
+export function StayReviews({ stay, stayReviews, userIsGuest }: StayReviewsProp) {
     const [isModalOpen, setIsModalOpen] = useState(false)
-
+    const loggedInUser = useAppSelector((state) => state.userModule.user)
+    console.log(userIsGuest)
     if (!stay || stayReviews.length === 0) {
         return (
             <div className="stay-reviews">
@@ -154,7 +159,7 @@ export function StayReviews({ stay, stayReviews }: { stay: Stay, stayReviews: Re
                         </div>
                     )}
                     {/* input for adding a review */}
-                    <ReviewEdit />
+                    {(loggedInUser && userIsGuest) && <ReviewEdit />}
                 </div>
 
             </div>

@@ -45,7 +45,7 @@ export async function addOrder(req: AuthenticatedRequest, res: Response) {
 	console.log('Logged in user _id:', loggedinUser?._id)
 
 	try {
-		const orderToAdd: Order = {
+		const orderToAdd: Omit<Order, "_id" | "createdAt"> = {
 			userId: order.userId,
 			stayId: order.stayId,
 			hostId: order.hostId,

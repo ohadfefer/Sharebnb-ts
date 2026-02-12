@@ -20,8 +20,8 @@ import { OrderStatus } from '../../types/global.js'
 
 type Dispatch = (action: OrderAction) => void
 
-export async function loadOrders(): Promise<OrderBackend[]> {
-    const { filterBy } = store.getState().orderModule
+export async function loadOrders(filterBy: Partial<OrderFilterBy>): Promise<OrderBackend[]> {
+    // const { filterBy } = store.getState().orderModule
 
     try {
         (store.dispatch as Dispatch)({ type: SET_IS_LOADING, isLoading: true })
@@ -30,7 +30,9 @@ export async function loadOrders(): Promise<OrderBackend[]> {
         // console.log('loadOrders -> orders returned:', orders.length, 'orders')
         // console.log('loadOrders -> orders details:', orders)
 
+        console.log('orders returned from backend:', orders);
         (store.dispatch as Dispatch)({ type: SET_ORDERS, orders })
+        console.log('orders deployed in order reducer:', orders)
         return orders
     } catch (err) {
         console.log('order action -> Cannot load orders')
@@ -50,9 +52,9 @@ export async function removeOrder(orderId: string): Promise<void> {
     }
 }
 
-export async function addOrder(order: Order): Promise<Order> {
+export async function addOrder(order: Order): Promise<OrderBackend> {
     try {
-        const savedOrder = await orderService.save(order) as Order
+        const savedOrder = await orderService.save(order) as OrderBackend
         (store.dispatch as Dispatch)(getCmdAddOrder(savedOrder))
         return savedOrder
     } catch (err) {
@@ -61,10 +63,10 @@ export async function addOrder(order: Order): Promise<Order> {
     }
 }
 
-export async function updateOrder(order: Order): Promise<Order> {
+export async function updateOrder(order: Order): Promise<OrderBackend> {
     try {
         console.log('Updating order in actions:', order)
-        const savedOrder = await orderService.save(order) as Order
+        const savedOrder = await orderService.save(order) as OrderBackend
         // console.log('Order updated successfully:', savedOrder)
         (store.dispatch as Dispatch)(getCmdUpdateOrder(savedOrder))
         return savedOrder
@@ -85,9 +87,9 @@ export async function updateOrder(order: Order): Promise<Order> {
 //     }
 // }
 
-export async function updateOrderStatus(orderId: string, nextStatus: OrderStatus): Promise<Order> {
+export async function updateOrderStatus(orderId: string, nextStatus: OrderStatus): Promise<OrderBackend> {
     try {
-        const updatedOrder = await orderService.updateStatus(orderId, nextStatus) as Order
+        const updatedOrder = await orderService.updateStatus(orderId, nextStatus) as OrderBackend
         (store.dispatch as Dispatch)({ type: UPDATE_ORDER, order: updatedOrder })
         return updatedOrder
     } catch (err) {
@@ -110,7 +112,7 @@ export function setFilter(filterBy: OrderFilterBy): void {
 }
 
 // Socket event handler for real-time order updates
-export function handleOrderUpdate(updatedOrder: Order): void {
+export function handleOrderUpdate(updatedOrder: OrderBackend): void {
     // console.log('Received order update via socket:', updatedOrder)
     (store.dispatch as Dispatch)({ type: UPDATE_ORDER, order: updatedOrder })
 }
@@ -126,13 +128,13 @@ export function cleanupOrderSocketListeners() {
 }
 
 
-export function getCmdSetOrders(orders: Order[]): OrderAction {
+export function getCmdSetOrders(orders: OrderBackend[]): OrderAction {
     return {
         type: SET_ORDERS,
         orders
     }
 }
-export function getCmdSetOrder(order: Order): OrderAction {
+export function getCmdSetOrder(order: OrderBackend): OrderAction {
     return {
         type: SET_ORDER,
         order
@@ -144,13 +146,13 @@ export function getCmdRemoveOrder(orderId: string): OrderAction {
         orderId
     }
 }
-export function getCmdAddOrder(order: Order): OrderAction {
+export function getCmdAddOrder(order: OrderBackend): OrderAction {
     return {
         type: ADD_ORDER,
         order
     }
 }
-export function getCmdUpdateOrder(order: Order): OrderAction {
+export function getCmdUpdateOrder(order: OrderBackend): OrderAction {
     return {
         type: UPDATE_ORDER,
         order

@@ -20,17 +20,20 @@ import star from '../assets/logo/icons/star.svg'
 // types and declarations
 import { useAppSelector } from '../store/hooks.js'
 import { loadReviews } from '../store/actions/review.actions.js'
+import { loadOrders } from '../store/actions/order.actions.js'
 
 
 
 export function StayDetails() {
   const stay = useAppSelector((storeState) => storeState.stayModule.stay)
   const stayReviews = useAppSelector((storeState) => storeState.reviewModule.reviews)
+  const userOrders = useAppSelector((storeState) => storeState.orderModule.orders)
   const { user } = useAppSelector(s => s.userModule)
   const { stayId } = useParams()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const dispatch = useDispatch()
+  const [userIsGuest, setUserIsGuest] = useState<boolean>(false)
   const [isSaved, setIsSaved] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
@@ -54,11 +57,19 @@ export function StayDetails() {
   const mobileGuestsPanelRef = useRef<HTMLDivElement>(null)
 
   /// add useEffect that loads reviews from the backend adn then pass them to StayReview cmp /// 
-  useEffect (() => {
+  useEffect(() => {
     if (!stayId) return
 
-    loadReviews({byUserId: '', aboutStayId: stayId}) // backend filtering the review collection by stayId
+    loadReviews({ byUserId: '', aboutStayId: stayId }) // backend filtering the review collection by stayId
   }, [stayId])
+
+  useEffect(() => {
+    if (!user) return
+
+    loadOrders({ userId: user._id }).then((orders) => {
+      setUserIsGuest(orders.some(order => order.stay._id === stayId))
+    })
+  }, [user, stayId])
 
   useEffect(() => {
     async function fetchStay() {
@@ -288,7 +299,7 @@ export function StayDetails() {
       <hr className='divider-long' />
 
       <div id="reviews">
-        <StayReviews stay={stay} stayReviews={stayReviews} />
+        <StayReviews stay={stay} stayReviews={stayReviews} userIsGuest={userIsGuest} />
       </div>
 
       <hr className='divider-long' />

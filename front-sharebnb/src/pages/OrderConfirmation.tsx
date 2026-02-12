@@ -6,6 +6,7 @@ import { orderService } from '../services/order/index.js'
 import { getCmdUpdateOrder } from '../store/actions/order.actions.js'
 import { formatGuestsLabel, formatDateMMDDYYYY, buildStayPathWithParams } from '../services/util.service.js'
 import { useAppSelector } from '../store/hooks.js'
+import { AggregateOrder as BackendOrder} from '../../../back-sharebnb/types/order.js'
 
 export function OrderConfirmation() {
     const { orderId: id } = useParams()
@@ -29,8 +30,8 @@ export function OrderConfirmation() {
                     const fetched = id ? await orderService.getById(id) : null
                     if (!alive) return
                     if (fetched) {
-                        setOrder(fetched)
-                        dispatch(getCmdUpdateOrder(fetched))
+                        setOrder(fetched as BackendOrder)
+                        dispatch(getCmdUpdateOrder(fetched as BackendOrder))
                     } else {
                         setError('Order not found')
                     }

@@ -19,7 +19,7 @@ export const orderService = {
 }
 
 function query(params: OrderFilterBy): Promise<AggregateOrder[]> {
-    console.log(params)
+    // console.log(params)
     return httpService.get<AggregateOrder[]>('order', params)
 }
 
@@ -49,7 +49,7 @@ async function updateStatus(orderId: string, status: OrderStatus): Promise<Aggre
     try {
         console.log(orderId, status, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         const order = await getById(orderId)
-        const updatedOrder = { ...order, status }
+        const updatedOrder: Order = { ...order, status }
         
         return await save(updatedOrder)
     } catch (err) {

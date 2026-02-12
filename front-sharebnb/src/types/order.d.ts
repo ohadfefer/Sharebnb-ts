@@ -1,7 +1,8 @@
+import { AggregateOrder as OrderBackend } from "../../../back-sharebnb/types/order.js"
 import { ADD_ORDER, ADD_ORDER_MSG, REMOVE_ORDER, SET_FILTER_BY, SET_IS_LOADING, SET_ORDER, SET_ORDERS, UPDATE_ORDER } from "../store/reducers/order.reducer.js"
 
 export interface Order {
-    _id: string
+    _id?: string
     userId: string
     stayId: string
     hostId: string
@@ -13,7 +14,7 @@ export interface Order {
         children: number
     }
     status: OrderStatus
-    createdAt: Date | string
+    createdAt?: Date | string
     contactEmail?: string | null
     emails?: Record<string, any>
 }
@@ -49,10 +50,10 @@ export interface RevenueEntry {
 export type OrderAction =
     | { type: typeof SET_IS_LOADING; isLoading: boolean }
     | { type: typeof SET_FILTER_BY; filterBy: OrderFilterBy }
-    | { type: typeof SET_ORDERS; orders: Order[] }
-    | { type: typeof SET_ORDER; order: Order }
-    | { type: typeof ADD_ORDER; order: Order }
-    | { type: typeof UPDATE_ORDER; order: Order }
+    | { type: typeof SET_ORDERS; orders: OrderBackend[] }
+    | { type: typeof SET_ORDER; order: OrderBackend }
+    | { type: typeof ADD_ORDER; order: OrderBackend }
+    | { type: typeof UPDATE_ORDER; order: OrderBackend }
     | { type: typeof REMOVE_ORDER; orderId: string }
     | { type: typeof ADD_ORDER_MSG; orderId: string; msg: OrderMsg }
 

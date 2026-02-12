@@ -4,6 +4,7 @@ import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { loadOrders, setFilter, setupOrderSocketListeners, cleanupOrderSocketListeners } from "../store/actions/order.actions.js" // EDIT
 import { useAppSelector } from "../store/hooks.js"
+import { OrderFilterBy } from "../types/order.js"
 
 function formatDate(iso: string | Date) {
   if (!iso) return "—"
@@ -30,7 +31,7 @@ function capFirst(txt = "") {
 
 export function TripIndex() {
   const navigate = useNavigate()
-
+  const filterBy = useAppSelector(s => s.orderModule.filterBy)
   const user = useAppSelector(s => s.userModule.user)
   const { orders, isLoading } = useAppSelector(s => s.orderModule)
 
@@ -43,7 +44,7 @@ export function TripIndex() {
     const userId = user?._id || ''
     console.log('TripIndex - setting filter with userId:', userId)
     setFilter({ userId : userId}) // backend aliases userId -> guestId
-    onLoadOrders()
+    onLoadOrders(filterBy)
     console.log(orders)
   }, [user?._id])
 
@@ -66,8 +67,8 @@ export function TripIndex() {
     }
   }, [])
 
-  async function onLoadOrders() {
-    await loadOrders()
+  async function onLoadOrders(filterBy: OrderFilterBy) {
+    await loadOrders(filterBy)
     console.log(orders)
   }
 
