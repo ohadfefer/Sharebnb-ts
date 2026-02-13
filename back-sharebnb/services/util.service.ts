@@ -7,9 +7,13 @@ export function makeId(length = 5) {
 	return txt
 }
 
-export function debounce(func, timeout = 300) {
-	let timer
-	return (...args) => {
+export function debounce<T extends (...args: any[]) => any>(
+	func: T,
+	timeout = 300
+): (...args: Parameters<T>) => void {
+	let timer: ReturnType<typeof setTimeout> | undefined
+
+	return function (this: any, ...args: Parameters<T>) {
 		clearTimeout(timer)
 		timer = setTimeout(() => {
 			func.apply(this, args)
@@ -17,7 +21,7 @@ export function debounce(func, timeout = 300) {
 	}
 }
 
-export function getRandomInt(min, max) {
+export function getRandomInt(min: number, max: number) {
 	min = Math.ceil(min)
 	max = Math.floor(max)
 	return Math.floor(Math.random() * (max - min + 1)) + min
@@ -34,10 +38,13 @@ export function generateRandomImg() {
 	return 'pro' + Math.floor(Math.random() * 17 + 1) + '.png'
 }
 
-export function timeAgo(ms = new Date()) {
+export function timeAgo(
+	ms: number | Date = new Date()
+): string {
 	const date = ms instanceof Date ? ms : new Date(ms)
-	const formatter = new Intl.RelativeTimeFormat('en')
-	const ranges = {
+	const formatter = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
+
+	const ranges: Record<string, number> = {
 		years: 3600 * 24 * 365,
 		months: 3600 * 24 * 30,
 		weeks: 3600 * 24 * 7,
@@ -46,19 +53,31 @@ export function timeAgo(ms = new Date()) {
 		minutes: 60,
 		seconds: 1,
 	}
+
 	const secondsElapsed = (date.getTime() - Date.now()) / 1000
-	for (let key in ranges) {
-		if (ranges[key] < Math.abs(secondsElapsed)) {
-			const delta = secondsElapsed / ranges[key]
-			let time = formatter.format(Math.round(delta), key)
-			if (time.includes('in')) {
+
+	for (const [unit, seconds] of Object.entries(ranges)) {
+		if (seconds < Math.abs(secondsElapsed)) {
+			const delta = secondsElapsed / seconds
+			let time = formatter.format(Math.round(delta), unit as Intl.RelativeTimeFormatUnit)
+
+			if (time.includes('in ')) {
 				time = time.replace('in ', '')
-				time = time.replace('ago', '')
+			}
+			if (!time.includes('ago') && secondsElapsed < 0) {
 				time += ' ago'
 			}
-			return time //? time : 'Just now'
+			return time
 		}
 	}
+
+	return 'just now'
+}
+
+export function getRandomIntInclusive(min: number, max: number) {
+	min = Math.ceil(min)
+	max = Math.floor(max)
+	return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 export function randomPastTime() {
