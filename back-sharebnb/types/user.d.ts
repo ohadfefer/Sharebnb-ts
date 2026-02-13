@@ -1,5 +1,4 @@
-export type User = Omit<UserWithPassword, 'password'>
-    
+
 
 export interface UserFilterBy {
 	txt?: string
@@ -24,6 +23,7 @@ export interface SignupCredentials {
 	imgUrl?: string | null
 	isAdmin?: boolean
 }
+export type User = Omit<UserWithPassword, 'password'>
 
-// based on what's stored in the token (from auth.service.js getLoginToken)
+// based on what is stored in the token (from auth.service.js getLoginToken)
 export type LoggedInUser = Omit<User, 'username'>

@@ -1,11 +1,13 @@
+import { Request, Response } from 'express'
 import { logger } from '../../services/logger.service.js'
 import { socketService } from '../../services/socket.service.js'
 import { userService } from '../user/user.service.js'
 import { authService } from '../auth/auth.service.js'
 import { reviewService } from './review.service.js'
 import { stayService } from '../stay/stay.service.js'
+import { AuthenticatedRequest } from '../../types/express.js'
 
-export async function getReviews(req, res) {
+export async function getReviews(req: Request, res: Response) {
 	try {
 		// logger.info('req.query ----------->', req.query)
 		const reviews = await reviewService.query(req.query)
@@ -16,14 +18,14 @@ export async function getReviews(req, res) {
 	}
 }
 
-export async function removeReview(req, res) {
+export async function removeReview(req: AuthenticatedRequest, res: Response) {
 	var { loggedinUser } = req
 	const { id: reviewId } = req.params
 
 	try {
-		const deletedCount = await reviewService.remove(reviewId)
+		const deletedCount = await reviewService.remove(reviewId as string)
 		if (deletedCount === 1) {
-			socketService.broadcast({ type: 'review-removed', data: reviewId, userId: loggedinUser._id })
+			socketService.broadcast({ type: 'review-removed', data: reviewId, userId: loggedinUser?._id })
 			res.send({ msg: 'Deleted successfully' })
 		} else {
 			res.status(400).send({ err: 'Cannot remove review' })
@@ -34,13 +36,13 @@ export async function removeReview(req, res) {
 	}
 }
 
-export async function addReview(req, res) {			/// this is the review that sent back to the client	-> add proper type for review ///
+export async function addReview(req: AuthenticatedRequest, res: Response) {			/// this is the review that sent back to the client	-> add proper type for review ///
 	var { loggedinUser } = req
 
 	try {
 		var review = req.body
 		const { aboutStayId } = review
-		review.byUserId = loggedinUser._id
+		review.byUserId = loggedinUser?._id
 		review = await reviewService.add(review)
 
 		// Give the user credit for adding a review
@@ -54,8 +56,8 @@ export async function addReview(req, res) {			/// this is the review that sent b
 
 		// prepare the updated review for sending out
 		const stay = await stayService.getById(aboutStayId)
-		
-		review.byUser = { fullname: loggedinUser.fullname, imgUrl: loggedinUser.imgUrl }
+
+		review.byUser = { fullname: loggedinUser?.fullname, imgUrl: loggedinUser?.imgUrl }
 		review.aboutStay = { fullname: stay.name }
 
 		// delete unnecessary fields from the client-side review object 
