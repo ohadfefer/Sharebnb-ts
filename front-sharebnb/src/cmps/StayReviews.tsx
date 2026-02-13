@@ -12,26 +12,21 @@ import { eventBus, OPEN_REVIEWS_MODAL } from '../services/event-bus.service.js'
 
 import { Stay } from '../types/stay.js'
 import { AggregateReview as ReviewBackend } from '../../../back-sharebnb/types/review.js'
-import { ReviewEdit } from './ReviewEdit.js'
-import { useAppSelector } from '../store/hooks.js'
-import { AggregateOrder as OrderBackend} from '../../../back-sharebnb/types/order.js'
 
-type StayReviewsProp = { stay: Stay, stayReviews: ReviewBackend[], userIsGuest: boolean }
+type StayReviewsProp = { stay: Stay, stayReviews: ReviewBackend[] }
 
-export function StayReviews({ stay, stayReviews, userIsGuest }: StayReviewsProp) {
+export function StayReviews({ stay, stayReviews }: StayReviewsProp) {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const loggedInUser = useAppSelector((state) => state.userModule.user)
-    console.log(userIsGuest)
-    if (!stay || stayReviews.length === 0) {
-        return (
-            <div className="stay-reviews">
-                <h2>Reviews</h2>
-                <p>No reviews yet</p>
-            </div>
-        )
-    }
 
+    const openModal = () => setIsModalOpen(true)
+    const closeModal = () => setIsModalOpen(false)
 
+    useEffect(() => {
+        const off = eventBus.on(OPEN_REVIEWS_MODAL, () => setIsModalOpen(true))
+        return () => off && off()
+    }, [])
+
+    
     const renderStars = (rating: number) => {
         return Array.from({ length: 5 }, (_, index) => (
             <FaStar
@@ -46,13 +41,14 @@ export function StayReviews({ stay, stayReviews, userIsGuest }: StayReviewsProp)
     //     : 0
     const avgRate = stay.rating
 
-    const openModal = () => setIsModalOpen(true)
-    const closeModal = () => setIsModalOpen(false)
-
-    useEffect(() => {
-        const off = eventBus.on(OPEN_REVIEWS_MODAL, () => setIsModalOpen(true))
-        return () => off && off()
-    }, [])
+    if (!stay || stayReviews.length === 0) {
+        return (
+            <div className="stay-reviews">
+                <h2>Reviews</h2>
+                <p>No reviews yet</p>
+            </div>
+        )
+    }
 
     return (
         <>
@@ -153,15 +149,12 @@ export function StayReviews({ stay, stayReviews, userIsGuest }: StayReviewsProp)
                             </div>
                         ))}
                     </div>
-                    {stayReviews.length > 8 && (
+                    {stayReviews.length > 6 && (
                         <div className="show-all-reviews">
                             <button onClick={openModal}>Show all {stayReviews.length} reviews</button>
                         </div>
                     )}
-                    {/* input for adding a review */}
-                    {(loggedInUser && userIsGuest) && <ReviewEdit />}
                 </div>
-
             </div>
 
             {/* reviews modal */}

@@ -19,7 +19,7 @@ export const orderService = {
 }
 
 function query(params: OrderFilterBy): Promise<AggregateOrder[]> {
-    // console.log(params)
+    console.log('filter orders in backend --->', params)
     return httpService.get<AggregateOrder[]>('order', params)
 }
 

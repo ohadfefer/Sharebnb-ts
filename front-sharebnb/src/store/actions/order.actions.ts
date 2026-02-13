@@ -20,15 +20,13 @@ import { OrderStatus } from '../../types/global.js'
 
 type Dispatch = (action: OrderAction) => void
 
-export async function loadOrders(filterBy: Partial<OrderFilterBy>): Promise<OrderBackend[]> {
+export async function loadOrders(filterBy: OrderFilterBy): Promise<OrderBackend[]> {
     // const { filterBy } = store.getState().orderModule
 
     try {
         (store.dispatch as Dispatch)({ type: SET_IS_LOADING, isLoading: true })
         console.log('loadOrders -> filterBy:', filterBy)
-        const orders = await orderService.query(filterBy as OrderFilterBy) as OrderBackend[]
-        // console.log('loadOrders -> orders returned:', orders.length, 'orders')
-        // console.log('loadOrders -> orders details:', orders)
+        const orders = await orderService.query(filterBy) 
 
         console.log('orders returned from backend:', orders);
         (store.dispatch as Dispatch)({ type: SET_ORDERS, orders })

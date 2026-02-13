@@ -14,6 +14,7 @@ import { StickyCard } from '../cmps/StickyCard.jsx'
 import { DateRangePanel } from '../cmps/DateRangePanel.jsx'
 import { GuestsPanel } from '../cmps/GuestsPanel.jsx'
 import { buildSearchParams, parseSearchParams, formatGuestsLabel, nightsBetween, formatMoney } from '../services/util.service.js'
+import { ReviewEdit } from '../cmps/ReviewEdit.js'
 
 import star from '../assets/logo/icons/star.svg'
 
@@ -299,7 +300,8 @@ export function StayDetails() {
       <hr className='divider-long' />
 
       <div id="reviews">
-        <StayReviews stay={stay} stayReviews={stayReviews} userIsGuest={userIsGuest} />
+        <StayReviews stay={stay} stayReviews={stayReviews} />
+        {(user && userIsGuest) && <ReviewEdit />}
       </div>
 
       <hr className='divider-long' />
