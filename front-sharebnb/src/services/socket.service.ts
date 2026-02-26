@@ -190,6 +190,14 @@ function createDummySocketService() {
         this.emit('user-updated', { ...user, score: 555 })
       }
     },
+
+    testConnection() {
+      console.log('Dummy socket: testConnection (no-op)')
+    },
+
+    ensureUserLoggedIn() {
+      console.log('Dummy socket: ensureUserLoggedIn (no-op)')
+    },
   }
 
   // For debugging
