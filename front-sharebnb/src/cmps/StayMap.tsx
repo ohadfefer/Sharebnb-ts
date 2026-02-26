@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Stay } from '../types/stay.js'
 
@@ -8,60 +8,71 @@ export function StayMap({ stay }: { stay: Stay}) {
     const mapRef = useRef<HTMLDivElement>(null)
     const mapInstanceRef = useRef<google.maps.Map | null>(null)
     const markerRef = useRef<google.maps.Marker | null>(null)
+    const [mapError, setMapError] = useState(false)
 
     useEffect(() => {
-        if (!stay || !stay.loc || !mapRef.current) return
+        const hasCoords = stay?.loc && typeof stay.loc.lat === 'number' && typeof stay.loc.lng === 'number' && stay.loc.lat !== 0 && stay.loc.lng !== 0
+        if (!stay || !stay.loc || !hasCoords || !mapRef.current) return
 
         if (!window.google || !window.google.maps) {
             const script = document.createElement('script')
             script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=places`
             script.async = true
             script.defer = true
-            script.onload = initMap
+            script.onload = () => initMap()
+            script.onerror = () => {
+                console.warn("StayMap: Failed to load Google Maps")
+                setMapError(true)
+            }
             document.head.appendChild(script)
         } else {
             initMap()
         }
 
         function initMap() {
-            if (!mapRef.current) return
-            
-            const { lat, lng } = stay.loc
-            const position = { lat, lng }
+            try {
+                if (!mapRef.current) return
 
-            const map = new window.google.maps.Map(mapRef.current, {
-                center: position,
-                zoom: 15,
-                mapTypeId: window.google.maps.MapTypeId.ROADMAP,
-                mapTypeControl: false,
-                streetViewControl: false,
-                fullscreenControl: false,
-                styles: [
-                    {
-                        featureType: 'poi',
-                        elementType: 'labels',
-                        stylers: [{ visibility: 'off' }]
-                    }
-                ]
-            })
+                const { lat, lng } = stay.loc
+                const position = { lat, lng }
 
-            const marker = new window.google.maps.Marker({
-                position: position,
-                map: map,
-                icon: {
-                    url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16 0C10.477 0 6 4.477 6 10C6 17.5 16 32 16 32S26 17.5 26 10C26 4.477 21.523 0 16 0ZM16 14C13.791 14 12 12.209 12 10C12 7.791 13.791 6 16 6C18.209 6 20 7.791 20 10C20 12.209 18.209 14 16 14Z" fill="#FF385C"/>
-                        </svg>
-                    `),
-                    scaledSize: new window.google.maps.Size(32, 32),
-                    anchor: new window.google.maps.Point(16, 32)
-                },
-                title: stay.name
-            })
+                const map = new window.google.maps.Map(mapRef.current, {
+                    center: position,
+                    zoom: 15,
+                    mapTypeId: window.google.maps.MapTypeId.ROADMAP,
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    fullscreenControl: false,
+                    styles: [
+                        {
+                            featureType: 'poi',
+                            elementType: 'labels',
+                            stylers: [{ visibility: 'off' }]
+                        }
+                    ]
+                })
 
-            mapInstanceRef.current = map
-            markerRef.current = marker
+                const marker = new window.google.maps.Marker({
+                    position: position,
+                    map: map,
+                    icon: {
+                        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 0C10.477 0 6 4.477 6 10C6 17.5 16 32 16 32S26 17.5 26 10C26 4.477 21.523 0 16 0ZM16 14C13.791 14 12 12.209 12 10C12 7.791 13.791 6 16 6C18.209 6 20 7.791 20 10C20 12.209 18.209 14 16 14Z" fill="#FF385C"/>
+                            </svg>
+                        `),
+                        scaledSize: new window.google.maps.Size(32, 32),
+                        anchor: new window.google.maps.Point(16, 32)
+                    },
+                    title: stay.name
+                })
+
+                mapInstanceRef.current = map
+                markerRef.current = marker
+            } catch (err) {
+                console.warn("StayMap: Failed to initialize map", err)
+                setMapError(true)
+            }
         }
 
         return () => {
@@ -79,12 +90,24 @@ export function StayMap({ stay }: { stay: Stay}) {
         return null
     }
 
+    const hasValidCoords = typeof stay.loc.lat === 'number' && typeof stay.loc.lng === 'number' && stay.loc.lat !== 0 && stay.loc.lng !== 0
+
     return (
         <div className="stay-map">
             <div className="map-header">Where you'll be</div>
             <div className="location-header">{stay.loc.city}, {stay.loc.country}</div>
             <div className="map-container">
-                <div ref={mapRef} className="google-map"></div>
+                {!hasValidCoords ? (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#717171', fontSize: '0.9rem' }}>
+                        Location coordinates not available
+                    </div>
+                ) : mapError ? (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#717171', fontSize: '0.9rem' }}>
+                        Map unavailable
+                    </div>
+                ) : (
+                    <div ref={mapRef} className="google-map"></div>
+                )}
             </div>
         </div>
     )

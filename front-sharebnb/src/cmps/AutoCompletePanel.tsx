@@ -26,7 +26,7 @@ function parseComponents(components: google.maps.GeocoderAddressComponent[] | un
 
 export function AutoCompletePanel({ value, onChange, onComplete, onAdvance }: WherePanelProps) {
     const query = value.address || ""
-    const { ready, getPredictions, getDetails, resetSession } = usePlacesAutocomplete()
+    const { ready, error, getPredictions, getDetails, resetSession } = usePlacesAutocomplete()
     const [items, setItems] = useState<ItemProps[]>([])
 
     useEffect(() => {
@@ -68,6 +68,18 @@ export function AutoCompletePanel({ value, onChange, onComplete, onAdvance }: Wh
             onComplete?.()
         }
     }
+
+    if (error) {
+        return (
+            <div className="where-suggestions">
+                <p style={{ color: '#717171', fontSize: '0.85rem', padding: '8px 0' }}>
+                    Address autocomplete is unavailable — please enter your location manually below.
+                </p>
+            </div>
+        )
+    }
+
+    if (!items.length) return null
 
     return (
         <div className="where-suggestions">

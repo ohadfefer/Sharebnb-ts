@@ -16,6 +16,7 @@ async function uploadImg(ev: React.ChangeEvent<HTMLInputElement>): Promise<any> 
 	
 	try {
 		const res = await fetch(UPLOAD_URL, { method: 'POST', body: formData })
+		if (!res.ok) throw new Error(`Upload failed (${res.status} ${res.statusText})`)
 		const imgData = await res.json()
 		return imgData
 	} catch (err) {

@@ -91,3 +91,4 @@ In development, Express allows CORS from `localhost:5173–5178`. In production,
 ## Conventions
 
 - Don't add ";" at the end of new lines in .tsx or .ts unless necessary
+- All element styling should be added in src/styles/. if needed, create a new css file and import it in main.css

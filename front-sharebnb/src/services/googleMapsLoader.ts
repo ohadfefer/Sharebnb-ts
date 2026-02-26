@@ -25,16 +25,31 @@ export function loadGoogleMapsPlaces(): Promise<void> {
 
     script.src = url
     script.async = true
-    script.defer = true           
+    script.defer = true
 
-    script.onload = () => resolve()        
-    script.onerror = () => reject(new Error("Failed to load Google Maps script"))
+    script.onload = () => {
+      // Check for InvalidKeyMapError after script loads
+      if (!window.google?.maps?.places) {
+        const err = new Error("Google Maps loaded but Places API unavailable — check your API key")
+        console.warn(err.message)
+        reject(err)
+        return
+      }
+      resolve()
+    }
+    script.onerror = () => {
+      console.warn("Failed to load Google Maps script — autocomplete and maps will be unavailable")
+      reject(new Error("Failed to load Google Maps script"))
+    }
 
     document.head.appendChild(script)
   })
 
-  loadingPromise.finally(() => {
-    loadingPromise = undefined
+  // Only reset on success so failed loads don't retry endlessly
+  loadingPromise.then(() => {
+    // keep the resolved promise cached — no reset needed
+  }, () => {
+    // keep the rejected promise cached so we don't re-inject broken scripts
   })
 
   return loadingPromise

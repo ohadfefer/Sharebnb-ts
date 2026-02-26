@@ -17,19 +17,24 @@ function debounce<T extends (...args: any[]) => any>(
 
 export function usePlacesAutocomplete() {
   const [ready, setReady] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const acRef = useRef<google.maps.places.AutocompleteService | null>(null)
   const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null)
 
   useEffect(() => {
     let mounted = true
 
-    loadGoogleMapsPlaces().then(() => {
-      if (!mounted) return
-
-      // No more PlacesService dummy div needed!
-      acRef.current = new google.maps.places.AutocompleteService()
-      setReady(true)
-    })
+    loadGoogleMapsPlaces()
+      .then(() => {
+        if (!mounted) return
+        acRef.current = new google.maps.places.AutocompleteService()
+        setReady(true)
+      })
+      .catch((err) => {
+        if (!mounted) return
+        console.warn("Places autocomplete unavailable:", err.message)
+        setError(err.message || "Google Maps API failed to load")
+      })
 
     return () => {
       mounted = false
@@ -94,5 +99,5 @@ export function usePlacesAutocomplete() {
     sessionTokenRef.current = null
   }
 
-  return { ready, getPredictions, getDetails, resetSession }
+  return { ready, error, getPredictions, getDetails, resetSession }
 }

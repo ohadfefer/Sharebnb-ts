@@ -136,7 +136,7 @@ export function StayEditor() {
     function validate(idx: number) {
         if (idx === 0) return form.name && form.type && +form.price > 0
         if (idx === 1) return form.loc.city && form.loc.country && form.loc.address
-        if (idx === 2) return form.imgUrls.length > 0
+        if (idx === 2) return true
         return true
     }
     function next() { if (validate(step)) setStep(s => Math.min(s + 1, STEPS.length - 1)) }
@@ -232,7 +232,11 @@ export function StayEditor() {
                         <input
                             name="loc.address"
                             value={addressQuery}
-                            onChange={(e) => setAddressQuery(e.target.value)}
+                            onChange={(e) => {
+                                const val = e.target.value
+                                setAddressQuery(val)
+                                setForm(f => ({ ...f, loc: { ...f.loc, address: val } }))
+                            }}
                             placeholder="Type an address or city…"
                         />
                     </div>

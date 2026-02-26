@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 // types
 import { Stay } from '../types/stay.js'
@@ -42,6 +42,8 @@ export function ExploreMap({ stays }: { stays: Stay[] }) {
     const ref = useRef(null)
     const mapRef = useRef<google.maps.Map | null>(null)
     const markersRef = useRef<google.maps.Marker[]>([])
+    const [mapError, setMapError] = useState(false)
+
     useEffect(() => {
         let mounted = true;
 
@@ -65,7 +67,8 @@ export function ExploreMap({ stays }: { stays: Stay[] }) {
                 renderMarkers(stays)
             })
             .catch((err: Error) => {
-                console.error('Maps load failed:', err)
+                console.warn('ExploreMap: Maps load failed:', err.message)
+                if (mounted) setMapError(true)
             })
 
         return () => { mounted = false; }
@@ -112,6 +115,14 @@ export function ExploreMap({ stays }: { stays: Stay[] }) {
                 mapRef.current?.fitBounds(bounds, { top: 40, right: 40, bottom: 40, left: 40 })
             }
         }
+    }
+
+    if (mapError) {
+        return (
+            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#717171', fontSize: '0.9rem' }}>
+                Map unavailable
+            </div>
+        )
     }
 
     return <div ref={ref} style={{ width: '100%', height: '100%' }} />
