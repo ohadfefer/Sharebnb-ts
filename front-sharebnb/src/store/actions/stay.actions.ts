@@ -21,14 +21,14 @@ export async function loadStays(filterBy: StayFilterBy): Promise<Stay[]> {
     
     try {
         store.dispatch({ type: SET_IS_LOADING, isLoading: true })
-        console.log('loadStays -> filterBy:', filterBy)
+        // console.log('loadStays -> filterBy:', filterBy)
         const stays = await stayService.query(filterBy)
-        console.log('loadStays -> stays returned:', stays.length, 'stays')
+        // console.log('loadStays -> stays returned:', stays.length, 'stays')
         
         store.dispatch({ type: SET_STAYS, stays })
         return stays
     } catch (err) {
-        console.log('stay action -> Cannot load stays')
+        // console.log('stay action -> Cannot load stays')
         throw err
     } finally {
         store.dispatch({ type: SET_IS_LOADING, isLoading: false })
@@ -40,7 +40,7 @@ export async function removeStay(stayId: string) {
         await stayService.remove(stayId);
         (store.dispatch as Dispatch)(getCmdRemoveStay(stayId))
     } catch (err) {
-        console.log('Cannot remove stay', err)
+        // console.log('Cannot remove stay', err)
         throw err
     }
 }
@@ -73,13 +73,13 @@ export async function addStayMsg(stayId: string, txt: string) {
         (store.dispatch as Dispatch)(getCmdAddStayMsg(msg))
         return msg
     } catch (err) {
-        console.log('Cannot add stay msg', err)
+        // console.log('Cannot add stay msg', err)
         throw err
     }
 }
 
 export function setFilter(filterBy: Partial<StayFilterBy>) {
-    console.log('from action:', filterBy);
+    // console.log('from action:', filterBy);
     
     store.dispatch({ type: SET_FILTER_BY, filterBy })
 }

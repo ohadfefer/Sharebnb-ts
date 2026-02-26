@@ -168,7 +168,7 @@ async function removeStayMsg(stayId: string, msgId: string): Promise<string> {
 }
 
 function _buildCriteria(filterBy: FilterBy): Record<string, any> {
-	console.log('_buildCriteria -> filterBy:', filterBy)
+	// console.log('_buildCriteria -> filterBy:', filterBy)
 	
 	const criteria = {}
 	const andConditions = []
@@ -185,7 +185,7 @@ function _buildCriteria(filterBy: FilterBy): Record<string, any> {
 	// Address filter - search in city, country, and address fields with flexible matching
 	if (filterBy.address && filterBy.address.trim()) {
 		const searchTerm = filterBy.address.trim().toLowerCase()
-		console.log('Searching for address term:', searchTerm)
+		// console.log('Searching for address term:', searchTerm)
 		
 		// Create flexible search patterns
 		const addressOr = []
@@ -226,7 +226,7 @@ function _buildCriteria(filterBy: FilterBy): Record<string, any> {
 		}
 		
 		andConditions.push({ $or: addressOr })
-		console.log('Adding address filter with', addressOr.length, 'conditions')
+		// console.log('Adding address filter with', addressOr.length, 'conditions')
 	}
 
 	// Date filters
@@ -252,14 +252,14 @@ function _buildCriteria(filterBy: FilterBy): Record<string, any> {
 
 	// Combine all conditions
 	if (andConditions.length === 0) {
-		console.log('No filters applied, returning all stays')
+		// console.log('No filters applied, returning all stays')
 		return {}
 	} else if (andConditions.length === 1) {
-		console.log('Single filter applied:', andConditions[0])
+		// console.log('Single filter applied:', andConditions[0])
 		return andConditions[0]
 	} else {
 		const finalCriteria = { $and: andConditions }
-		console.log('Multiple filters applied:', finalCriteria)
+		// console.log('Multiple filters applied:', finalCriteria)
 		return finalCriteria
 	}
 }

@@ -61,12 +61,12 @@ function getLoggedinUser(): LoggedInUser | null {
 	const storedUser = sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER)
 	if (!storedUser) return null
 	const user: LoggedInUser = JSON.parse(storedUser)
-	console.log('getLoggedinUser called, result:', user)
+	// console.log('getLoggedinUser called, result:', user)
 	return user
 }
 
 function saveLoggedinUser<T>(user: T): T {
-	console.log('saveLoggedinUser called with:', user)
+	// console.log('saveLoggedinUser called with:', user)
 	// user = { 
 	//     _id: user._id, 
 	//     fullname: user.fullname, 

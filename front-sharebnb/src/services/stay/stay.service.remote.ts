@@ -15,7 +15,7 @@ export const stayService: StayServiceRemote = {
 
 async function query(filterBy: StayFilterBy) {
     const f: StayFilterBy = { ...filterBy }
-    console.log('stay.service.remote.query -> original filterBy:', filterBy)
+    // console.log('stay.service.remote.query -> original filterBy:', filterBy)
 
     // Only sum if guests is an object from the UI.
     if (f.guests && typeof f.guests === 'object') {
@@ -29,7 +29,7 @@ async function query(filterBy: StayFilterBy) {
     // If it's a string from URL (?guests=8), make sure it's numeric:
     if (typeof f.guests === 'string') f.guests = parseInt(f.guests, 10) || 0
 
-    console.log('stay.service.remote.query -> processed filter:', f)
+    // console.log('stay.service.remote.query -> processed filter:', f)
     return httpService.get('stay', f)
     // if (filterBy.guests) {
     //     const sum = filterBy.guests.adults +
