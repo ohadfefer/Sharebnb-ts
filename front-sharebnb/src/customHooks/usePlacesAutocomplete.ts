@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import { loadGoogleMapsPlaces } from "../services/googleMapsLoader.js"  
-import { PredictionsProps } from "../types/google-map.js"
+import { loadGoogleMapsPlaces } from "../services/googleMapsLoader.js"
 
 function debounce<T extends (...args: any[]) => any>(
   fn: T,
@@ -13,12 +12,17 @@ function debounce<T extends (...args: any[]) => any>(
   }
 }
 
-
+export interface SuggestionItem {
+  id: string
+  label: string
+  sub: string
+  description: string
+  toPlace: () => google.maps.places.Place
+}
 
 export function usePlacesAutocomplete() {
   const [ready, setReady] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const acRef = useRef<google.maps.places.AutocompleteService | null>(null)
   const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null)
 
   useEffect(() => {
@@ -27,7 +31,6 @@ export function usePlacesAutocomplete() {
     loadGoogleMapsPlaces()
       .then(() => {
         if (!mounted) return
-        acRef.current = new google.maps.places.AutocompleteService()
         setReady(true)
       })
       .catch((err) => {
@@ -43,9 +46,8 @@ export function usePlacesAutocomplete() {
 
   const getPredictions = useMemo(
     () =>
-      debounce((input: string, cb: (preds: PredictionsProps[]) => void) => {
-        const svc = acRef.current
-        if (!svc || !input.trim() || input.trim().length < 2) {
+      debounce((input: string, cb: (items: SuggestionItem[]) => void) => {
+        if (!input.trim() || input.trim().length < 2) {
           return cb([])
         }
 
@@ -53,42 +55,48 @@ export function usePlacesAutocomplete() {
           sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken()
         }
 
-        svc.getPlacePredictions(
-          {
-            input,
-            sessionToken: sessionTokenRef.current,
-          },
-          (predictions, status) => {
-            const isOK = status === google.maps.places.PlacesServiceStatus.OK
-            cb(isOK && Array.isArray(predictions) ? predictions.slice(0, 5) : [])
-          }
-        )
+        const request: google.maps.places.AutocompleteRequest = {
+          input,
+          sessionToken: sessionTokenRef.current,
+        }
+
+        google.maps.places.AutocompleteSuggestion
+          .fetchAutocompleteSuggestions(request)
+          .then(({ suggestions }) => {
+            const items: SuggestionItem[] = (suggestions || [])
+              .slice(0, 5)
+              .filter(s => s.placePrediction)
+              .map(s => {
+                const p = s.placePrediction!
+                const mainText = p.mainText?.text || p.text?.text || ""
+                const secondaryText = p.secondaryText?.text || ""
+                return {
+                  id: p.placeId,
+                  label: mainText,
+                  sub: secondaryText,
+                  description: p.text?.text || mainText,
+                  toPlace: () => p.toPlace(),
+                }
+              })
+            cb(items)
+          })
+          .catch(() => cb([]))
       }, 200),
     []
   )
 
   async function getDetails(
-    placeId: string,
+    place: google.maps.places.Place,
     fields: string[] = [
-      "location",              // lat/lng → geometry.location
-      "addressComponents",     // structured parts
-      "formattedAddress",      // full readable address
-      "displayName",           // place name
+      "location",
+      "addressComponents",
+      "formattedAddress",
+      "displayName",
     ]
-  ): Promise<any | null> {   // replace 'any' with proper PlaceResult type if you define it
-    if (!placeId) return null
-
+  ): Promise<google.maps.places.Place | null> {
     try {
-      // Create a Place object from the place_id (from prediction)
-      const place = new google.maps.places.Place({ id: placeId })
-
-      // Automatically uses the session token if it was part of the prediction flow
-      // (no need to pass it manually in most cases with AutocompleteService)
-
       await place.fetchFields({ fields })
-
-      // The place object now has the requested fields populated
-      return place  // or return a custom shape: { lat: place.location?.lat(), ... }
+      return place
     } catch (err) {
       console.error("Place fetch failed:", err)
       return null

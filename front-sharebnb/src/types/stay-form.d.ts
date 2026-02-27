@@ -7,8 +7,8 @@ export interface StayFormData {
         city: string
         country: string
         countryCode: string
-        lat: number 
-        lng: number
+        lat: number | null
+        lng: number | null
     }
     imgUrls: string[]
     capacity: number

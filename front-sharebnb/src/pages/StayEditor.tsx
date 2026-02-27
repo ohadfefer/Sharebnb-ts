@@ -135,7 +135,7 @@ export function StayEditor() {
 
     function validate(idx: number) {
         if (idx === 0) return form.name && form.type && +form.price > 0
-        if (idx === 1) return form.loc.city && form.loc.country && form.loc.address
+        if (idx === 1) return form.loc.city && form.loc.country && form.loc.address && form.loc.lat != null && form.loc.lng != null
         if (idx === 2) return true
         return true
     }
@@ -163,8 +163,13 @@ export function StayEditor() {
         try {
             const payload = {
                 ...form,
-                _id: isEditMode ? stayId : '',
+                ...(isEditMode && { _id: stayId }),
                 price: +form.price,
+                loc: {
+                    ...form.loc,
+                    lat: form.loc.lat ?? 0,
+                    lng: form.loc.lng ?? 0,
+                },
                 host: {
                     _id: loggedinUser?._id,
                     fullname: loggedinUser?.fullname,

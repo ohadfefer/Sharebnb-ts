@@ -1,23 +1,21 @@
-// cmps/AutoCompletePanel.jsx
 import { useEffect, useState } from "react"
-import { usePlacesAutocomplete } from "../customHooks/usePlacesAutocomplete.js"
+import { usePlacesAutocomplete, SuggestionItem } from "../customHooks/usePlacesAutocomplete.js"
 import location from "../assets/imgs/location.png"
 
 // types
 import { WherePanelProps } from "./WherePanel.js"
-import { ItemProps, PredictionsProps } from "../types/google-map.js"
 
-function parseComponents(components: google.maps.GeocoderAddressComponent[] | undefined) {
+function parseComponents(components: google.maps.places.AddressComponent[] | undefined) {
     if (components) {
         const out = {} as any
         for (const c of components) {
             const t = c.types || []
-            if (t.includes('country')) { out.country = c.long_name; out.countryCode = c.short_name }
-            if (t.includes('locality')) out.city = c.long_name
-            if (t.includes('postal_town') && !out.city) out.city = c.long_name
-            if (t.includes('administrative_area_level_2') && !out.city) out.city = c.long_name
-            if (t.includes('route')) out.route = c.long_name
-            if (t.includes('street_number')) out.streetNumber = c.long_name
+            if (t.includes('country')) { out.country = c.longText; out.countryCode = c.shortText }
+            if (t.includes('locality')) out.city = c.longText
+            if (t.includes('postal_town') && !out.city) out.city = c.longText
+            if (t.includes('administrative_area_level_2') && !out.city) out.city = c.longText
+            if (t.includes('route')) out.route = c.longText
+            if (t.includes('street_number')) out.streetNumber = c.longText
         }
         out.street = [out.streetNumber, out.route].filter(Boolean).join(' ')
         return out
@@ -27,36 +25,29 @@ function parseComponents(components: google.maps.GeocoderAddressComponent[] | un
 export function AutoCompletePanel({ value, onChange, onComplete, onAdvance }: WherePanelProps) {
     const query = value.address || ""
     const { ready, error, getPredictions, getDetails, resetSession } = usePlacesAutocomplete()
-    const [items, setItems] = useState<ItemProps[]>([])
+    const [items, setItems] = useState<SuggestionItem[]>([])
 
     useEffect(() => {
-        if (!ready || query.trim().length < 2) { setItems([]); return; }
-        getPredictions(query, (preds: PredictionsProps[]) =>
-            setItems((preds || []).slice(0, 5).map(p => ({
-                id: p.place_id,
-                label: p.structured_formatting?.main_text || p.description,
-                sub: p.structured_formatting?.secondary_text || "",
-                description: p.description,
-            })))
-        )
+        if (!ready || query.trim().length < 2) { setItems([]); return }
+        getPredictions(query, (suggestions) => setItems(suggestions))
     }, [ready, query, getPredictions])
 
-    async function select(item: ItemProps) {
+    async function select(item: SuggestionItem) {
         const fallbackAddress = item.description || item.label
         try {
-            const details = await getDetails(item.id, ['geometry', 'address_components', 'formatted_address', 'name'])
-            const comps = parseComponents(details?.address_components)
-            const lat = details?.geometry?.location?.lat?.()
-            const lng = details?.geometry?.location?.lng?.()
-            const address = details?.formatted_address || fallbackAddress
+            const place = await getDetails(item.toPlace())
+            const comps = parseComponents(place?.addressComponents)
+            const lat = place?.location?.lat()
+            const lng = place?.location?.lng()
+            const address = place?.formattedAddress || fallbackAddress
 
             onChange?.({
                 placeId: item.id,
                 address,
-                city: comps.city || '',
-                country: comps.country || '',
-                countryCode: comps.countryCode || '',
-                street: comps.street || '',
+                city: comps?.city || '',
+                country: comps?.country || '',
+                countryCode: comps?.countryCode || '',
+                street: comps?.street || '',
                 lat, lng
             })
         } catch {
@@ -104,4 +95,3 @@ export function AutoCompletePanel({ value, onChange, onComplete, onAdvance }: Wh
         </div>
     )
 }
-

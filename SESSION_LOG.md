@@ -36,3 +36,23 @@ Both issues require updating external credentials (Google Cloud Console and Clou
 
 ### Files modified
 - `front-sharebnb/src/services/socket.service.ts` (added `testConnection` and `ensureUserLoggedIn` to dummy service)
+
+## 2/27 - Google Places API Migration & StayEditor Fixes
+
+### Positive Progress
+- Migrated Google Maps Places API from deprecated `AutocompleteService` to new `AutocompleteSuggestion.fetchAutocompleteSuggestions()` in `usePlacesAutocomplete.ts`
+- Migrated `PlacesService.getDetails()` to `Place.fetchFields()` with correct new field names (`location`, `addressComponents`, `formattedAddress`, `displayName`)
+- Updated `AutoCompletePanel.tsx` to use new `SuggestionItem` type with `toPlace()` pattern instead of old `PredictionsProps`
+- Updated `parseComponents()` to use new `AddressComponent` type (`longText`/`shortText` instead of `long_name`/`short_name`)
+- Enabled new Places API (`places.googleapis.com`) in GCP console for project
+- Fixed bug where new stays were POSTed with empty `_id: ''` causing MongoDB insert failure — changed to conditionally spread `_id` only in edit mode
+- Fixed `lat`/`lng` typed as `number` but initialized as `null` — updated `StayFormData` type, added `?? 0` guard in payload, and added validation requiring geocoords before advancing past Location step
+- Removed obsolete `PlaceResult` and `PredictionsProps` types from `google-map.d.ts`
+- Verified autocomplete search and place selection working end-to-end with zero console errors via browser automation
+
+### Files modified
+- `front-sharebnb/src/customHooks/usePlacesAutocomplete.ts` (full rewrite — new API)
+- `front-sharebnb/src/cmps/AutoCompletePanel.tsx` (new types, new API response shape)
+- `front-sharebnb/src/types/google-map.d.ts` (removed obsolete types)
+- `front-sharebnb/src/types/stay-form.d.ts` (`lat`/`lng` now `number | null`)
+- `front-sharebnb/src/pages/StayEditor.tsx` (fixed `_id`, `lat`/`lng` guard, validation)

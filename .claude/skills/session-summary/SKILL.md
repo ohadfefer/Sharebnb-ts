@@ -1,6 +1,6 @@
 ---
 name: session-summary
-description: Generates a structured summary of the current development session. Only run when the user explicitly invokes /session-summary.
+description: Write a structured summary of the current development session for SESSION_LOG.md. Only run when the user explicitly invokes /session-summary.
 ---
 
 ## Before generating the summary
@@ -20,29 +20,26 @@ Example: `## 2/26 - Stay Editor Fixes`
 
 ### Categories
 
-Include only the categories relevant to the session. Use HTML `<span>` tags for color:
+Include only the categories relevant to the session.
 
-**Positive** — `<span style="color:green">### Positive Progress</span>`
-Features that were added, bugs that were fixed, improvements shipped.
+**Positive** — Features that were added, bugs that were fixed, improvements shipped.
 
-**Negative** — `<span style="color:red">### Negative Progress</span>`
-Things the user tried but failed: bugs still unresolved, UI/UX still broken, blocked features.
+**Negative** — Things the user tried but failed: bugs still unresolved, UI/UX still broken, blocked features.
 
-**Pending** — `<span style="color:orange">### Pending Progress</span>`
-Work heading in the right direction but not yet completed when the skill was called.
+**Pending** — Work heading in the right direction but not yet completed when the skill was called.
 
 ### Example output
 
 ```
 ## 2/26 - Stay Editor Fixes
 
-<span style="color:green">### Positive Progress</span>
+### Positive Progress
 - Fixed crash on empty order list
 - Added stay filtering by location
 
-<span style="color:red">### Negative Progress</span>
+### Negative Progress
 - Google Maps API still broken — key configuration unresolved
 
-<span style="color:orange">### Pending Progress</span>
+### Pending Progress
 - Stay Editor form partially wired to Redux, not yet complete
 ```
