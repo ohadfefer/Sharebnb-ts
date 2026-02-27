@@ -3,8 +3,8 @@ export const uploadService = {
 }
 
 async function uploadImg(ev: React.ChangeEvent<HTMLInputElement>): Promise<any> {
-	const CLOUD_NAME = 'vanilla-test-images'
-	const UPLOAD_PRESET = 'stavs_preset'
+	const CLOUD_NAME = 'devvappxu' 
+	const UPLOAD_PRESET = 'Sharebnb-ts'
 	const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
 
 	const file =  ev.target.files?.[0]
