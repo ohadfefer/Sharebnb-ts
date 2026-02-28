@@ -41,7 +41,7 @@ export function AppFooter({ year = new Date().getFullYear() }) {
 	]
 
 	return (
-		<footer className="af-footer">
+		<footer className="af-footer full">
 			<div className="af-container">
 				<div className="af-cols">
 					{columns.map(({ title, links }) => (

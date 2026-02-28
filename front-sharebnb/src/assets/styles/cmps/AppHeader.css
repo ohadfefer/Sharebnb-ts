@@ -7,7 +7,7 @@
   --nav-translate: 0px;
 
   height: var(--h-current);
-
+  pointer-events: none;
   transition:
     height 0.8s cubic-bezier(.2, .8, .2, 1),
     padding 1s cubic-bezier(.2, .8, .2, 1),
@@ -15,7 +15,6 @@
     transform 1s ease;
 
   top: 0;
-  z-index: 100;
   display: grid;
   grid-template-rows: auto;
   background: linear-gradient(#fff, #f8f8f8);
@@ -33,13 +32,9 @@
 
 .app-header.is-expanded .header-main {
   grid-area: header-main;
-  grid-column: 1 / -1;
-  grid-template-rows: auto auto;
   justify-self: center;
-  justify-content: space-between;
   width: 100%;
-  row-gap: 8px;
-  align-items: start;
+  padding-top: 20px;
 }
 
 .filter {
@@ -69,12 +64,16 @@
 .app-header.is-sticky {
   position: sticky;
   top: 0;
+  z-index: 100;
 }
 
 .nav-bar {
   display: grid;
-  grid-template-columns: max-content auto max-content;
-  grid-template-areas: "logo header-main side-links";
+  grid-template-columns: max-content 1fr max-content;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "logo nav-links side-links"
+    "header-main header-main header-main";
   align-items: center;
   height: 100%;
   transition: height 0.4s ease, padding 1s ease;
@@ -83,12 +82,10 @@
 .logo {
   grid-area: logo;
   display: flex;
-  align-self: flex-start;
+  align-self: center;
   justify-self: start;
   gap: 4px;
   text-decoration: none;
-  padding-top: 0.5em;
-  margin-top: 8px;
   z-index: 10;
 }
 
@@ -100,11 +97,9 @@
 
 .nav-links {
   grid-area: nav-links;
-  display: grid;
-  grid-template-columns: repeat(3, max-content);
+  display: flex;
   justify-content: center;
-  align-items: start;
-  align-self: start;
+  align-items: center;
   gap: 24px;
 
   opacity: var(--nav-opacity);
@@ -117,11 +112,11 @@
   font-family: Roboto;
   font-size: 32px;
   text-decoration: none;
-  padding: 0px 12px 24px 12px;
+  padding: 4px 12px;
   border-radius: 360px;
 
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
 
   transition: background-color 0.2s ease, color 0.2s ease;
@@ -173,11 +168,10 @@
   grid-area: side-links;
   display: flex;
   justify-self: flex-end;
-  align-self: flex-start;
+  align-self: center;
   gap: 16px;
   z-index: 10;
   width: max-content;
-  margin-top: 10px;
 
   img {
     padding: 4px;
@@ -227,11 +221,9 @@
 
 @media (min-width: 769px) {
 
-  /* keep your current padding so there's room for the bar */
   .nav-links a {
     position: relative;
-    padding: 0 12px 24px;
-    /* bottom space for the underline */
+    padding: 4px 12px 12px;
   }
 
   .nav-links a .nav-text {

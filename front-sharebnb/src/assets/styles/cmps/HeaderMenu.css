@@ -1,6 +1,7 @@
 .nav-bar {
     position: relative;
     isolation: isolate;
+    pointer-events: auto;
 }
 
 .app-header .header-main {
@@ -51,8 +52,7 @@
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
-    z-index: 60;
-    /* above everything inside header */
+    z-index: 200;
     width: 265px;
     max-width: min(90vw, 380px);
     background: #fff;

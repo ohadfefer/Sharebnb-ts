@@ -3,6 +3,7 @@
 	display: grid;
 	place-items: center;
 	padding: 24px 12px;
+	margin-bottom: 30px;
 }
 
 .login-form, .signup-form {
