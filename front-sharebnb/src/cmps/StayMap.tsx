@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Stay } from '../types/stay.js'
 
-const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY_DETAILS;
+const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 export function StayMap({ stay }: { stay: Stay}) {
     const mapRef = useRef<HTMLDivElement>(null)

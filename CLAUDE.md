@@ -84,7 +84,7 @@ The codebase is mid-migration from JavaScript to TypeScript. Backend has `allowJ
 
 **Backend** (`.env`): `SERVER_URL`, `MONGO_URL`, `DB_NAME`, `QSTASH_URL`, `QSTASH_TOKEN`, `EMAIL_PASSWORD`, `ACCOUNT_EMAIL`
 
-**Frontend** (`.env`): `VITE_GOOGLE_MAPS_API_KEY`, `VITE_GOOGLE_MAPS_API_KEY_DETAILS`
+**Frontend** (`.env`): `VITE_GOOGLE_MAPS_API_KEY`
 
 In development, Express allows CORS from `localhost:5173–5178`. In production, it serves the SPA from `public/` with a catch-all fallback to `public/index.html`.
 

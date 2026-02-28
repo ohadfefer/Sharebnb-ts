@@ -45,7 +45,6 @@ ACCOUNT_EMAIL=<your-email>
 **Frontend** (`front-sharebnb/.env`):
 ```
 VITE_GOOGLE_MAPS_API_KEY=<your-key>
-VITE_GOOGLE_MAPS_API_KEY_DETAILS=<your-key>
 ```
 
 ### Running in Development
