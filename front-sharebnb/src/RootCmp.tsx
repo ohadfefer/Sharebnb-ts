@@ -67,7 +67,7 @@ export function RootCmp() {
                 </Routes>
             </main>
             <AppFooter />
-            <MobileTabBar forceHide={true}/>
+            <MobileTabBar forceHide={false}/>
         </div>
     )
 }

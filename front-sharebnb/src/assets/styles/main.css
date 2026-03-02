@@ -9,7 +9,7 @@
 /* @import "RootCmp"; */
 
 /* @import "cmps/AboutUs"; */
-/* @import "cmps/UserDetails"; */
+@import "cmps/UserDetails.css";
 @import "cmps/LoginSignup";
 /* @import "cmps/Chat"; */
 @import "cmps/DateRangePicker";

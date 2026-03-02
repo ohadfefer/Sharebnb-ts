@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 import { loadUser } from '../store/actions/user.actions.js'
 import { store } from '../store/store.js'
@@ -11,9 +10,10 @@ import { useAppSelector } from '../store/hooks.js'
 import { WatchedUser } from '../types/user.js'
 
 export function UserDetails() {
-
   const params = useParams()
   const user = useAppSelector(storeState => storeState.userModule.watchedUser)
+  const loggedInUser = useAppSelector(storeState => storeState.userModule.user)
+  const isOwnProfile = loggedInUser && user && loggedInUser._id === user._id
 
   useEffect(() => {
     if (params.id) loadUser(params.id)
@@ -24,7 +24,6 @@ export function UserDetails() {
     return () => {
       socketService.off(SOCKET_EVENT_USER_UPDATED, onUserUpdate as any)
     }
-
   }, [params.id])
 
   function onUserUpdate(user: WatchedUser) {
@@ -32,16 +31,48 @@ export function UserDetails() {
     store.dispatch({ type: 'SET_WATCHED_USER', user })
   }
 
+  if (!user) return <div className="user-details-loading">Loading...</div>
+
+  const initial = user.fullname?.charAt(0)?.toUpperCase() || '?'
+
   return (
     <section className="user-details">
-      <h1>User Details</h1>
-      {user && <div>
-        <h3>
-          {user.fullname}
-        </h3>
-        <img src={user.imgUrl} style={{ width: '100px' }} />
-        <pre> {JSON.stringify(user, null, 2)} </pre>
-      </div>}
+      <div className="ud-card">
+        <div className="ud-avatar-section">
+          {user.imgUrl ? (
+            <img className="ud-avatar" src={user.imgUrl} alt={user.fullname} />
+          ) : (
+            <div className="ud-avatar-placeholder">{initial}</div>
+          )}
+          <h1 className="ud-name">{user.fullname}</h1>
+        </div>
+
+        <div className="ud-info">
+          {user.username && (
+            <div className="ud-info-row">
+              <span className="ud-info-label">Username</span>
+              <span className="ud-info-value">@{user.username}</span>
+            </div>
+          )}
+          {user.email && (
+            <div className="ud-info-row">
+              <span className="ud-info-label">Email</span>
+              <span className="ud-info-value">{user.email}</span>
+            </div>
+          )}
+        </div>
+
+        {isOwnProfile && (
+          <div className="ud-actions">
+            <Link to="/dashboard/reservations" className="ud-btn-primary">
+              Manage reservations
+            </Link>
+            <Link to="/dashboard/listings" className="ud-btn-secondary">
+              Manage listings
+            </Link>
+          </div>
+        )}
+      </div>
     </section>
   )
 }

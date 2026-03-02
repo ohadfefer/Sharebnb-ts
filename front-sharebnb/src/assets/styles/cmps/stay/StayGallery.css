@@ -119,6 +119,7 @@
         
         .gallery-grid {
             display: block;
+            height: auto;
             aspect-ratio: unset;
             border-radius: 0;
             margin: 0;
