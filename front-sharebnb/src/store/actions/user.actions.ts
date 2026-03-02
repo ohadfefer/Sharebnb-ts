@@ -5,24 +5,28 @@ import { store } from '../store.js'
 import { showErrorMsg } from '../../services/event-bus.service.js'
 import { LOADING_DONE, LOADING_START } from '../reducers/system.reducer.js'
 import { REMOVE_USER, SET_USER, SET_USERS, SET_WATCHED_USER, INIT_USER } from '../reducers/user.reducer.js'
+import { SET_STAYS, SET_FILTER_BY } from '../reducers/stay.reducer.js'
+import { SET_ORDERS } from '../reducers/order.reducer.js'
+import { stayService } from '../../services/stay/index.js'
 import type { LoggedInUser, LoginCredentials, SignupCredentials, WatchedUser } from '../../types/user.js'
 
-export function initUser(): void {
-    // console.log('initUser called')
-    const user = userService.getLoggedinUser() as LoggedInUser | null
-    // console.log('initUser - user from service:', user)
-    if (user) {
-        // console.log('initUser - dispatching INIT_USER action')
-        store.dispatch({
-            type: INIT_USER,
-            user
-        })
-        if (user._id) socketService.login(user._id)
-    } else {
+export async function initUser(): Promise<void> {
+    try {
+        // console.log('initUser called')
+        const user = userService.getLoggedinUser() as LoggedInUser | null
+        // console.log('initUser - user from service:', user)
+        if (user) {
+            // console.log('initUser - dispatching INIT_USER action')
+            store.dispatch({
+                type: INIT_USER,
+                user
+            })
+            if (user._id) socketService.login(user._id)
+        }
+    } catch (err) {
         console.log('initUser - no user found in sessionStorage')
     }
 }
-
 export async function loadUsers(): Promise<void> {
     try {
         store.dispatch({ type: LOADING_START })
@@ -78,10 +82,10 @@ export async function signup(credentials: SignupCredentials): Promise<LoggedInUs
 export async function logout(): Promise<void> {
     try {
         await userService.logout()
-        store.dispatch({
-            type: SET_USER,
-            user: null
-        })
+        store.dispatch({ type: SET_USER, user: null })
+        store.dispatch({ type: SET_FILTER_BY, filterBy: stayService.getDefaultFilter() })
+        store.dispatch({ type: SET_STAYS, stays: [] })
+        store.dispatch({ type: SET_ORDERS, orders: [] })
         socketService.logout()
     } catch (err) {
         console.log('Cannot logout', err)

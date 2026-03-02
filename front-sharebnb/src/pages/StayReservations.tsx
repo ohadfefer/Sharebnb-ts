@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import { loadOrders, setFilter as setOrderFilter } from '../store/actions/order.actions.js' // EDIT
+import { loadOrders } from '../store/actions/order.actions.js'
 import { formatDateMMDDYYYY as fmtDate, formatMoney } from '../services/util.service.js'
 import { KpiCards } from '../cmps/KpiCards.jsx'
 import { ReservationsToolbar } from '../cmps/ReservationsToolbar.jsx'
@@ -21,15 +21,12 @@ export function StayReservations() {
     const [status, setStatus] = useState('all') // all | pending | approved | rejected | completed
 
     useEffect(() => {
-        setFilter({ hostId: user?._id })
-        onLoadOrders()
-    }, [])
-
-    async function onLoadOrders() {
-        console.log(filterBy)
-        const orders = await loadOrders(filterBy)
-        console.log(orders)
-    }
+        if (!user?._id) return
+        const filter = { hostId: user._id }
+        setFilter(filter)
+        loadOrders(filter)
+        return () => { setFilter({}) }
+    }, [user?._id])
 
     // filter client-side for now
     const rows = useMemo(() => {

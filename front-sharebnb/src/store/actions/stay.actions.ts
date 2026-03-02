@@ -13,12 +13,11 @@ import {
 } from '../reducers/stay.reducer.js'
 import { Dispatch } from 'redux'
 
-export async function loadStays(filterBy: StayFilterBy): Promise<Stay[]> {
-    
+export async function loadStays(filterBy?: StayFilterBy): Promise<Stay[]> {
     if (!filterBy) {
-        const { filterBy } = store.getState().stayModule
+        filterBy = store.getState().stayModule.filterBy
     }
-    
+
     try {
         store.dispatch({ type: SET_IS_LOADING, isLoading: true })
         // console.log('loadStays -> filterBy:', filterBy)

@@ -175,10 +175,9 @@ function _buildCriteria(filterBy: FilterBy): Record<string, any> {
 
 	// Host ID filter
 	if (filterBy.hostId) {
-		const hostIdOr = [{ 'host._id': filterBy.hostId }]
-		try {
-			hostIdOr.push({ 'host._id': ObjectId.createFromHexString(filterBy.hostId).toString() })
-		} catch (e) { }
+		const hostOid = _asObjectId(filterBy.hostId)
+		const hostIdOr: Record<string, any>[] = [{ 'host._id': filterBy.hostId }]
+		if (hostOid) hostIdOr.push({ 'host._id': hostOid })
 		andConditions.push({ $or: hostIdOr })
 	}
 

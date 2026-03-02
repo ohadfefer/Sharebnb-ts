@@ -71,4 +71,5 @@ export interface Stay {
     guestFavorit?: boolean
     isGuestFavorite?: boolean
     wishlist?: { userId: string; addedAt: string }[]
+    createdAt?: Date
 }

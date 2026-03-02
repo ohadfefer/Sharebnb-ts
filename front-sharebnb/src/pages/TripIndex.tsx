@@ -4,7 +4,6 @@ import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { loadOrders, setFilter, setupOrderSocketListeners, cleanupOrderSocketListeners } from "../store/actions/order.actions.js" // EDIT
 import { useAppSelector } from "../store/hooks.js"
-import { OrderFilterBy } from "../types/order.js"
 
 function formatDate(iso: string | Date) {
   if (!iso) return "—"
@@ -40,12 +39,11 @@ export function TripIndex() {
 
   // Set the backend filter to the logged-in user's id (guest) and load orders.
   useEffect(() => {
-    // Handle guest mode - if no user is logged in, use a default guest user ID
-    const userId = user?._id || ''
-    console.log('TripIndex - setting filter with userId:', userId)
-    setFilter({ userId : userId}) // backend aliases userId -> guestId
-    onLoadOrders(filterBy)
-    console.log(orders)
+    if (!user?._id) return
+    const filter = { userId: user._id }
+    setFilter(filter)
+    loadOrders(filter)
+    return () => { setFilter({}) }
   }, [user?._id])
 
   // Set up socket listeners for real-time order updates
@@ -66,11 +64,6 @@ export function TripIndex() {
       cleanupOrderSocketListeners()
     }
   }, [])
-
-  async function onLoadOrders(filterBy: OrderFilterBy) {
-    await loadOrders(filterBy)
-    console.log(orders)
-  }
 
   function handleRowClick(stayId: string) {
     if (stayId) navigate(`/stay/${stayId}`)

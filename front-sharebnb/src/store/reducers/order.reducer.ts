@@ -28,8 +28,8 @@ export function orderReducer(state: OrderState = initialState, action: OrderActi
     switch (action.type) {
         case SET_IS_LOADING:
             return { ...state, isLoading: action.isLoading }
-        case SET_FILTER_BY: 
-            return { ...state, filterBy: { ...state.filterBy, ...action.filterBy } }
+        case SET_FILTER_BY:
+            return { ...state, filterBy: action.filterBy }
         case SET_ORDERS:
             return { ...state, orders: action.orders }
         case ADD_ORDER:

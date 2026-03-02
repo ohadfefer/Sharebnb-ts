@@ -1,4 +1,5 @@
 // import { log } from '../../middlewares/logger.middleware.js'
+import { ObjectId } from 'mongodb'
 import { Request, Response } from 'express'
 import { logger } from '../../services/logger.service.js'
 import { stayService } from './stay.service.js'
@@ -63,16 +64,13 @@ export async function addStay(req: AuthenticatedRequest, res: Response) {
 		}
 
 		stay.host = loggedinUser ? {
-			_id: loggedinUser._id,
+			_id: new ObjectId(loggedinUser._id as string),
 			fullname: loggedinUser.fullname,
 			pictureUrl: hostImgUrl,
 		} : undefined
 
-		// Debug logs to verify host assignment
-		logger.info('addStay -> loggedinUser:', loggedinUser)
-		logger.info('addStay -> loggedinUser.imgUrl:', loggedinUser?.imgUrl)
-		logger.info('addStay -> final hostImgUrl:', hostImgUrl)
-		logger.info('addStay -> final stay payload host:', stay.host)
+		stay.createdAt = new Date()
+
 		const addedStay: Stay = await stayService.add(stay)
 		res.json(addedStay)
 	} catch (err) {

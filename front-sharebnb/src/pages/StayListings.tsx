@@ -13,11 +13,11 @@ export function StayListings() {
 
     useEffect(() => {
         if (!loggedInUser?._id) return
-        setFilter({ hostId: loggedInUser._id })  // EDIT
-        loadStays({} as StayFilterBy)                              // EDIT
+        const filter = { hostId: loggedInUser._id } as StayFilterBy
+        setFilter(filter)
+        loadStays(filter)
         return () => {
-            // NEW: clear host filter when leaving dashboard
-            setFilter({ hostId: '' })
+            setFilter({ hostId: '' } as StayFilterBy)
         }
     }, [loggedInUser?._id])
 
@@ -106,9 +106,7 @@ export function StayListings() {
                                 <td className="location-cell">
                                     {stay.loc?.city}{stay.loc?.city && stay.loc?.country ? ', ' : ''}{stay.loc?.country}
                                 </td>
-                                {/* missing 'createdAt' property on Stay type */}
-                                {/* <td className="date-cell">{formatDate(stay.createdAt || stay.at)}</td> */} 
-                                <td className="date-cell">{formatDate('')}</td>
+                                <td className="date-cell">{formatDate(stay.createdAt as any || '')}</td>
                             </tr>
                         ))}
                     </tbody>
