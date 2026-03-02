@@ -24,10 +24,13 @@
   margin-bottom: 28px;
 }
 
-.app-header.is-unset .nav-bar {
+/* this setting aligned the logo and hamburger menu in appheader
+with the main grid of the details page. not needed.*/
+
+/* .app-header.is-unset .nav-bar {
   margin: 0 auto;
   grid-template-columns: max-content minmax(auto, 820px) max-content;
-}
+} */
 
 
 .app-header.is-expanded .header-main {

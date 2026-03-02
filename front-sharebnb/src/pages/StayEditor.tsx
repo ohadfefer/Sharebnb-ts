@@ -136,7 +136,7 @@ export function StayEditor() {
     function validate(idx: number) {
         if (idx === 0) return form.name && form.type && +form.price > 0
         if (idx === 1) return form.loc.city && form.loc.country && form.loc.address && form.loc.lat != null && form.loc.lng != null
-        if (idx === 2) return true
+        if (idx === 2) return form.imgUrls.length >= 5
         return true
     }
     function next() { if (validate(step)) setStep(s => Math.min(s + 1, STEPS.length - 1)) }
@@ -285,6 +285,7 @@ export function StayEditor() {
                         <input type="file" accept="image/*" onChange={onFileInput} />
                         <span>Drop or click to upload</span>
                     </div>
+                    <p className="hint">{form.imgUrls.length < 5 ? `${form.imgUrls.length}/5 photos uploaded — at least 5 required` : '' } </p>
                     {!!form.imgUrls.length && (
                         <ul className="thumbs">
                             {form.imgUrls.map((u, i) => (

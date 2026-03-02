@@ -2,6 +2,8 @@
 
 A full-featured Airbnb clone with property listings, bookings, reviews, real-time chat, and a host dashboard.
 
+[Live Demo](https://sharebnb-ts.onrender.com)
+
 ## Tech Stack
 
 | Layer | Technologies |
