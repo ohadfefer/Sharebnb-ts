@@ -19,7 +19,7 @@ export const orderService = {
 }
 
 function query(params: OrderFilterBy): Promise<AggregateOrder[]> {
-    console.log('filter orders in backend --->', params)
+    // console.log('filter orders in backend --->', params)
     return httpService.get<AggregateOrder[]>('order', params)
 }
 
@@ -28,13 +28,13 @@ function getById(orderId: string): Promise<OrderBackend> {
 }
 
 async function save(order: Order): Promise<AggregateOrder> {
-    console.log('Saving order in remote service:', order)
+    // console.log('Saving order in remote service:', order)
     var savedOrder: AggregateOrder
     if (order._id) {
-        console.log('Updating existing order:', order._id)
+        // console.log('Updating existing order:', order._id)
         savedOrder = await httpService.put<AggregateOrder>(`order/${order._id}`, order)
     } else {
-        console.log('Creating new order')
+        // console.log('Creating new order')
         savedOrder = await httpService.post<AggregateOrder>('order', order)
     }
     // console.log('Order saved successfully:', savedOrder)
@@ -47,7 +47,7 @@ async function remove(orderId: string): Promise<void> {
 
 async function updateStatus(orderId: string, status: OrderStatus): Promise<AggregateOrder> {
     try {
-        console.log(orderId, status, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        // console.log(orderId, status, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         const order = await getById(orderId)
         const updatedOrder: Order = { ...order, status }
         
@@ -73,7 +73,7 @@ async function createOrder(
         // const { userService } = await import('../user')
         const loggedInUser = userService.getLoggedinUser()
 
-        console.log('Creating order with:', { stayId, stayData, overrides, loggedInUser })
+        // console.log('Creating order with:', { stayId, stayData, overrides, loggedInUser })
 
         // Handle guest mode - if no user is logged in, use a default guest user ID
         const userId = loggedInUser?._id || 'guest-user-id'
@@ -98,7 +98,7 @@ async function createOrder(
             hostId = 'u102'
         }
 
-        console.log('Extracted hostId:', hostId, 'from stayData:', stayData)
+        // console.log('Extracted hostId:', hostId, 'from stayData:', stayData)
 
         const newOrder = {
             userId: userId,
@@ -117,9 +117,9 @@ async function createOrder(
             createdAt: new Date().toISOString()
         }
 
-        console.log('Saving order:', newOrder)
+        // console.log('Saving order:', newOrder)
         const savedOrder = await save(newOrder as Order)
-        console.log('Order saved successfully:', savedOrder)
+        // console.log('Order saved successfully:', savedOrder)
         return savedOrder
     } catch (err) {
         console.error('Error creating order:', err)

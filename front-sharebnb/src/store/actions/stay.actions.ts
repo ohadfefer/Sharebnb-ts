@@ -50,7 +50,7 @@ export async function addStay(stay: Stay) {
         (store.dispatch as Dispatch)(getCmdAddStay(savedStay))
         return savedStay
     } catch (err) {
-        console.log('Cannot add stay', err)
+        // console.log('Cannot add stay', err)
         throw err
     }
 }
@@ -61,7 +61,7 @@ export async function updateStay(stay: Stay) {
         (store.dispatch as Dispatch)(getCmdUpdateStay(savedStay))
         return savedStay
     } catch (err) {
-        console.log('Cannot save stay', err)
+        // console.log('Cannot save stay', err)
         throw err
     }
 }

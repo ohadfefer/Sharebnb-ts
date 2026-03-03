@@ -25,15 +25,15 @@ export async function loadOrders(filterBy: OrderFilterBy): Promise<OrderBackend[
 
     try {
         (store.dispatch as Dispatch)({ type: SET_IS_LOADING, isLoading: true })
-        console.log('loadOrders -> filterBy:', filterBy)
-        const orders = await orderService.query(filterBy) 
+        // console.log('loadOrders -> filterBy:', filterBy)
+        const orders = await orderService.query(filterBy); 
 
-        console.log('orders returned from backend:', orders);
+        // console.log('orders returned from backend:', orders);
         (store.dispatch as Dispatch)({ type: SET_ORDERS, orders })
-        console.log('orders deployed in order reducer:', orders)
+        // console.log('orders deployed in order reducer:', orders)
         return orders
     } catch (err) {
-        console.log('order action -> Cannot load orders')
+        // console.log('order action -> Cannot load orders')
         throw err
     } finally {
         (store.dispatch as Dispatch)({ type: SET_IS_LOADING, isLoading: false })
@@ -45,7 +45,7 @@ export async function removeOrder(orderId: string): Promise<void> {
         await orderService.remove(orderId) as void
         (store.dispatch as Dispatch)(getCmdRemoveOrder(orderId))
     } catch (err) {
-        console.log('Cannot remove order', err)
+        // console.log('Cannot remove order', err)
         throw err
     }
 }
@@ -56,20 +56,20 @@ export async function addOrder(order: Order): Promise<OrderBackend> {
         (store.dispatch as Dispatch)(getCmdAddOrder(savedOrder))
         return savedOrder
     } catch (err) {
-        console.log('Cannot add order', err)
+        // console.log('Cannot add order', err)
         throw err
     }
 }
 
 export async function updateOrder(order: Order): Promise<OrderBackend> {
     try {
-        console.log('Updating order in actions:', order)
+        // console.log('Updating order in actions:', order)
         const savedOrder = await orderService.save(order) as OrderBackend
         // console.log('Order updated successfully:', savedOrder)
         (store.dispatch as Dispatch)(getCmdUpdateOrder(savedOrder))
         return savedOrder
     } catch (err) {
-        console.log('Cannot save order', err)
+        // console.log('Cannot save order', err)
         throw err
     }
 }
@@ -91,7 +91,7 @@ export async function updateOrderStatus(orderId: string, nextStatus: OrderStatus
         (store.dispatch as Dispatch)({ type: UPDATE_ORDER, order: updatedOrder })
         return updatedOrder
     } catch (err) {
-        console.log('Cannot update order status', err)
+        // console.log('Cannot update order status', err)
         throw err
     }
 }

@@ -39,10 +39,10 @@ export async function getOrderById(req: Request, res: Response) {
 export async function addOrder(req: AuthenticatedRequest, res: Response) {
 	const { loggedinUser, body: order } = req
 
-	console.log('Adding order:', { loggedinUser, order })
-	console.log('Order userId:', order.userId)
-	console.log('Order hostId:', order.hostId)
-	console.log('Logged in user _id:', loggedinUser?._id)
+	// console.log('Adding order:', { loggedinUser, order })
+	// console.log('Order userId:', order.userId)
+	// console.log('Order hostId:', order.hostId)
+	// console.log('Logged in user _id:', loggedinUser?._id)
 
 	try {
 		const orderToAdd: Omit<Order, "_id" | "createdAt"> = {
@@ -72,49 +72,49 @@ export async function addOrder(req: AuthenticatedRequest, res: Response) {
 }
 
 export async function updateOrder(req: AuthenticatedRequest, res: Response) {
-	console.log('=== UPDATE ORDER FUNCTION CALLED ===')
-	console.log('Request method:', req.method)
-	console.log('Request URL:', req.url)
-	console.log('Request params:', req.params)
-	console.log('Request body:', req.body)
-	console.log('Request headers:', req.headers)
+	// console.log('=== UPDATE ORDER FUNCTION CALLED ===')
+	// console.log('Request method:', req.method)
+	// console.log('Request URL:', req.url)
+	// console.log('Request params:', req.params)
+	// console.log('Request body:', req.body)
+	// console.log('Request headers:', req.headers)
 
 	const { loggedinUser, body: order } = req
 
-	console.log('=== ORDER UPDATE REQUEST ===')
-	console.log('Updating order:', { loggedinUser, order })
-	console.log('Order hostId:', order.hostId, 'Type:', typeof order.hostId)
-	console.log('Logged in user _id:', loggedinUser?._id, 'Type:', typeof loggedinUser?._id)
-	console.log('Comparison result:', order.hostId !== loggedinUser?._id)
-	console.log('Order status:', order.status)
-	console.log('=== END ORDER UPDATE REQUEST ===')
+	// console.log('=== ORDER UPDATE REQUEST ===')
+	// console.log('Updating order:', { loggedinUser, order })
+	// console.log('Order hostId:', order.hostId, 'Type:', typeof order.hostId)
+	// console.log('Logged in user _id:', loggedinUser?._id, 'Type:', typeof loggedinUser?._id)
+	// console.log('Comparison result:', order.hostId !== loggedinUser?._id)
+	// console.log('Order status:', order.status)
+	// console.log('=== END ORDER UPDATE REQUEST ===')
 
 	if (!loggedinUser || order.hostId !== loggedinUser._id) {
-		console.log('Access denied - not your order')
+		// console.log('Access denied - not your order')
 		res.status(403).send('Not your order...')
 		return
 	}
 
 	try {
 		const updatedOrder: AggregateOrder = await orderService.update(order)
-		console.log('=== ORDER UPDATE SUCCESS ===')
-		console.log('Order updated successfully:', updatedOrder)
-		console.log('Updated order status:', updatedOrder.status)
-		console.log('Updated order userId:', updatedOrder.guest._id)
-		console.log('Updated order hostId:', updatedOrder.host?._id)
+		// console.log('=== ORDER UPDATE SUCCESS ===')
+		// console.log('Order updated successfully:', updatedOrder)
+		// console.log('Updated order status:', updatedOrder.status)
+		// console.log('Updated order userId:', updatedOrder.guest._id)
+		// console.log('Updated order hostId:', updatedOrder.host?._id)
 
 		if (updatedOrder.status && (updatedOrder.status === 'approved' || updatedOrder.status === 'rejected')) {
-			console.log('=== EMITTING SOCKET EVENTS ===')
-			console.log('Emitting socket events for order status change:', {
-				orderId: updatedOrder._id,
-				status: updatedOrder.status,
-				userId: updatedOrder.guest._id,
-				hostId: updatedOrder.host?._id
-			})
+			// console.log('=== EMITTING SOCKET EVENTS ===')
+			// console.log('Emitting socket events for order status change:', {
+			// 	orderId: updatedOrder._id,
+			// 	status: updatedOrder.status,
+			// 	userId: updatedOrder.guest._id,
+			// 	hostId: updatedOrder.host?._id
+			// })
 
-			console.log('Emitting socket events')
+			// console.log('Emitting socket events')
 
-			console.log('Emitting to user:', updatedOrder.guest._id.toString())
+			// console.log('Emitting to user:', updatedOrder.guest._id.toString())
 			socketService.emitToUser({
 				type: 'order-updated',
 				data: updatedOrder,
@@ -122,7 +122,7 @@ export async function updateOrder(req: AuthenticatedRequest, res: Response) {
 			})
 
 			if (updatedOrder.host) {
-				console.log('Emitting to host:', updatedOrder.host._id.toString())
+				// console.log('Emitting to host:', updatedOrder.host._id.toString())
 				socketService.emitToUser({
 					type: 'order-updated',
 					data: updatedOrder,
@@ -131,9 +131,9 @@ export async function updateOrder(req: AuthenticatedRequest, res: Response) {
 			}
 
 			logger.info(`Order status updated to ${updatedOrder.status} for order ${updatedOrder._id}`)
-			console.log('=== SOCKET EVENTS EMITTED ===')
+			// console.log('=== SOCKET EVENTS EMITTED ===')
 		} else {
-			console.log('No socket emission - status not approved/rejected:', updatedOrder.status)
+			// console.log('No socket emission - status not approved/rejected:', updatedOrder.status)
 		}
 
 		res.json(updatedOrder)
@@ -158,7 +158,7 @@ export async function removeOrder(req: Request, res: Response) {
 export async function testSocket(req: Request, res: Response) {
 	try {
 		const { userId } = req.query
-		console.log('Testing socket emission to user:', userId)
+		// console.log('Testing socket emission to user:', userId)
 
 		socketService.emitToUser({
 			type: 'order-updated',

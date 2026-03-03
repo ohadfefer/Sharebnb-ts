@@ -34,29 +34,29 @@ function createSocketService() {
         autoConnect: true,
       })
 
-      console.log('Socket created, initial connection status:', socket.connected)
+      // console.log('Socket created, initial connection status:', socket.connected)
 
       socket.on('connect', () => {
-        console.log('Socket connected successfully with ID:', socket!.id)
+        // console.log('Socket connected successfully with ID:', socket!.id)
         const user = userService.getLoggedinUser() as LoggedInUser | null
         if (user?._id) {
-          console.log('User logged in, setting socket userId:', user._id)
+          // console.log('User logged in, setting socket userId:', user._id)
           this.login(user._id)
         } else {
-          console.log('No user logged in')
+          // console.log('No user logged in')
         }
       })
 
       socket.on('disconnect', () => {
-        console.log('Socket disconnected')
+        // console.log('Socket disconnected')
       })
 
       socket.on('order-updated', (data: Order) => {
-        console.log('Received order-updated event:', data)
+        // console.log('Received order-updated event:', data)
       })
 
       socket.on('connect_error', (error: Error) => {
-        console.error('Socket connection error:', error)
+        // console.error('Socket connection error:', error)
       })
     },
 
@@ -78,12 +78,12 @@ function createSocketService() {
     },
 
     login(userId: string) {
-      console.log('Socket login called with userId:', userId)
+      // console.log('Socket login called with userId:', userId)
       if (socket?.connected) {
         socket.emit(SOCKET_EMIT_LOGIN, userId)
-        console.log('Login event emitted successfully')
+        // console.log('Login event emitted successfully')
       } else {
-        console.log('Socket not connected, cannot emit login event')
+        // console.log('Socket not connected, cannot emit login event')
       }
     },
 
@@ -103,29 +103,29 @@ function createSocketService() {
     },
 
     testConnection() {
-      console.log('=== Socket Connection Test ===')
-      console.log('Socket exists:', !!socket)
-      console.log('Socket connection status:', socket?.connected)
-      console.log('Socket ID:', socket?.id)
+      // console.log('=== Socket Connection Test ===')
+      // console.log('Socket exists:', !!socket)
+      // console.log('Socket connection status:', socket?.connected)
+      // console.log('Socket ID:', socket?.id)
 
       const user = userService.getLoggedinUser() as LoggedInUser | null
-      console.log('Current user:', user)
+      // console.log('Current user:', user)
 
       if (user && socket?.connected) {
-        console.log('Attempting to login user to socket...')
+        // console.log('Attempting to login user to socket...')
         this.login(user._id)
       } else if (!socket?.connected) {
-        console.log('Socket not connected, cannot login user')
+        // console.log('Socket not connected, cannot login user')
       } else {
-        console.log('No user logged in')
+        // console.log('No user logged in')
       }
-      console.log('=== End Socket Test ===')
+      // console.log('=== End Socket Test ===')
     },
 
     ensureUserLoggedIn() {
       const user = userService.getLoggedinUser() as LoggedInUser | null
       if (user?._id && socket?.connected) {
-        console.log('Ensuring user is logged in to socket:', user._id)
+        // console.log('Ensuring user is logged in to socket:', user._id)
         this.login(user._id)
       }
     },
@@ -147,11 +147,11 @@ function createDummySocketService() {
     },
 
     login() {
-      console.log('Dummy socket service here, login - got it')
+      // console.log('Dummy socket service here, login - got it')
     },
 
     logout() {
-      console.log('Dummy socket service here, logout - got it')
+      // console.log('Dummy socket service here, logout - got it')
     },
 
     on(eventName: string, cb: SocketCallback) {
@@ -192,11 +192,11 @@ function createDummySocketService() {
     },
 
     testConnection() {
-      console.log('Dummy socket: testConnection (no-op)')
+      // console.log('Dummy socket: testConnection (no-op)')
     },
 
     ensureUserLoggedIn() {
-      console.log('Dummy socket: ensureUserLoggedIn (no-op)')
+      // console.log('Dummy socket: ensureUserLoggedIn (no-op)')
     },
   }
 

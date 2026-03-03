@@ -26,22 +26,22 @@ function _asObjectId(id: string | ObjectId | null | undefined): ObjectId | null 
 
 function _buildCriteria(filterBy: OrderFilterBy): Record<string, any> {
 	const criteria: Record<string, any> = {}
-	console.log('_buildCriteria -> filterBy:', filterBy)
+	// console.log('_buildCriteria -> filterBy:', filterBy)
 
 	if (filterBy.hostId) {
-		console.log('Adding hostId filter:', filterBy.hostId)
+		// console.log('Adding hostId filter:', filterBy.hostId)
 		criteria.hostId = ObjectId.createFromHexString(filterBy.hostId)
 	}
 	if (filterBy.userId) {
-		console.log('Adding userId filter:', filterBy.userId)
+		// console.log('Adding userId filter:', filterBy.userId)
 		criteria.userId = ObjectId.createFromHexString(filterBy.userId)
 	}
 	if (filterBy.status) {
-		console.log('Adding status filter:', filterBy.status)
+		// console.log('Adding status filter:', filterBy.status)
 		criteria.status = filterBy.status
 	}
 
-	console.log('_buildCriteria -> final criteria:', criteria)
+	// console.log('_buildCriteria -> final criteria:', criteria)
 	return criteria
 }
 
@@ -163,9 +163,9 @@ async function add(order: Omit<Order, "_id" | "createdAt">): Promise<Order> {
 
 async function update(order: Order): Promise<AggregateOrder> {
 	try {
-		console.log('order status!!!!!!!!!!!!!!', typeof order.status)
-		console.log('order id!!!!!!!!!!!!!!', typeof order._id)
-		console.log('order id!!!!!!!!!!!!!!', order._id)
+		// console.log('order status!!!!!!!!!!!!!!', typeof order.status)
+		// console.log('order id!!!!!!!!!!!!!!', typeof order._id)
+		// console.log('order id!!!!!!!!!!!!!!', order._id)
 
 		const collection = await dbService.getCollection(COLLECTION_NAME)
 

@@ -12,7 +12,7 @@ export async function loadReviews(filterBy: { byUserId: string, aboutStayId: str
 		store.dispatch({ type: SET_REVIEWS, reviews })
 		// console.log('Just dispatched SET_REVIEWS with:', reviews)
 	} catch (err) {
-		console.log('ReviewActions: err in loadReviews', err)
+		// console.log('ReviewActions: err in loadReviews', err)
 		throw err
 	}
 }
@@ -22,7 +22,7 @@ export async function addReview(review: { txt: string, aboutStayId: string }) {
 		const addedReview = await reviewService.add(review);
 		(store.dispatch as Dispatch)(getActionAddReview(addedReview))
 	} catch (err) {
-		console.log('ReviewActions: err in addReview', err)
+		// console.log('ReviewActions: err in addReview', err)
 		throw err
 	}
 }
@@ -32,7 +32,7 @@ export async function removeReview(reviewId: string) {
 		await reviewService.remove(reviewId);
 		(store.dispatch as Dispatch)(getActionRemoveReview(reviewId))
 	} catch (err) {
-		console.log('ReviewActions: err in removeReview', err)
+		// console.log('ReviewActions: err in removeReview', err)
 		throw err
 	}
 }

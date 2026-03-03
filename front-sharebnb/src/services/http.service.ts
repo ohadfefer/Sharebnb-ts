@@ -31,7 +31,7 @@ async function ajax(endpoint: string, method = 'GET', data = null) {
         const res = await axios(options)
         return res.data
     } catch (err: unknown) {
-        console.log(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
+        // console.log(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
         console.dir(err)
 
         if (Axios.isAxiosError(err)) {

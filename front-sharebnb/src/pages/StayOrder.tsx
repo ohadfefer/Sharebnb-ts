@@ -144,9 +144,9 @@ export function StayOrder() {
 
             if (!stay || !user) return
 
-            console.log('Creating order with stay data:', stay)
-            console.log('Stay host:', stay.host)
-            console.log('Stay host._id:', stay.host?._id)
+            // console.log('Creating order with stay data:', stay)
+            // console.log('Stay host:', stay.host)
+            // console.log('Stay host._id:', stay.host?._id)
             
             const orderToSave = {
                 stayId: stay._id,
@@ -159,13 +159,13 @@ export function StayOrder() {
                 status: 'pending'
             }
             
-            console.log('Order to save:', orderToSave)
+            // console.log('Order to save:', orderToSave)
 
             const savedOrder = await addOrder(orderToSave as Order)
             setOrder(savedOrder)
             setIsSaved(true)
             showSuccessMsg('Order confirmed successfully!')
-            console.log(savedOrder)
+            // console.log(savedOrder)
 
             // Navigate to order confirmation page
             navigate(`/order/${savedOrder._id}/confirmation`)

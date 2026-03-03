@@ -47,7 +47,7 @@ async function save(order) {
     }
 
     const savedOrder = await storageService.post(ORDER_KEY, orderToSave)
-    console.log('from service',order);
+    // console.log('from service',order);
     
     return savedOrder
 }

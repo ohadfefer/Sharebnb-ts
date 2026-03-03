@@ -21,10 +21,10 @@ const isLocalhost = Boolean(
           checkValidServiceWorker(swUrl, config);
   
           navigator.serviceWorker.ready.then(() => {
-            console.log(
-              'This web app is being served cache-first by a service ' +
-                'worker. To learn more, visit https://cra.link/PWA'
-            );
+            // console.log(
+            //   'This web app is being served cache-first by a service ' +
+            //     'worker. To learn more, visit https://cra.link/PWA'
+            // );
           });
         } else {
           registerValidSW(swUrl, config);
@@ -46,17 +46,17 @@ const isLocalhost = Boolean(
             if (installingWorker.state === 'installed') {
               if (navigator.serviceWorker.controller) {
                 
-                console.log(
-                  'New content is available and will be used when all ' +
-                    'tabs for this page are closed. See https://cra.link/PWA.'
-                );
+                // console.log(
+                //   'New content is available and will be used when all ' +
+                //     'tabs for this page are closed. See https://cra.link/PWA.'
+                // );
   
                 if (config && config.onUpdate) {
                   config.onUpdate(registration);
                 }
               } else {
                 
-                console.log('Content is cached for offline use.');
+                // console.log('Content is cached for offline use.');
   
                 if (config && config.onSuccess) {
                   config.onSuccess(registration);

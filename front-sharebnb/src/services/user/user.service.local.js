@@ -87,5 +87,5 @@ async function _createAdmin() {
     }
 
     const newUser = await storageService.post('user', userCred)
-    console.log('newUser: ', newUser)
+    // console.log('newUser: ', newUser)
 }
