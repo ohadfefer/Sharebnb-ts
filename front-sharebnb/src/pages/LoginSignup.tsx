@@ -29,8 +29,8 @@ export function Login() {
     async function onDemoLogin(ev: React.FormEvent) {
         if (ev) ev.preventDefault()
         const demoCreds = {
-            username: 'Alon Ben Ari',
-            password: 'Baravizemer',
+            username: 'Ohad Fefer',
+            password: 'ohad16',
         }
         setCredentials(demoCreds)
         try {
@@ -38,10 +38,10 @@ export function Login() {
         } catch (err) {
             try {
                 await signup({
-                    username: 'Alon Ben Ari',
-                    password: 'Baravizemer',
-                    fullname: 'Alon Ben Ari',
-                    imgUrl: 'https://ca.slack-edge.com/T08T1AM7L02-U08T35Z7745-79b18d468cce-512'
+                    username: 'Ohad Fefer',
+                    password: 'ohad16',
+                    fullname: 'Ohad Fefer',
+                    imgUrl: 'https://res.cloudinary.com/devvappxu/image/upload/v1772534860/WhatsApp_Image_2026-03-03_at_12.03.24_hfionj.jpg'
                 })
             } catch (e) {
             }
